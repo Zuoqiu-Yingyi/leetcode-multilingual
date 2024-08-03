@@ -2,6 +2,7 @@ antfu
 commitlint
 dprint
 leetcode
+nums
 tsdoc
 Yingyi
 Zuoqiu

@@ -6,6 +6,9 @@
         "eslint.config.js",
     ],
     "include": [
-        "scripts",
+        "./packages",
+        "./scripts",
+        "./solutions/ecmascript",
+        "./tools",
     ],
 }

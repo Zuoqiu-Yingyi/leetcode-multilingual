@@ -40,6 +40,7 @@ const rules = {
                 "side-effect", // import "module";
 
                 [
+                    "$bun", // import path from "bun:path";
                     "$node", // import path from "node:path";
                     "builtin", // import path from "path";
                 ],
@@ -62,6 +63,7 @@ const rules = {
                 "unknown",
 
                 [
+                    "$bun-type", // import type path from "bun:path";
                     "$node-type", // import type path from "node:path";
                     "builtin-type", // import type path from "path";
                 ],
@@ -91,6 +93,7 @@ const rules = {
             ],
             customGroups: {
                 value: {
+                    $bun: "bun:**",
                     $node: "node:**",
                     $repo: "@repo/**",
                     $workspace: "@workspace/**",
@@ -99,6 +102,7 @@ const rules = {
                     $svelte: "**.svelte",
                 },
                 type: {
+                    "$bun-type": "bun:**",
                     "$node-type": "node:**",
                     "$repo-type": "@repo/**",
                     "$workspace-type": "@workspace/**",

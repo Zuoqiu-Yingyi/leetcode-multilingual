@@ -1,12 +1,9 @@
 {
-    "name": "@repo/solutions",
+    "name": "@repo/common",
     "type": "module",
     "private": false,
-    "engines": {
-        "bun": "1.1.21"
-    },
+    "main": "index.ts",
     "scripts": {
-        "test": "bun test --watch src",
         "lint:eslint": "eslint --max-warnings 0 .",
         "format:eslint": "eslint --fix .",
         "check:cspell": "cspell ."

@@ -20,87 +20,22 @@ import process from "node:process";
 import chalk from "chalk";
 import chokidar from "chokidar";
 
+import { C, E } from "@repo/common";
+
 import type fs from "node:fs";
 
 console.log(import.meta.url);
-
-/**
- * 题目难度
- */
-enum Difficulty {
-    easy = "easy",
-    hard = "hard",
-    medium = "medium",
-}
-
-/**
- * 题解语言
- */
-enum Language {
-    bash = "bash",
-    c = "c",
-    cpp = "cpp",
-    csharp = "csharp",
-    golang = "golang",
-    java = "java",
-    javascript = "javascript",
-    kotlin = "kotlin",
-    mysql = "mysql",
-    php = "php",
-    python = "python",
-    python3 = "python3",
-    ruby = "ruby",
-    rust = "rust",
-    scala = "scala",
-    swift = "swift",
-    typescript = "typescript",
-}
-
-/**
- * 题解文件扩展名
- */
-enum Extension {
-    sh = "sh",
-    c = "c",
-    cpp = "cpp",
-    cs = "cs",
-    go = "go",
-    java = "java",
-    js = "js",
-    kt = "kt",
-    sql = "sql",
-    php = "php",
-    py = "py",
-    rb = "rb",
-    rs = "rs",
-    scala = "scala",
-    swift = "swift",
-    ts = "ts",
-}
 
 /**
  * 题解信息
  */
 interface ISolutionInfo {
     id: number;
-    difficulty: Difficulty;
+    difficulty: E.Difficulty;
     name: string;
-    language: Language;
-    ext: Extension;
+    language: E.Language;
+    ext: E.Extension;
 }
-
-/**
- * 题解临时目录
- */
-const SOLUTIONS_TEMPORARY_DIRECTORY = ".solutions";
-
-/**
- * 题解目录
- */
-const SOLUTIONS_DIRECTORY = {
-    [Language.javascript]: "./solutions/ecmascript/src",
-    [Language.typescript]: "./solutions/ecmascript/src",
-} as const;
 
 /**
  * 解析题解文件路径
@@ -110,15 +45,15 @@ const SOLUTIONS_DIRECTORY = {
 function parseSolutionFilePath(filePath: string): ISolutionInfo | void {
     const { dir, name: language, ext } = path.parse(filePath);
     const [directory, problem] = dir.split(path.sep);
-    if (directory === SOLUTIONS_TEMPORARY_DIRECTORY && problem) {
+    if (directory === C.SOLUTIONS_TEMPORARY_DIRECTORY && problem) {
         const [id, difficulty, name] = problem.split(".");
         if (id && difficulty && name) {
             return {
                 id: Number.parseInt(id),
-                difficulty: difficulty as Difficulty,
+                difficulty: difficulty as E.Difficulty,
                 name,
-                language: language as Language,
-                ext: ext as Extension,
+                language: language as E.Language,
+                ext: ext as E.Extension,
             } satisfies ISolutionInfo;
         }
     }
@@ -131,16 +66,16 @@ function parseSolutionFilePath(filePath: string): ISolutionInfo | void {
  * @returns 目录路径
  */
 function solutionDirectory(
-    language: Language,
+    language: E.Language,
     id: number,
 ): string {
     // @ts-expect-error info is not assignable to type 'never'
-    const source_root_directory: string | undefined = SOLUTIONS_DIRECTORY[language];
+    const source_root_directory: string | undefined = C.SOLUTIONS_DIRECTORY[language];
     if (source_root_directory) {
-        const paths = String(id).padStart(4, "0").split("");
+        const paths = String(id).padStart(C.ID_LENGTH, "0").split("");
         switch (language) {
-            case Language.javascript:
-            case Language.typescript:
+            case E.Language.javascript:
+            case E.Language.typescript:
             default:
                 return path.join(source_root_directory, ...paths);
         }
@@ -150,21 +85,19 @@ function solutionDirectory(
 
 /**
  * 构造题解文件名
- * @param language - 题解语言
+ * @param info - 题解信息
  * @param index - 题解序号
- * @param ext - 扩展名
  * @returns 文件名
  */
 function solutionFileName(
-    language: Language,
+    info: ISolutionInfo,
     index: number,
-    ext: Extension,
 ): string {
-    switch (language) {
-        case Language.javascript:
-        case Language.typescript:
+    switch (info.language) {
+        case E.Language.javascript:
+        case E.Language.typescript:
         default:
-            return `solution${index}${ext}`;
+            return `${String(info.id).padStart(C.ID_LENGTH, "0")}-${String(index).padStart(2, "0")}${info.ext}`;
     }
 }
 
@@ -179,20 +112,28 @@ async function moveSolutionFile(
     original: string,
 ): Promise<string | void> {
     try {
-        const target_directory_path = solutionDirectory(info.language, info.id);
+        const destination_directory_path = solutionDirectory(info.language, info.id);
 
         switch (info.language) {
-            case Language.javascript:
-            case Language.typescript: {
+            case E.Language.javascript:
+            case E.Language.typescript: {
                 for (let index = 1; true; index++) {
-                    const target_file_path = path.join(target_directory_path, solutionFileName(info.language, index, info.ext));
-                    if (await fsAsync.exists(target_file_path)) {
+                    const destination = path.join(destination_directory_path, solutionFileName(info, index));
+                    if (await fsAsync.exists(destination)) {
                         continue;
                     }
                     else {
-                        await fsAsync.mkdir(target_directory_path, { recursive: true });
-                        await fsAsync.rename(original, target_file_path);
-                        return target_file_path;
+                        await Bun.sleep(1_000); // 避免 VSCode 扩展 LeetCode.vscode-leetcode 重复创建文件
+                        const content = await Bun.file(original).text();
+                        await Bun.write(destination, content.replaceAll("\r\n", "\n"), { createPath: true });
+                        await Bun.write(path.join(destination_directory_path, "-.test.ts"), [
+                            `import { t } from "@/utils/test";`,
+                            "",
+                            `t(import.meta.dir);`,
+                            "",
+                        ].join("\n"), { createPath: true });
+                        await fsAsync.unlink(original);
+                        return destination;
                     }
                 }
             }
@@ -285,7 +226,7 @@ async function solutionsHandler(
  * REF: https://www.npmjs.com/package/chokidar
  */
 const solutions_watcher = chokidar.watch(
-    SOLUTIONS_TEMPORARY_DIRECTORY,
+    C.SOLUTIONS_TEMPORARY_DIRECTORY,
     {
         // ignored: /(^|[/\\])\../, // ignore dotfiles
     },

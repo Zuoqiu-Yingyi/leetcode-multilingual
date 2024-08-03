@@ -45,7 +45,9 @@
         "check:cspell": "cspell ."
     },
     "dependencies": {
+        "@repo/common": "workspace:*",
         "@repo/eslint": "workspace:*",
+        "@repo/examples": "workspace:*",
         "@repo/tsconfig": "workspace:*"
     },
     "devDependencies": {

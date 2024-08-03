@@ -1,12 +1,8 @@
 {
-    "name": "@repo/solutions",
+    "name": "@repo/examples",
     "type": "module",
     "private": false,
-    "engines": {
-        "bun": "1.1.21"
-    },
     "scripts": {
-        "test": "bun test --watch src",
         "lint:eslint": "eslint --max-warnings 0 .",
         "format:eslint": "eslint --fix .",
         "check:cspell": "cspell ."

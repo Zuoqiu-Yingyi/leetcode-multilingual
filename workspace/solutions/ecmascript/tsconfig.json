@@ -1,0 +1,17 @@
+{
+    "extends": "@repo/tsconfig/base",
+    "compilerOptions": {
+        "baseUrl": "./",
+        "paths": {
+            "~/*": [
+                "./../../*",
+            ],
+            "@/*": [
+                "./src/*",
+            ],
+        },
+    },
+    "include": [
+        "src",
+    ],
+}
