@@ -1,0 +1,17 @@
+{
+    "name": "@repo/eslint",
+    "type": "module",
+    "private": false,
+    "main": "index.js",
+    "scripts": {
+        "lint:eslint": "eslint --max-warnings 0 .",
+        "format:eslint": "eslint --fix .",
+        "check:cspell": "cspell ."
+    },
+    "devDependencies": {
+        "@antfu/eslint-config": "^2.24.1",
+        "@prettier/plugin-xml": "^3.4.1",
+        "eslint-plugin-format": "^0.1.2",
+        "eslint-plugin-tsdoc": "^0.3.0"
+    }
+}

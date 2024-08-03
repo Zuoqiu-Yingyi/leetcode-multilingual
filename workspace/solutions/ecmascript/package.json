@@ -1,0 +1,10 @@
+{
+    "name": "@repo/solutions",
+    "type": "module",
+    "private": false,
+    "scripts": {
+        "lint:eslint": "eslint --max-warnings 0 .",
+        "format:eslint": "eslint --fix .",
+        "check:cspell": "cspell ."
+    }
+}

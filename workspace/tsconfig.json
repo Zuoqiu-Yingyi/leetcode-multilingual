@@ -1,0 +1,8 @@
+{
+    "extends": "@repo/tsconfig/base",
+    "files": [
+        "commitlint.config.ts",
+        "lint-staged.config.js",
+        "eslint.config.js",
+    ],
+}
