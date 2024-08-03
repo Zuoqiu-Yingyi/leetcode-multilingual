@@ -5,4 +5,7 @@
         "lint-staged.config.js",
         "eslint.config.js",
     ],
+    "include": [
+        "scripts",
+    ],
 }

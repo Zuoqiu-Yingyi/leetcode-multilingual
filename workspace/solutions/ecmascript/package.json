@@ -2,6 +2,9 @@
     "name": "@repo/solutions",
     "type": "module",
     "private": false,
+    "engines": {
+        "bun": "1.1.21"
+    },
     "scripts": {
         "lint:eslint": "eslint --max-warnings 0 .",
         "format:eslint": "eslint --fix .",

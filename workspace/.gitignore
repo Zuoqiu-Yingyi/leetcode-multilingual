@@ -1,3 +1,7 @@
+# Custom
+./.solutions
+./.solutions/.gitkeep
+
 # Logs
 logs
 *.log
