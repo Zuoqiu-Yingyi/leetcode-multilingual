@@ -15,7 +15,9 @@
 
 import fsAsync from "node:fs/promises";
 import path from "node:path";
+import process from "node:process";
 
+import chalk from "chalk";
 import chokidar from "chokidar";
 
 import type fs from "node:fs";
@@ -123,10 +125,35 @@ function parseSolutionFilePath(filePath: string): ISolutionInfo | void {
 }
 
 /**
+ * 构造题解目录
+ * @param language - 题解语言
+ * @param id - 题解编号
+ * @returns 目录路径
+ */
+function solutionDirectory(
+    language: Language,
+    id: number,
+): string {
+    // @ts-expect-error info is not assignable to type 'never'
+    const source_root_directory: string | undefined = SOLUTIONS_DIRECTORY[language];
+    if (source_root_directory) {
+        const paths = String(id).padStart(4, "0").split("");
+        switch (language) {
+            case Language.javascript:
+            case Language.typescript:
+            default:
+                return path.join(source_root_directory, ...paths);
+        }
+    }
+    throw new Error(`Unsupported language: ${language}`);
+}
+
+/**
  * 构造题解文件名
  * @param language - 题解语言
  * @param index - 题解序号
  * @param ext - 扩展名
+ * @returns 文件名
  */
 function solutionFileName(
     language: Language,
@@ -151,13 +178,8 @@ async function moveSolutionFile(
     info: ISolutionInfo,
     original: string,
 ): Promise<string | void> {
-    if (info.language in SOLUTIONS_DIRECTORY) {
-        // @ts-expect-error info is not assignable to type 'never'
-        const source_directory = SOLUTIONS_DIRECTORY[info.language];
-        const target_directory_path = path.join(
-            source_directory,
-            ...String(info.id).padStart(4, "0").split(""),
-        );
+    try {
+        const target_directory_path = solutionDirectory(info.language, info.id);
 
         switch (info.language) {
             case Language.javascript:
@@ -179,31 +201,82 @@ async function moveSolutionFile(
                 break;
         }
     }
+    catch (error) {
+        console.warn(error);
+    }
+}
+
+/**
+ * 事件名称文本宽度
+ */
+const EVENT_NAME_WIDTH = 10;
+
+type TEntryEventName = "add" | "addDir" | "change" | "unlink" | "unlinkDir";
+
+/**
+ * @param eventName - 事件名称
+ * @param entryPath - 资源路径
+ */
+function printEntryEvent(
+    eventName: TEntryEventName,
+    entryPath: string,
+) {
+    let event_name: string = eventName;
+    const blank_spaces = " ".repeat(EVENT_NAME_WIDTH - eventName.length);
+    const entry_path = path.join(process.cwd(), entryPath);
+    switch (eventName) {
+        case "add":
+        case "addDir":
+            event_name = chalk.green(event_name);
+            break;
+        case "change":
+            event_name = chalk.cyan(event_name);
+            break;
+        case "unlink":
+        case "unlinkDir":
+            event_name = chalk.red(event_name);
+            break;
+        default:
+            break;
+    }
+    console.debug([
+        event_name,
+        blank_spaces,
+        entry_path,
+    ].join(""));
 }
 
 /**
  * 处理文件资源变化
  * @param eventName - 事件名称
- * @param path - 资源路径
+ * @param entryPath - 资源路径
  * @param _stats - 文件状态
  */
 async function solutionsHandler(
-    eventName: "add" | "addDir" | "change" | "unlink" | "unlinkDir", //
-    path: string,
+    eventName: TEntryEventName,
+    entryPath: string,
     _stats?: fs.Stats,
 ) {
-    console.debug(`\x1B[4m${eventName}\x1B[0m${" ".repeat(10 - eventName.length)}${path}`);
+    printEntryEvent(eventName, entryPath);
+    let target_file_path: string | void = void null;
     switch (eventName) {
         case "add": {
-            const file_info = parseSolutionFilePath(path);
+            const file_info = parseSolutionFilePath(entryPath);
             if (file_info) {
                 // console.log(file_info);
-                await moveSolutionFile(file_info, path);
+                target_file_path = await moveSolutionFile(file_info, entryPath);
             }
             break;
         }
         default:
             break;
+    }
+    if (target_file_path) {
+        console.debug([
+            // " ".repeat(EVENT_NAME_WIDTH),
+            "➜  ".padStart(EVENT_NAME_WIDTH),
+            chalk.green(path.join(process.cwd(), target_file_path)),
+        ].join(""));
     }
 }
 
