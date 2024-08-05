@@ -32,3 +32,32 @@ export const SOLUTIONS_DIRECTORY = {
     [Language.javascript]: "./solutions/ecmascript/src",
     [Language.typescript]: "./solutions/ecmascript/src",
 } as const;
+
+/**
+ * 题解测试用例文件目录
+ */
+export const SOLUTIONS_TEST_EXAMPLES_DIRECTORY = "./packages/examples";
+
+/**
+ * 题解测试用例文件内容
+ */
+export const SOLUTIONS_TEST_EXAMPLES_CONTENT = `\
+[
+]
+`;
+
+/**
+ * 题解测试文件名
+ */
+export const ES_SOLUTIONS_TEST_FILE_NAME = "index.test.ts";
+
+export const ES_SOLUTIONS_TEST_FILE_CONTENT = `\
+import test from "bun:test";
+
+import { t } from "@/utils/test";
+
+t(
+    test,
+    import.meta.dir,
+);
+`;

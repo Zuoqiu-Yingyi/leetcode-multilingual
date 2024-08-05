@@ -60,6 +60,28 @@ function parseSolutionFilePath(filePath: string): ISolutionInfo | void {
 }
 
 /**
+ * 题目 ID 填充前导零
+ * @param id - 题目 ID
+ * @param maxLength - 填充后的最大长度
+ * @returns 填充后的题目 ID
+ */
+function idPadZero(
+    id: number,
+    maxLength = C.ID_LENGTH,
+): string {
+    return String(id).padStart(maxLength, "0");
+}
+
+/**
+ * 题目 ID 转换为目录路径
+ * @param id - 题目 ID
+ * @returns 目录路径列表
+ */
+function id2paths(id: number): string[] {
+    return idPadZero(id).split("");
+}
+
+/**
  * 构造题解目录
  * @param language - 题解语言
  * @param id - 题解编号
@@ -72,7 +94,7 @@ function solutionDirectory(
     // @ts-expect-error info is not assignable to type 'never'
     const source_root_directory: string | undefined = C.SOLUTIONS_DIRECTORY[language];
     if (source_root_directory) {
-        const paths = String(id).padStart(C.ID_LENGTH, "0").split("");
+        const paths = id2paths(id);
         switch (language) {
             case E.Language.javascript:
             case E.Language.typescript:
@@ -102,12 +124,12 @@ function solutionFileName(
 }
 
 /**
- * 移动题解文件
+ * 创建题解文件
  * @param info - 题解信息
  * @param original - 原文件路径
  * @returns 新文件路径
  */
-async function moveSolutionFile(
+async function createSolutionFile(
     info: ISolutionInfo,
     original: string,
 ): Promise<string | void> {
@@ -124,14 +146,23 @@ async function moveSolutionFile(
                     }
                     else {
                         await Bun.sleep(1_000); // 避免 VSCode 扩展 LeetCode.vscode-leetcode 重复创建文件
+
+                        /* 在指定位置创建题解模板文件 */
                         const content = await Bun.file(original).text();
-                        await Bun.write(destination, content.replaceAll("\r\n", "\n"), { createPath: true });
-                        await Bun.write(path.join(destination_directory_path, "-.test.ts"), [
-                            `import { t } from "@/utils/test";`,
-                            "",
-                            `t(import.meta.dir);`,
-                            "",
-                        ].join("\n"), { createPath: true });
+                        await Bun.write(
+                            destination,
+                            content.replaceAll("\r\n", "\n"),
+                            { createPath: true },
+                        );
+
+                        /* 覆写测试文件以触发 bun 的测试 */
+                        await Bun.write(
+                            path.join(destination_directory_path, C.ES_SOLUTIONS_TEST_FILE_NAME),
+                            C.ES_SOLUTIONS_TEST_FILE_CONTENT,
+                            { createPath: true },
+                        );
+
+                        /* 删除 VSCode 插件 LeetCode.vscode-leetcode 创建的题解模板文件 */
                         await fsAsync.unlink(original);
                         return destination;
                     }
@@ -145,6 +176,25 @@ async function moveSolutionFile(
     catch (error) {
         console.warn(error);
     }
+}
+
+/**
+ * 创建题解测试用例文件
+ * @param info - 题解信息
+ * @returns 测试用例文件路径
+ */
+async function createSolutionTestExamplesFile(info: ISolutionInfo) {
+    const id = idPadZero(info.id);
+    const paths = id2paths(info.id);
+    const examples_file_path = path.join(process.cwd(), C.SOLUTIONS_TEST_EXAMPLES_DIRECTORY, ...paths, `${id}.json`);
+    if (!(await fsAsync.exists(examples_file_path))) {
+        await Bun.write(
+            examples_file_path,
+            C.SOLUTIONS_TEST_EXAMPLES_CONTENT,
+            { createPath: true },
+        );
+    }
+    return examples_file_path;
 }
 
 /**
@@ -199,24 +249,31 @@ async function solutionsHandler(
     _stats?: fs.Stats,
 ) {
     printEntryEvent(eventName, entryPath);
-    let target_file_path: string | void = void null;
+    let solution_file_path: string | void = void null;
+    let examples_file_path: string | void = void null;
     switch (eventName) {
         case "add": {
             const file_info = parseSolutionFilePath(entryPath);
             if (file_info) {
                 // console.log(file_info);
-                target_file_path = await moveSolutionFile(file_info, entryPath);
+                solution_file_path = await createSolutionFile(file_info, entryPath);
+                examples_file_path = await createSolutionTestExamplesFile(file_info);
             }
             break;
         }
         default:
             break;
     }
-    if (target_file_path) {
+    if (solution_file_path) {
         console.debug([
             // " ".repeat(EVENT_NAME_WIDTH),
             "➜  ".padStart(EVENT_NAME_WIDTH),
-            chalk.green(path.join(process.cwd(), target_file_path)),
+            chalk.green(path.join(process.cwd(), solution_file_path)),
+        ].join(""));
+        console.debug([
+            // " ".repeat(EVENT_NAME_WIDTH),
+            "🧪  ".padStart(EVENT_NAME_WIDTH),
+            chalk.green(examples_file_path),
         ].join(""));
     }
 }

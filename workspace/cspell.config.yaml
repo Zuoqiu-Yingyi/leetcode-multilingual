@@ -9,6 +9,7 @@ dictionaries:
   - cspell-words
 ignorePaths:
   - node_modules
+  - packages/examples/**/*.json
   - .gitignore
   - ./cspell-words.txt
   - ./pnpm-lock.yaml

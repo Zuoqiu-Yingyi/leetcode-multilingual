@@ -1,5 +1,9 @@
 # 更改日志 | Change Log
 
+## 2024-08-05
+
+- 修复 `ecmascript` 题解的自动化测试 | Fix automated tests for `ecmascript` solutions
+
 ## 2024-08-04
 
 - 初始化 monorepo 仓库 | Initialize monorepo repository
