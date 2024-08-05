@@ -1,15 +1,15 @@
 // Copyright (C) 2024 Zuoqiu Yingyi
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
@@ -56,16 +56,18 @@ export async function t<
 ) {
     // console.debug("t", arguments);
 
-    const paths = dir.split(path.sep);
-    const paths_ = paths.slice(paths.length - C.ID_LENGTH);
-    const id = paths_.join("");
-    const cwd = paths_.join("/");
+    const full_paths = dir.split(path.sep);
+    const _paths = full_paths.slice(full_paths.length - C.ID_LENGTH);
+    const paths = _paths.map((path) => path.replace(/^_*/, ""));
+    const id = paths.join("");
+    const examples_path = paths.join("/");
+    const solutions_path = _paths.join("/");
 
     if (!examples) {
         const examples_file_path = path.join(
             process.cwd(),
             "./../../packages/examples",
-            cwd,
+            examples_path,
             `${id}.json`,
         );
         try {
@@ -83,10 +85,10 @@ export async function t<
     }
 
     const files = fs.readdirSync(dir);
-    const names = files.filter((name) => /^\d+-\d+\.(?:js|ts)$/.test(name));
+    const names = files.filter((name) => /^s_\d+_\d+\.(?:js|ts)$/.test(name));
     const solutions = await Promise.all(names.map((name) => (async () => ({
         name,
-        func: (await import(`@/${cwd}/${name}`)).default,
+        func: (await import(`@/${solutions_path}/${name}`)).default,
     }))()));
 
     test.describe.each(solutions)(id, async ({ name, func }) => {

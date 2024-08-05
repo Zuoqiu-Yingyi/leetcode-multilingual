@@ -1,0 +1,16 @@
+{
+    "leetcode.filePath": {
+        // REF: https://github.com/LeetCode-OpenSource/vscode-leetcode/wiki/Customize-the-Relative-Folder-and-the-File-Name-of-the-Problem-File
+        "default": {
+            "folder": "./workspace/.solutions/${id}.${difficulty}.${name}/",
+            "filename": "${language}.${ext}",
+        },
+    },
+    "leetcode.editor.shortcuts": [
+        "submit",
+        "test",
+        "star",
+        "solution",
+        "description",
+    ],
+}

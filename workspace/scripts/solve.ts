@@ -1,15 +1,15 @@
 // Copyright (C) 2024 Zuoqiu Yingyi
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
@@ -75,10 +75,16 @@ function idPadZero(
 /**
  * 题目 ID 转换为目录路径
  * @param id - 题目 ID
+ * @param prefix - 目录名前缀
+ * @param suffix - 目录名后缀
  * @returns 目录路径列表
  */
-function id2paths(id: number): string[] {
-    return idPadZero(id).split("");
+function id2paths(
+    id: number,
+    prefix = "",
+    suffix = "",
+): string[] {
+    return idPadZero(id).split("").map((digit) => `${prefix}${digit}${suffix}`);
 }
 
 /**
@@ -94,8 +100,9 @@ function solutionDirectory(
     // @ts-expect-error info is not assignable to type 'never'
     const source_root_directory: string | undefined = C.SOLUTIONS_DIRECTORY[language];
     if (source_root_directory) {
-        const paths = id2paths(id);
+        const paths = id2paths(id, "_");
         switch (language) {
+            case E.Language.golang:
             case E.Language.javascript:
             case E.Language.typescript:
             default:
@@ -115,11 +122,15 @@ function solutionFileName(
     info: ISolutionInfo,
     index: number,
 ): string {
+    const name = `${String(info.id).padStart(C.ID_LENGTH, "0")}_${String(index).padStart(2, "0")}`;
     switch (info.language) {
+        case E.Language.golang: {
+            return `s_${name}/s_${name}${info.ext}`;
+        }
         case E.Language.javascript:
         case E.Language.typescript:
         default:
-            return `${String(info.id).padStart(C.ID_LENGTH, "0")}-${String(index).padStart(2, "0")}${info.ext}`;
+            return `s_${name}${info.ext}`;
     }
 }
 
@@ -136,41 +147,40 @@ async function createSolutionFile(
     try {
         const destination_directory_path = solutionDirectory(info.language, info.id);
 
-        switch (info.language) {
-            case E.Language.javascript:
-            case E.Language.typescript: {
-                for (let index = 1; true; index++) {
-                    const destination = path.join(destination_directory_path, solutionFileName(info, index));
-                    if (await fsAsync.exists(destination)) {
-                        continue;
-                    }
-                    else {
-                        await Bun.sleep(1_000); // 避免 VSCode 扩展 LeetCode.vscode-leetcode 重复创建文件
+        for (let index = 1; true; index++) {
+            const destination = path.join(destination_directory_path, solutionFileName(info, index));
+            if (await fsAsync.exists(destination)) {
+                continue;
+            }
+            else {
+                await Bun.sleep(1_000); // 避免 VSCode 扩展 LeetCode.vscode-leetcode 重复创建文件
 
-                        /* 在指定位置创建题解模板文件 */
-                        const content = await Bun.file(original).text();
-                        await Bun.write(
-                            destination,
-                            content.replaceAll("\r\n", "\n"),
-                            { createPath: true },
-                        );
+                /* 在指定位置创建题解模板文件 */
+                const content = await Bun.file(original).text();
+                await Bun.write(
+                    destination,
+                    content.replaceAll("\r\n", "\n"),
+                    { createPath: true },
+                );
 
+                switch (info.language) {
+                    case E.Language.javascript:
+                    case E.Language.typescript:
                         /* 覆写测试文件以触发 bun 的测试 */
                         await Bun.write(
                             path.join(destination_directory_path, C.ES_SOLUTIONS_TEST_FILE_NAME),
                             C.ES_SOLUTIONS_TEST_FILE_CONTENT,
                             { createPath: true },
                         );
-
-                        /* 删除 VSCode 插件 LeetCode.vscode-leetcode 创建的题解模板文件 */
-                        await fsAsync.unlink(original);
-                        return destination;
-                    }
+                        break;
+                    default:
+                        break;
                 }
-            }
 
-            default:
-                break;
+                /* 删除 VSCode 插件 LeetCode.vscode-leetcode 创建的题解模板文件 */
+                await fsAsync.unlink(original);
+                return destination;
+            }
         }
     }
     catch (error) {
@@ -256,8 +266,15 @@ async function solutionsHandler(
             const file_info = parseSolutionFilePath(entryPath);
             if (file_info) {
                 // console.log(file_info);
-                solution_file_path = await createSolutionFile(file_info, entryPath);
-                examples_file_path = await createSolutionTestExamplesFile(file_info);
+                switch (file_info.language) {
+                    case E.Language.golang:
+                    case E.Language.javascript:
+                    case E.Language.typescript: {
+                        solution_file_path = await createSolutionFile(file_info, entryPath);
+                        examples_file_path = await createSolutionTestExamplesFile(file_info);
+                        break;
+                    }
+                }
             }
             break;
         }
@@ -270,6 +287,8 @@ async function solutionsHandler(
             "➜  ".padStart(EVENT_NAME_WIDTH),
             chalk.green(path.join(process.cwd(), solution_file_path)),
         ].join(""));
+    }
+    if (examples_file_path) {
         console.debug([
             // " ".repeat(EVENT_NAME_WIDTH),
             "🧪  ".padStart(EVENT_NAME_WIDTH),
