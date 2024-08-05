@@ -3,6 +3,7 @@
 ## 2024-08-05
 
 - 修复 `ecmascript` 题解的自动化测试 | Fix automated tests for `ecmascript` solutions
+- 添加调用 `commitlint` 的 `commit-msg` 脚本 | Add `commit-msg` script that calls `commitlint`
 
 ## 2024-08-04
 
