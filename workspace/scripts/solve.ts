@@ -20,11 +20,14 @@ import process from "node:process";
 import chalk from "chalk";
 import chokidar from "chokidar";
 
-import { C, E } from "@repo/common";
+import { C, E, U } from "@repo/common";
+import { renderTestFile } from "@repo/templates";
 
 import type fs from "node:fs";
 
 console.log(import.meta.url);
+
+type TEntryEventName = "add" | "addDir" | "change" | "unlink" | "unlinkDir";
 
 /**
  * 题解信息
@@ -35,6 +38,14 @@ interface ISolutionInfo {
     name: string;
     language: E.Language;
     ext: E.Extension;
+}
+
+/**
+ * 文件操作事件
+ */
+interface IFileEvent {
+    path: string;
+    name?: "add" | "change" | "unlink";
 }
 
 /**
@@ -60,34 +71,6 @@ function parseSolutionFilePath(filePath: string): ISolutionInfo | void {
 }
 
 /**
- * 题目 ID 填充前导零
- * @param id - 题目 ID
- * @param maxLength - 填充后的最大长度
- * @returns 填充后的题目 ID
- */
-function idPadZero(
-    id: number,
-    maxLength = C.ID_LENGTH,
-): string {
-    return String(id).padStart(maxLength, "0");
-}
-
-/**
- * 题目 ID 转换为目录路径
- * @param id - 题目 ID
- * @param prefix - 目录名前缀
- * @param suffix - 目录名后缀
- * @returns 目录路径列表
- */
-function id2paths(
-    id: number,
-    prefix = "",
-    suffix = "",
-): string[] {
-    return idPadZero(id).split("").map((digit) => `${prefix}${digit}${suffix}`);
-}
-
-/**
  * 构造题解目录路径
  * @param language - 题解语言
  * @param id - 题解编号
@@ -97,10 +80,9 @@ function solutionDirectory(
     language: E.Language,
     id: number,
 ): string {
-    // @ts-expect-error info is not assignable to type 'never'
-    const source_root_directory: string | undefined = C.SOLUTIONS_DIRECTORY[language];
+    const source_root_directory = C.SOLUTIONS_DIRECTORY_MAP.get(language);
     if (source_root_directory) {
-        const paths = id2paths(id, "_");
+        const paths = U.id2paths(id, "_");
         switch (language) {
             case E.Language.java:
             case E.Language.golang:
@@ -123,10 +105,9 @@ function solutionTestDirectory(
     language: E.Language,
     id: number,
 ): string {
-    // @ts-expect-error info is not assignable to type 'never'
-    const source_root_directory: string | undefined = C.SOLUTIONS_TEST_DIRECTORY[language];
+    const source_root_directory = C.SOLUTIONS_TEST_DIRECTORY_MAP.get(language);
     if (source_root_directory) {
-        const paths = id2paths(id, "_");
+        const paths = U.id2paths(id, "_");
         switch (language) {
             case E.Language.java:
             case E.Language.golang:
@@ -149,7 +130,7 @@ function solutionFileName(
     info: ISolutionInfo,
     index: number,
 ): string {
-    const name = `${String(info.id).padStart(C.ID_LENGTH, "0")}_${String(index).padStart(2, "0")}`;
+    const name = `${String(info.id).padStart(C.ID_LENGTH, "0")}_${String(index).padStart(C.SOLUTION_INDEX_LENGTH, "0")}`;
     switch (info.language) {
         case E.Language.golang:
             return `s_${name}/s_${name}${info.ext}`;
@@ -170,13 +151,13 @@ function solutionFileName(
 async function createSolutionFile(
     info: ISolutionInfo,
     original: string,
-): Promise<string | void> {
+): Promise<IFileEvent | void> {
     try {
-        const destination_directory_path = solutionDirectory(info.language, info.id);
+        const solution_directory_path = solutionDirectory(info.language, info.id);
 
         for (let index = 1; true; index++) {
-            const destination = path.join(destination_directory_path, solutionFileName(info, index));
-            if (await fsAsync.exists(destination)) {
+            const solution_file_path = path.join(solution_directory_path, solutionFileName(info, index));
+            if (await fsAsync.exists(solution_file_path)) {
                 continue;
             }
             else {
@@ -185,14 +166,17 @@ async function createSolutionFile(
                 /* 在指定位置创建题解模板文件 */
                 const content = await Bun.file(original).text();
                 await Bun.write(
-                    destination,
+                    solution_file_path,
                     content.replaceAll("\r\n", "\n"),
                     { createPath: true },
                 );
 
                 /* 删除 VSCode 插件 LeetCode.vscode-leetcode 创建的题解模板文件 */
                 await fsAsync.unlink(original);
-                return destination;
+                return {
+                    path: solution_file_path,
+                    name: "add",
+                };
             }
         }
     }
@@ -208,19 +192,52 @@ async function createSolutionFile(
  */
 async function createSolutionTestFile(
     info: ISolutionInfo,
-): Promise<string | void> {
+): Promise<IFileEvent | void> {
     try {
-        const destination_directory_path = solutionTestDirectory(info.language, info.id);
+        const test_directory_path = solutionTestDirectory(info.language, info.id);
+        const id = U.idPadZero(info.id);
         switch (info.language) {
-            case E.Language.golang:
+            case E.Language.golang: {
+                const test_file_path = path.join(test_directory_path, `s_${id}_test.go`);
+                if (!(await fsAsync.exists(test_file_path))) {
+                    const test_file_content = await renderTestFile(info);
+                    if (test_file_content) {
+                        await Bun.write(
+                            test_file_path,
+                            test_file_content,
+                            { createPath: true },
+                        );
+                        return {
+                            path: test_file_path,
+                            name: "add",
+                        };
+                    }
+                }
+                else {
+                    return {
+                        path: test_file_path,
+                    };
+                }
+                break;
+            }
             case E.Language.javascript:
             case E.Language.typescript: {
                 /* 覆写测试文件以触发 bun 的测试 */
-                await Bun.write(
-                    path.join(destination_directory_path, `s_${idPadZero(info.id)}.test.ts`),
-                    C.ES_SOLUTIONS_TEST_FILE_CONTENT,
-                    { createPath: true },
-                );
+                const test_file_path = path.join(test_directory_path, `s_${id}.test.ts`);
+                const test_file_content = await renderTestFile(info);
+                if (test_file_content) {
+                    await Bun.write(
+                        test_file_path,
+                        test_file_content,
+                        { createPath: true },
+                    );
+                    return {
+                        path: test_file_path,
+                        name: (await fsAsync.exists(test_file_path))
+                            ? "change"
+                            : "add",
+                    };
+                }
                 break;
             }
             default:
@@ -237,26 +254,30 @@ async function createSolutionTestFile(
  * @param info - 题解信息
  * @returns 测试用例文件路径
  */
-async function createSolutionTestExamplesFile(info: ISolutionInfo) {
-    const id = idPadZero(info.id);
-    const paths = id2paths(info.id);
-    const examples_file_path = path.join(process.cwd(), C.SOLUTIONS_TEST_EXAMPLES_DIRECTORY, ...paths, `${id}.json`);
+async function createSolutionTestExamplesFile(info: ISolutionInfo): Promise<IFileEvent | void> {
+    const id = U.idPadZero(info.id);
+    const paths = U.id2paths(info.id);
+    const examples_file_path = path.join(C.SOLUTIONS_TEST_EXAMPLES_DIRECTORY, ...paths, `${id}.json`);
     if (!(await fsAsync.exists(examples_file_path))) {
         await Bun.write(
             examples_file_path,
             C.SOLUTIONS_TEST_EXAMPLES_CONTENT,
             { createPath: true },
         );
+        return {
+            path: examples_file_path,
+            name: "add",
+        };
     }
-    return examples_file_path;
+    return {
+        path: examples_file_path,
+    };
 }
 
 /**
  * 事件名称文本宽度
  */
 const EVENT_NAME_WIDTH = 10;
-
-type TEntryEventName = "add" | "addDir" | "change" | "unlink" | "unlinkDir";
 
 /**
  * @param eventName - 事件名称
@@ -292,6 +313,24 @@ function printEntryEvent(
 }
 
 /**
+ * 格式化文件事件
+ * @param event - 文件事件
+ */
+function formatFileEvent(event: IFileEvent): string {
+    const full_path = path.join(process.cwd(), event.path);
+    switch (event.name) {
+        case "add":
+            return chalk.green(full_path);
+        case "change":
+            return chalk.cyan(full_path);
+        case "unlink":
+            return chalk.red(full_path);
+        default:
+            return full_path;
+    }
+}
+
+/**
  * 处理文件资源变化
  * @param eventName - 事件名称
  * @param entryPath - 资源路径
@@ -303,9 +342,9 @@ async function solutionsHandler(
     _stats?: fs.Stats,
 ) {
     printEntryEvent(eventName, entryPath);
-    let examples_file_path: string | void = void null;
-    let solution_file_path: string | void = void null;
-    let solution_test_file_path: string | void = void null;
+    let examples_file: IFileEvent | void = void null;
+    let solution_file: IFileEvent | void = void null;
+    let solution_test_file: IFileEvent | void = void null;
     switch (eventName) {
         case "add": {
             const file_info = parseSolutionFilePath(entryPath);
@@ -315,9 +354,9 @@ async function solutionsHandler(
                     case E.Language.golang:
                     case E.Language.javascript:
                     case E.Language.typescript: {
-                        examples_file_path = await createSolutionTestExamplesFile(file_info);
-                        solution_file_path = await createSolutionFile(file_info, entryPath);
-                        solution_test_file_path = await createSolutionTestFile(file_info);
+                        examples_file = await createSolutionTestExamplesFile(file_info);
+                        solution_file = await createSolutionFile(file_info, entryPath);
+                        solution_test_file = await createSolutionTestFile(file_info);
                         break;
                     }
                 }
@@ -327,22 +366,22 @@ async function solutionsHandler(
         default:
             break;
     }
-    if (examples_file_path) {
+    if (examples_file) {
         console.debug([
             "🌰  ".padStart(EVENT_NAME_WIDTH),
-            chalk.green(examples_file_path),
+            formatFileEvent(examples_file),
         ].join(""));
     }
-    if (solution_file_path) {
+    if (solution_file) {
         console.debug([
             "➜  ".padStart(EVENT_NAME_WIDTH),
-            chalk.green(path.join(process.cwd(), solution_file_path)),
+            formatFileEvent(solution_file),
         ].join(""));
     }
-    if (solution_test_file_path) {
+    if (solution_test_file) {
         console.debug([
             "🧪  ".padStart(EVENT_NAME_WIDTH),
-            chalk.green(path.join(process.cwd(), solution_test_file_path)),
+            formatFileEvent(solution_test_file),
         ].join(""));
     }
 }

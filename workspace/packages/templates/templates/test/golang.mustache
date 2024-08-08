@@ -1,0 +1,20 @@
+package _/*{{ id }}*/
+
+import (
+	"testing"
+
+	"github.com/Zuoqiu-Yingyi/leetcode-multilingual/workspace/solutions/go/utils"
+
+	"github.com/Zuoqiu-Yingyi/leetcode-multilingual/workspace/solutions/go//*{{ path }}*//s_/*{{ id }}*/_/*{{ index}}*/"
+)
+
+type Solution = func(__ []any /* TODO: input type */) any /* TODO: output type */
+
+func TestSolutions(t *testing.T) {
+	utils.Test(
+		[]Solution{
+			s_/*{{ id }}*/_/*{{ index}}*/.Solution,
+		},
+		t,
+	)
+}

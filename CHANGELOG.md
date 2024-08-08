@@ -1,5 +1,9 @@
 # 更改日志 | Change Log
 
+## 2024-08-09
+
+- 添加测试文件模板 | Add test file template
+
 ## 2024-08-08
 
 - 优化 `go` 题解的自动化测试 | Optimize automated tests for `go` solutions

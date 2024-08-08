@@ -21,6 +21,11 @@ import { Language } from "./enums";
 export const ID_LENGTH = 4;
 
 /**
+ * 题解序号长度
+ */
+export const SOLUTION_INDEX_LENGTH = 2;
+
+/**
  * 题解临时目录
  */
 export const SOLUTIONS_TEMPORARY_DIRECTORY = ".solutions";
@@ -35,6 +40,8 @@ export const SOLUTIONS_DIRECTORY = {
     [Language.typescript]: "./solutions/ecmascript/src",
 } as const;
 
+export const SOLUTIONS_DIRECTORY_MAP = new Map(Object.entries(SOLUTIONS_DIRECTORY)) as Map<Language, string>;
+
 /**
  * 题解测试目录
  */
@@ -42,6 +49,8 @@ export const SOLUTIONS_TEST_DIRECTORY = {
     ...SOLUTIONS_DIRECTORY,
     [Language.java]: "./solutions/java/src/test/java",
 } as const;
+
+export const SOLUTIONS_TEST_DIRECTORY_MAP = new Map(Object.entries(SOLUTIONS_DIRECTORY)) as Map<Language, string>;
 
 /**
  * 题解测试用例文件目录
@@ -54,15 +63,4 @@ export const SOLUTIONS_TEST_EXAMPLES_DIRECTORY = "./packages/examples";
 export const SOLUTIONS_TEST_EXAMPLES_CONTENT = `\
 [
 ]
-`;
-
-export const ES_SOLUTIONS_TEST_FILE_CONTENT = `\
-import test from "bun:test";
-
-import { t } from "@/utils/test";
-
-t(
-    test,
-    import.meta.dir,
-);
 `;

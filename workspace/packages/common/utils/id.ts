@@ -13,6 +13,34 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-export * as C from "./constants";
-export * as E from "./enums";
-export * as U from "./utils";
+import { C } from "./..";
+
+/**
+ * 题目 ID 填充前导零
+ * @param id - 题目 ID
+ * @param maxLength - 填充后的最大长度
+ * @returns 填充后的题目 ID
+ */
+export function idPadZero(
+    id: number,
+    maxLength = C.ID_LENGTH,
+): string {
+    return String(id).padStart(maxLength, "0");
+}
+
+/**
+ * 题目 ID 转换为目录路径
+ * @param id - 题目 ID
+ * @param prefix - 目录名前缀
+ * @param suffix - 目录名后缀
+ * @returns 目录路径列表
+ */
+export function id2paths(
+    id: number,
+    prefix = "",
+    suffix = "",
+): string[] {
+    return idPadZero(id)
+        .split("")
+        .map((digit) => `${prefix}${digit}${suffix}`);
+}
