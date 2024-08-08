@@ -88,7 +88,7 @@ function id2paths(
 }
 
 /**
- * 构造题解目录
+ * 构造题解目录路径
  * @param language - 题解语言
  * @param id - 题解编号
  * @returns 目录路径
@@ -102,6 +102,33 @@ function solutionDirectory(
     if (source_root_directory) {
         const paths = id2paths(id, "_");
         switch (language) {
+            case E.Language.java:
+            case E.Language.golang:
+            case E.Language.javascript:
+            case E.Language.typescript:
+            default:
+                return path.join(source_root_directory, ...paths);
+        }
+    }
+    throw new Error(`Unsupported language: ${language}`);
+}
+
+/**
+ * 构造题解测试目录路径
+ * @param language - 题解语言
+ * @param id - 题解编号
+ * @returns 目录路径
+ */
+function solutionTestDirectory(
+    language: E.Language,
+    id: number,
+): string {
+    // @ts-expect-error info is not assignable to type 'never'
+    const source_root_directory: string | undefined = C.SOLUTIONS_TEST_DIRECTORY[language];
+    if (source_root_directory) {
+        const paths = id2paths(id, "_");
+        switch (language) {
+            case E.Language.java:
             case E.Language.golang:
             case E.Language.javascript:
             case E.Language.typescript:
@@ -124,9 +151,9 @@ function solutionFileName(
 ): string {
     const name = `${String(info.id).padStart(C.ID_LENGTH, "0")}_${String(index).padStart(2, "0")}`;
     switch (info.language) {
-        case E.Language.golang: {
+        case E.Language.golang:
             return `s_${name}/s_${name}${info.ext}`;
-        }
+        case E.Language.java:
         case E.Language.javascript:
         case E.Language.typescript:
         default:
@@ -163,24 +190,41 @@ async function createSolutionFile(
                     { createPath: true },
                 );
 
-                switch (info.language) {
-                    case E.Language.javascript:
-                    case E.Language.typescript:
-                        /* 覆写测试文件以触发 bun 的测试 */
-                        await Bun.write(
-                            path.join(destination_directory_path, C.ES_SOLUTIONS_TEST_FILE_NAME),
-                            C.ES_SOLUTIONS_TEST_FILE_CONTENT,
-                            { createPath: true },
-                        );
-                        break;
-                    default:
-                        break;
-                }
-
                 /* 删除 VSCode 插件 LeetCode.vscode-leetcode 创建的题解模板文件 */
                 await fsAsync.unlink(original);
                 return destination;
             }
+        }
+    }
+    catch (error) {
+        console.warn(error);
+    }
+}
+
+/**
+ * 创建题解测试文件
+ * @param info - 题解信息
+ * @returns 测试文件路径
+ */
+async function createSolutionTestFile(
+    info: ISolutionInfo,
+): Promise<string | void> {
+    try {
+        const destination_directory_path = solutionTestDirectory(info.language, info.id);
+        switch (info.language) {
+            case E.Language.golang:
+            case E.Language.javascript:
+            case E.Language.typescript: {
+                /* 覆写测试文件以触发 bun 的测试 */
+                await Bun.write(
+                    path.join(destination_directory_path, `s_${idPadZero(info.id)}.test.ts`),
+                    C.ES_SOLUTIONS_TEST_FILE_CONTENT,
+                    { createPath: true },
+                );
+                break;
+            }
+            default:
+                break;
         }
     }
     catch (error) {
@@ -259,8 +303,9 @@ async function solutionsHandler(
     _stats?: fs.Stats,
 ) {
     printEntryEvent(eventName, entryPath);
-    let solution_file_path: string | void = void null;
     let examples_file_path: string | void = void null;
+    let solution_file_path: string | void = void null;
+    let solution_test_file_path: string | void = void null;
     switch (eventName) {
         case "add": {
             const file_info = parseSolutionFilePath(entryPath);
@@ -270,8 +315,9 @@ async function solutionsHandler(
                     case E.Language.golang:
                     case E.Language.javascript:
                     case E.Language.typescript: {
-                        solution_file_path = await createSolutionFile(file_info, entryPath);
                         examples_file_path = await createSolutionTestExamplesFile(file_info);
+                        solution_file_path = await createSolutionFile(file_info, entryPath);
+                        solution_test_file_path = await createSolutionTestFile(file_info);
                         break;
                     }
                 }
@@ -281,18 +327,22 @@ async function solutionsHandler(
         default:
             break;
     }
+    if (examples_file_path) {
+        console.debug([
+            "🌰  ".padStart(EVENT_NAME_WIDTH),
+            chalk.green(examples_file_path),
+        ].join(""));
+    }
     if (solution_file_path) {
         console.debug([
-            // " ".repeat(EVENT_NAME_WIDTH),
             "➜  ".padStart(EVENT_NAME_WIDTH),
             chalk.green(path.join(process.cwd(), solution_file_path)),
         ].join(""));
     }
-    if (examples_file_path) {
+    if (solution_test_file_path) {
         console.debug([
-            // " ".repeat(EVENT_NAME_WIDTH),
             "🧪  ".padStart(EVENT_NAME_WIDTH),
-            chalk.green(examples_file_path),
+            chalk.green(path.join(process.cwd(), solution_test_file_path)),
         ].join(""));
     }
 }

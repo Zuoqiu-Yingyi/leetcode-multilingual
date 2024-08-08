@@ -1,3 +1,5 @@
+# REF: https://github.com/github/gitignore/blob/main/Node.gitignore
+
 # Custom
 ./.solutions
 ./.solutions/.gitkeep

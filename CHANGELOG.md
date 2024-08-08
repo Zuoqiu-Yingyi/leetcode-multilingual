@@ -1,5 +1,9 @@
 # 更改日志 | Change Log
 
+## 2024-08-08
+
+- 优化 `go` 题解的自动化测试 | Optimize automated tests for `go` solutions
+
 ## 2024-08-06
 
 - 添加 `go` 题解的自动化测试 | Add automated tests for `go` solutions

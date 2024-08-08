@@ -6,6 +6,7 @@ const config = {
     // REF: https://github.com/sudo-suhas/lint-staged-django-react-demo
     "*": "cspell",
     "*.{js,ts,md,json,yaml}": "eslint --fix",
+    "*.go": "gofmt -w",
 };
 
 export default config;

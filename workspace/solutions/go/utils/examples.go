@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"reflect"
 	"strings"
 )
 
@@ -94,7 +95,44 @@ func loadExamples() (examples []*Example, err error) {
 	return
 }
 
-func GetExamples() []*Example {
-	examples, _ := loadExamples()
-	return examples
+func GetExamples() (examples []*Example, err error) {
+	examples, err = loadExamples()
+	return
+}
+
+type ExampleValue struct {
+	Inputs  []reflect.Value
+	Outputs []reflect.Value
+}
+
+func ExamplesToExamplesValue(examples []*Example, inputTypes, outputTypes []*reflect.Type) (examplesValue []*ExampleValue, err error) {
+	examplesValue = make([]*ExampleValue, len(examples))
+	for i, example := range examples {
+		if len(example.Input) != len(inputTypes) {
+			panic("invalid example input length")
+		}
+		if len(outputTypes) != 1 {
+			panic("invalid solution output length")
+		}
+
+		Inputs := make([]reflect.Value, len(inputTypes))
+		for j, input := range example.Input {
+			Inputs[j], err = AnyToReflectValue(input, *inputTypes[j])
+			if err != nil {
+				return
+			}
+		}
+
+		Outputs := make([]reflect.Value, 1)
+		Outputs[0], err = AnyToReflectValue(example.Output, *outputTypes[0])
+		if err != nil {
+			return
+		}
+
+		examplesValue[i] = &ExampleValue{
+			Inputs:  Inputs,
+			Outputs: Outputs,
+		}
+	}
+	return
 }

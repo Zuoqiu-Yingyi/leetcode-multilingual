@@ -29,9 +29,18 @@ export const SOLUTIONS_TEMPORARY_DIRECTORY = ".solutions";
  * 题解目录
  */
 export const SOLUTIONS_DIRECTORY = {
+    [Language.java]: "./solutions/java/src/main/java",
     [Language.golang]: "./solutions/go",
     [Language.javascript]: "./solutions/ecmascript/src",
     [Language.typescript]: "./solutions/ecmascript/src",
+} as const;
+
+/**
+ * 题解测试目录
+ */
+export const SOLUTIONS_TEST_DIRECTORY = {
+    ...SOLUTIONS_DIRECTORY,
+    [Language.java]: "./solutions/java/src/test/java",
 } as const;
 
 /**
@@ -46,11 +55,6 @@ export const SOLUTIONS_TEST_EXAMPLES_CONTENT = `\
 [
 ]
 `;
-
-/**
- * 题解测试文件名
- */
-export const ES_SOLUTIONS_TEST_FILE_NAME = "index.test.ts";
 
 export const ES_SOLUTIONS_TEST_FILE_CONTENT = `\
 import test from "bun:test";

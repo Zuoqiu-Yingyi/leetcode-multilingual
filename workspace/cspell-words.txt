@@ -1,6 +1,7 @@
 antfu
 commitlint
 dprint
+gofmt
 leetcode
 nums
 tsdoc

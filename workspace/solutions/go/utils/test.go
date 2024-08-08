@@ -15,16 +15,60 @@
 
 package utils
 
-func IntArrayEqual(a, b []int) bool {
-	if len(a) != len(b) {
-		return false
-	}
-	length := len(a)
+import (
+	"fmt"
+	"reflect"
+	"testing"
+)
 
-	for i := 0; i < length; i++ {
-		if a[i] != b[i] {
-			return false
-		}
+func Test[T any](solutions []T, t *testing.T) {
+	if len(solutions) == 0 {
+		t.Fatal("No solutions")
 	}
-	return true
+
+	examples, err := GetExamples()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(examples) == 0 {
+		t.Fatal("No examples")
+	}
+
+	inputTypes, err := GetFuncInputTypes(solutions)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	outputTypes, err := GetFuncOutputTypes(solutions)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	examplesValue, err := ExamplesToExamplesValue(examples, inputTypes, outputTypes)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for s, solution := range solutions {
+		solutionValue := reflect.ValueOf(solution)
+		t.Run(fmt.Sprintf("solution:%d", s), func(t *testing.T) {
+			for e, exampleValue := range examplesValue {
+				t.Run(fmt.Sprintf("example:%d", e), func(t *testing.T) {
+					outputs := ReflectValueToAny(solutionValue.Call(exampleValue.Inputs))
+					expected := ReflectValueToAny(exampleValue.Outputs)
+					if !reflect.DeepEqual(outputs, expected) {
+						inputs := ReflectValueToAny(exampleValue.Inputs)
+						t.Errorf(
+							"solution: %d, example: %d, input: %v, output: %v, expected: %v",
+							s,
+							e,
+							inputs,
+							outputs,
+							expected,
+						)
+					}
+				})
+			}
+		})
+	}
 }

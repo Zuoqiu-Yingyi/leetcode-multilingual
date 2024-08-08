@@ -1,10 +1,10 @@
+package s_0001_01
+
 /*
  * @lc app=leetcode.cn id=1 lang=golang
  *
  * [1] 两数之和
  */
-
-package _0001_01
 
 // @lc code=start
 func twoSum(nums []int, target int) []int {
@@ -21,4 +21,4 @@ func twoSum(nums []int, target int) []int {
 
 // @lc code=end
 
-var TwoSum = twoSum
+var Solution = twoSum

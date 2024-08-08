@@ -1,0 +1,14 @@
+{
+    "name": "@repo/templates",
+    "type": "module",
+    "private": false,
+    "scripts": {
+        "lint:eslint": "eslint --max-warnings 0 .",
+        "format:eslint": "eslint --fix .",
+        "check:cspell": "cspell ."
+    },
+    "devDependencies": {
+        "@types/mustache": "^4.2.5",
+        "mustache": "^4.2.0"
+    }
+}

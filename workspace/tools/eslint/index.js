@@ -206,4 +206,11 @@ export default antfu({
         GLOB_JS,
         GLOB_JSX,
     ],
+}, {
+    rules: {
+        "style/spaced-comment": ["off"],
+    },
+    files: [
+        "**/*.mustache.*",
+    ],
 });
