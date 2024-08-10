@@ -1,7 +1,12 @@
 antfu
+aosp
+classpath
 commitlint
 dprint
+fastjson
+foojay
 gofmt
+gradlew
 leetcode
 nums
 tsdoc

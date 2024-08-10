@@ -34,7 +34,7 @@ export const SOLUTIONS_TEMPORARY_DIRECTORY = ".solutions";
  * 题解目录
  */
 export const SOLUTIONS_DIRECTORY = {
-    [Language.java]: "./solutions/java/src/main/java",
+    [Language.java]: "./solutions/java/lib/src/main/java",
     [Language.golang]: "./solutions/go",
     [Language.javascript]: "./solutions/ecmascript/src",
     [Language.typescript]: "./solutions/ecmascript/src",

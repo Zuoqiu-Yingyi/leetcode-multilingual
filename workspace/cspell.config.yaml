@@ -8,8 +8,13 @@ dictionaryDefinitions:
 dictionaries:
   - cspell-words
 ignorePaths:
+  - .gitignore
+  - build
+  - cspell-words.txt
+  - gradle
+  - gradlew
+  - gradlew.bat
   - node_modules
   - packages/examples/**/*.json
-  - .gitignore
-  - ./cspell-words.txt
-  - ./pnpm-lock.yaml
+  - pnpm-lock.yaml
+  - temp

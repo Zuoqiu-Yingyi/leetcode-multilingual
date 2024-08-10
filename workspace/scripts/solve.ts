@@ -223,7 +223,7 @@ async function createSolutionTestFile(
             case E.Language.javascript:
             case E.Language.typescript: {
                 /* 覆写测试文件以触发 bun 的测试 */
-                const test_file_path = path.join(test_directory_path, `s_${id}.test.ts`);
+                const test_file_path = path.join(test_directory_path, `s_${id}_test.ts`);
                 const test_file_content = await renderTestFile(info);
                 if (test_file_content) {
                     await Bun.write(
@@ -351,6 +351,7 @@ async function solutionsHandler(
             if (file_info) {
                 // console.log(file_info);
                 switch (file_info.language) {
+                    case E.Language.java:
                     case E.Language.golang:
                     case E.Language.javascript:
                     case E.Language.typescript: {

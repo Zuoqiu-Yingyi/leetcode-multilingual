@@ -13,4 +13,22 @@
         "solution",
         "description",
     ],
+    "java.format.enabled": false,
+
+    "[java]": {
+        "spotlessGradle.diagnostics.enable": true,
+        "spotlessGradle.format.enable": true,
+        "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle",
+        "editor.codeActionsOnSave": {
+            "source.fixAll.spotlessGradle": true,
+        }
+    },
+    "[gradle]": {
+        "spotlessGradle.diagnostics.enable": true,
+        "spotlessGradle.format.enable": true,
+        "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle",
+        "editor.codeActionsOnSave": {
+            "source.fixAll.spotlessGradle": true,
+        }
+    }
 }

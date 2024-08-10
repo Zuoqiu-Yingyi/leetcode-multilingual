@@ -1,5 +1,9 @@
 # 更改日志 | Change Log
 
+## 2024-08-10
+
+- 初始化 `java` 题解项目 | Initialize `java` solutions project
+
 ## 2024-08-09
 
 - 添加测试文件模板 | Add test file template
