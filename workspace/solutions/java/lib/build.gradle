@@ -21,8 +21,8 @@ dependencies {
     testImplementation libs.junit.jupiter
 
     // REF: https://github.com/alibaba/fastjson2
+    // implementation 'com.alibaba.fastjson2:fastjson2:2.0.52'
     testImplementation libs.fastjson2
-
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
@@ -43,9 +43,6 @@ java {
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
 }
 
 // REF: https://github.com/diffplug/spotless/tree/main/plugin-gradle
@@ -59,7 +56,7 @@ spotless {
 
         // define the steps to apply to those files
         trimTrailingWhitespace()
-        indentWithSpaces() // or spaces. Takes an integer argument if you don't like 4
+        indentWithSpaces(4) // or spaces. Takes an integer argument if you don't like 4
         endWithNewline()
     }
 
@@ -67,13 +64,19 @@ spotless {
         // don't need to set target, it is inferred from java
 
         // apply a specific flavor of google-java-format
-        // REF: https://github.com/google/google-java-format
-        googleJavaFormat().aosp()
+        // googleJavaFormat().aosp()
+
+        // REF: https://github.com/diffplug/spotless/tree/main/plugin-gradle#clang-format
+        // LLVM, Google, Chromium, Mozilla, WebKit, Microsoft, GNU, InheritParentConfig
+        clangFormat('18.1.8').style('WebKit')
+
+        // Use the default importOrder configuration
+        importOrder()
+
+        removeUnusedImports()
 
         // fix formatting of type annotations
         formatAnnotations()
-
-        // removeUnusedImports()
 
         // make sure every file has the following copyright header.
         // optionally, Spotless can set copyright years by digging

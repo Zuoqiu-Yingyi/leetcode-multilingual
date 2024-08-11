@@ -8,6 +8,7 @@ dictionaryDefinitions:
 dictionaries:
   - cspell-words
 ignorePaths:
+  - .clang-format
   - .gitignore
   - build
   - cspell-words.txt
@@ -15,6 +16,7 @@ ignorePaths:
   - gradlew
   - gradlew.bat
   - node_modules
+  - package.json
   - packages/examples/**/*.json
   - pnpm-lock.yaml
   - temp

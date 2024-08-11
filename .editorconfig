@@ -18,5 +18,5 @@ trim_trailing_whitespace = false
 [*.{go}]
 indent_style = tab
 
-[*.{yml,yaml}]
+[*.{yml,yaml,clang-format}]
 indent_size = 2

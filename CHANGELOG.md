@@ -1,5 +1,9 @@
 # 更改日志 | Change Log
 
+## 2024-08-11
+
+- 添加 `java` 题解的自动化测试 | Add automated tests for `java` solutions
+
 ## 2024-08-10
 
 - 初始化 `java` 题解项目 | Initialize `java` solutions project

@@ -6,7 +6,7 @@ commons-math3 = "3.6.1"
 fastjson2 = "2.0.52"
 guava = "33.1.0-jre"
 junit-jupiter = "5.10.2"
-spotless = "6.25.0"
+spotless = "7.0.0.BETA1"
 
 [libraries]
 commons-math3 = { module = "org.apache.commons:commons-math3", version.ref = "commons-math3" }

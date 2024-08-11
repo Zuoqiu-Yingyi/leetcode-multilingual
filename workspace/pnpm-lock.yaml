@@ -42,6 +42,9 @@ importers:
       '@types/node':
         specifier: ^22.1.0
         version: 22.1.0
+      '@wasm-fmt/clang-format':
+        specifier: ^18.1.8
+        version: 18.1.8
       chalk:
         specifier: ^5.3.0
         version: 5.3.0
@@ -60,6 +63,9 @@ importers:
       lint-staged:
         specifier: ^15.2.8
         version: 15.2.8
+      nushell:
+        specifier: ^0.96.1
+        version: 0.96.1
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
@@ -526,6 +532,46 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
+  '@nushell/darwin-arm64@0.96.1':
+    resolution: {integrity: sha512-jDuaZKyZYzOcfD6v4Hlm6EMfw/xxvgBWakt8XRNIrjuIxUxboIsM7mk7dvCCw4CPtMBjr9JS9sAH0IVhpz1d/g==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@nushell/darwin-x64@0.96.1':
+    resolution: {integrity: sha512-gxeLIICL6uGao88bKUEMLYL7rfO/hw4n5FUR9PpHhvU4iM3zbvXXQsbGFFFScSph5ABQyY83eBlN3x9oNfjXDQ==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@nushell/linux-arm64@0.96.1':
+    resolution: {integrity: sha512-X8LhOWlseJHbZtwrQIA8wWtBnTOPf96toL2Yb9un5eNb80YZiY7U7dhSfN2SqhyejmeUAJjIVTq4hqHNgvM9jQ==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@nushell/linux-arm@0.96.1':
+    resolution: {integrity: sha512-g+dX5qi6QtKgwoY3l9iBpv1KK7/Csjyeifpn7SP4A8GvTZ7XtebUBKB6hG4VygPKahe7kehoDWpJHv0Ne+MaNw==}
+    cpu: [arm]
+    os: [linux]
+
+  '@nushell/linux-riscv64@0.96.1':
+    resolution: {integrity: sha512-RO7/iVMRDgt1OzOlSpOzycsQz39tfmxU1sAYHlCT2HQX5NJO/ZtwH9z0nkxMwjoK7wfVMV28AP1SzQgdfIrLSQ==}
+    cpu: [riscv64]
+    os: [linux]
+
+  '@nushell/linux-x64@0.96.1':
+    resolution: {integrity: sha512-qKHpx+k6uLJe44Y9QU/AVXCtbgrIWPPLQxWOzgoypaHCxDhVWoPqG8fynZSinAO0KxbOlyNvywA7nXgGJz9X3w==}
+    cpu: [x64]
+    os: [linux]
+
+  '@nushell/windows-arm64@0.96.1':
+    resolution: {integrity: sha512-rTQNOfBtn1w/bbw0i+byaLFMqD5ArpeJEHYnF5GqwK3MZGLZ1FzaIbM7UQ6rAmENjpPsaT3GnJEKntyJxiMehA==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@nushell/windows-x64@0.96.1':
+    resolution: {integrity: sha512-QFjP5JH6Fg//bKM8ObFtYCkaShQyNvM6SVRpXtd3qgKKFlUud7r4NxkJQ/b8r8qktMHU5Ppmpx3eKUhPMKBKaA==}
+    cpu: [x64]
+    os: [win32]
+
   '@pkgr/core@0.1.1':
     resolution: {integrity: sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
@@ -704,6 +750,11 @@ packages:
 
   '@vue/shared@3.4.35':
     resolution: {integrity: sha512-hvuhBYYDe+b1G8KHxsQ0diDqDMA8D9laxWZhNAjE83VZb5UDaXl9Xnz7cGdDSyiHM90qqI/CyGMcpBpiDy6VVQ==}
+
+  '@wasm-fmt/clang-format@18.1.8':
+    resolution: {integrity: sha512-JWX9ILldydxP0/Z6ksCiyWbpN9mB7X1Kj8ESVGkZ3KA5aV363EEzTctHb/Y/FHXAsNIdWO7dp73OMNM0uCUPBg==}
+    engines: {node: '>=16.17.0'}
+    hasBin: true
 
   '@xml-tools/parser@1.0.11':
     resolution: {integrity: sha512-aKqQ077XnR+oQtHJlrAflaZaL7qZsulWc/i/ZEooar5JiWj1eLt0+Wg28cpa+XLney107wXqneC+oG1IZvxkTA==}
@@ -1782,6 +1833,11 @@ packages:
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
 
+  nushell@0.96.1:
+    resolution: {integrity: sha512-WVOZ1VEzScLhIkEWlkyN+wVFjwAPgHonX3ui18T+nZeRi7Pof11DeJEZ1+VvulRSPvZCibU8pT2fS5j40o4geA==}
+    engines: {node: '>=20.0.0', pnpm: '>=9'}
+    hasBin: true
+
   onetime@6.0.0:
     resolution: {integrity: sha512-1FlR+gjXK7X+AsAHso35MnyN5KqGwJRi/31ft6x0M194ht7S+rWAvd7PHss9xSKMzE0asv1pyIHaJYq+BbacAQ==}
     engines: {node: '>=12'}
@@ -2749,6 +2805,30 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
+  '@nushell/darwin-arm64@0.96.1':
+    optional: true
+
+  '@nushell/darwin-x64@0.96.1':
+    optional: true
+
+  '@nushell/linux-arm64@0.96.1':
+    optional: true
+
+  '@nushell/linux-arm@0.96.1':
+    optional: true
+
+  '@nushell/linux-riscv64@0.96.1':
+    optional: true
+
+  '@nushell/linux-x64@0.96.1':
+    optional: true
+
+  '@nushell/windows-arm64@0.96.1':
+    optional: true
+
+  '@nushell/windows-x64@0.96.1':
+    optional: true
+
   '@pkgr/core@0.1.1': {}
 
   '@prettier/plugin-xml@3.4.1(prettier@3.3.3)':
@@ -2999,6 +3079,8 @@ snapshots:
       '@vue/shared': 3.4.35
 
   '@vue/shared@3.4.35': {}
+
+  '@wasm-fmt/clang-format@18.1.8': {}
 
   '@xml-tools/parser@1.0.11':
     dependencies:
@@ -4148,6 +4230,17 @@ snapshots:
   nth-check@2.1.1:
     dependencies:
       boolbase: 1.0.0
+
+  nushell@0.96.1:
+    optionalDependencies:
+      '@nushell/darwin-arm64': 0.96.1
+      '@nushell/darwin-x64': 0.96.1
+      '@nushell/linux-arm': 0.96.1
+      '@nushell/linux-arm64': 0.96.1
+      '@nushell/linux-riscv64': 0.96.1
+      '@nushell/linux-x64': 0.96.1
+      '@nushell/windows-arm64': 0.96.1
+      '@nushell/windows-x64': 0.96.1
 
   onetime@6.0.0:
     dependencies:

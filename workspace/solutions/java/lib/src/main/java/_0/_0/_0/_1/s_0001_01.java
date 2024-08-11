@@ -11,23 +11,20 @@ import java.util.Map;
 
 // @lc code=start
 class Solution {
-    public int[] twoSum(int[] nums, int target) {
-        this.t();
+    public int[] twoSum(int[] nums, int target)
+    {
         final Map<Integer, Integer> map = new HashMap<Integer, Integer>();
-        for (int i = 0; ; ++i) {
+        for (int i = 0;; ++i) {
             final int num = nums[i];
             final int diff = target - num;
             final Integer j = map.get(diff);
             if (j != null) {
-                return new int[] {j, i};
+                return new int[] { j, i };
             }
             map.put(num, i);
         }
     }
-
-    protected void t() {}
 }
-
 // @lc code=end
 
-public class s_0001_01 extends Solution {}
+public class s_0001_01 extends Solution { }

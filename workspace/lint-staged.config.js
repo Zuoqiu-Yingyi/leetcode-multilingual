@@ -7,7 +7,8 @@ const config = {
     "*": "cspell lint --no-must-find-files",
     "*.{js,ts,md,json,yaml}": "eslint --fix",
     "*.go": "gofmt -w",
-    "*.java": (_) => "./solutions/java/gradlew -p ./solutions/java spotlessApply",
+    "*.java": "clang-format -i --style=file:./.clang-format",
+    // "*.java": (_) => "./solutions/java/gradlew -p ./solutions/java spotlessApply",
 };
 
 export default config;
