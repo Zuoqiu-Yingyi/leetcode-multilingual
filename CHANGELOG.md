@@ -4,6 +4,7 @@
 
 - 添加 `java` 题解的自动化测试 | Add automated tests for `java` solutions
 - 添加 `java` 测试模板自动生成功能 | Add automatic generation of `java` test templates
+- 优化 `go` 题解的自动化测试 | Optimize automated tests for `go` solutions
 
 ## 2024-08-10
 

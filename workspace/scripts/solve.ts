@@ -165,6 +165,9 @@ async function createSolutionFile(
 
                 /* 在指定位置创建题解模板文件 */
                 const content = await Bun.file(original).text();
+
+                // TODO: 使用模板初始化题解文件
+
                 await Bun.write(
                     solution_file_path,
                     content.replaceAll("\r\n", "\n"),

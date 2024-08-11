@@ -2,7 +2,6 @@
     "recommendations": [
         "dbaeumer.vscode-eslint",
         "editorconfig.editorconfig",
-        "golang.go",
         "leetcode.vscode-leetcode",
         "ms-vscode.vscode-typescript-next",
         "redhat.java",

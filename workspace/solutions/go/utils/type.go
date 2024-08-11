@@ -35,12 +35,7 @@ func GetFuncType(f any) (funcType reflect.Type, err error) {
 }
 
 // GetFuncInputTypes returns the input types of a function.
-func GetFuncInputTypes(f any) (inputTypes []*reflect.Type, err error) {
-	funcType, err := GetFuncType(f)
-	if err != nil {
-		return
-	}
-
+func GetFuncInputTypes(funcType reflect.Type) (inputTypes []*reflect.Type) {
 	inputTypes = make([]*reflect.Type, funcType.NumIn())
 	for i := 0; i < funcType.NumIn(); i++ {
 		inputType := funcType.In(i)
@@ -50,12 +45,7 @@ func GetFuncInputTypes(f any) (inputTypes []*reflect.Type, err error) {
 }
 
 // GetFuncOutputTypes returns the output types of a function.
-func GetFuncOutputTypes(f any) (outputTypes []*reflect.Type, err error) {
-	funcType, err := GetFuncType(f)
-	if err != nil {
-		return
-	}
-
+func GetFuncOutputTypes(funcType reflect.Type) (outputTypes []*reflect.Type) {
 	outputTypes = make([]*reflect.Type, funcType.NumOut())
 	for i := 0; i < funcType.NumOut(); i++ {
 		outputType := funcType.Out(i)

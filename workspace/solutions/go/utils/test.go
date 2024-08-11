@@ -34,15 +34,26 @@ func Test[T any](solutions []T, t *testing.T) {
 		t.Fatal("No examples")
 	}
 
-	inputTypes, err := GetFuncInputTypes(solutions)
+	funcType, err := GetFuncType(solutions[0])
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	outputTypes, err := GetFuncOutputTypes(solutions)
-	if err != nil {
-		t.Fatal(err)
+	/* 校验函数签名是否一致 */
+	funcTypeName := funcType.String()
+	for _, solution := range solutions {
+		funcType, err := GetFuncType(solution)
+		if err != nil {
+			t.Fatal(err)
+		}
+		_funcTypeName := funcType.String()
+		if funcTypeName != _funcTypeName {
+			t.Fatalf("Different function types: %s, %s", funcTypeName, _funcTypeName)
+		}
 	}
+
+	inputTypes := GetFuncInputTypes(funcType)
+	outputTypes := GetFuncOutputTypes(funcType)
 
 	examplesValue, err := ExamplesToExamplesValue(examples, inputTypes, outputTypes)
 	if err != nil {
