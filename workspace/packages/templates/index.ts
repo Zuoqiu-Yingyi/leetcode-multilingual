@@ -27,6 +27,7 @@ export const TEMPLATES_TEST_DIRECTORY_NAME = "test";
 export const TEMPLATES_SOLUTION_DIRECTORY_NAME = "solution";
 
 export const TEMPLATE_FILE_NAME = {
+    [E.Language.java]: "java.mustache",
     [E.Language.golang]: "golang.mustache",
     [E.Language.javascript]: "ecmascript.mustache",
     [E.Language.typescript]: "ecmascript.mustache",
@@ -58,6 +59,7 @@ export async function renderTestFile(info: ITestInfo): Promise<string | void> {
                 id: U.idPadZero(info.id),
                 path: U.id2paths(info.id, "_").join("/"),
                 index: U.idPadZero(info.index ?? 1, C.SOLUTION_INDEX_LENGTH),
+                package: U.id2paths(info.id, "_").join("."),
             }, undefined, {
                 escape: (value) => value,
                 tags: MUSTACHE_TAGS,

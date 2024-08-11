@@ -130,15 +130,15 @@ function solutionFileName(
     info: ISolutionInfo,
     index: number,
 ): string {
-    const name = `${String(info.id).padStart(C.ID_LENGTH, "0")}_${String(index).padStart(C.SOLUTION_INDEX_LENGTH, "0")}`;
+    const name = `s_${String(info.id).padStart(C.ID_LENGTH, "0")}_${String(index).padStart(C.SOLUTION_INDEX_LENGTH, "0")}`;
     switch (info.language) {
-        case E.Language.golang:
-            return `s_${name}/s_${name}${info.ext}`;
         case E.Language.java:
+        case E.Language.golang:
+            return `${name}/${name}${info.ext}`;
         case E.Language.javascript:
         case E.Language.typescript:
         default:
-            return `s_${name}${info.ext}`;
+            return `${name}${info.ext}`;
     }
 }
 
@@ -197,8 +197,9 @@ async function createSolutionTestFile(
         const test_directory_path = solutionTestDirectory(info.language, info.id);
         const id = U.idPadZero(info.id);
         switch (info.language) {
+            case E.Language.java:
             case E.Language.golang: {
-                const test_file_path = path.join(test_directory_path, `s_${id}_test.go`);
+                const test_file_path = path.join(test_directory_path, `s_${id}_test${info.ext}`);
                 if (!(await fsAsync.exists(test_file_path))) {
                     const test_file_content = await renderTestFile(info);
                     if (test_file_content) {

@@ -153,15 +153,18 @@ public class Test_ {
         // }
     }
 
+    private final String packageName;
     private final Class<?>[] Solutions;
     private List<Example> examples;
 
     /**
      * 构造函数
+     * @param packageName 测试类的包名
      * @param Solutions 题解类列表
      */
-    public Test_(final Class<?>... Solutions)
+    public Test_(final String packageName, final Class<?>... Solutions)
     {
+        this.packageName = packageName;
         this.Solutions = Solutions;
     }
 
@@ -205,18 +208,15 @@ public class Test_ {
         assertTrue(this.Solutions.length > 0, "No solutions");
 
         final Method method = Test_.getMethod(this.Solutions[0]);
-        final String package_name = Test_.getPackageName(this.Solutions[0]);
         final int method_parameter_count = Test_.getMethodParameterCount(method);
         final String[] method_parameter_type_names = Test_.getMethodParameterTypeNames(method);
         final String method_return_type_name = Test_.getMethodReturnTypeName(method);
         for (Class<?> Solution : this.Solutions) {
             final Method _method = Test_.getMethod(Solution);
-            final String _package_name = Test_.getPackageName(Solution);
             final int _method_parameter_count = Test_.getMethodParameterCount(_method);
             final String[] _method_parameter_type_names = Test_.getMethodParameterTypeNames(_method);
             final String _method_return_type_name = Test_.getMethodReturnTypeName(_method);
 
-            assertEquals(_package_name, package_name, "Package name is inconsistent");
             assertEquals(_method_parameter_count, method_parameter_count, "Method parameter count is inconsistent");
             assertArrayEquals(_method_parameter_type_names, method_parameter_type_names, "Method parameter type names is inconsistent");
             assertEquals(
@@ -224,7 +224,7 @@ public class Test_ {
             );
         }
 
-        final String examples_json = Example.readExamplesFile(package_name);
+        final String examples_json = Example.readExamplesFile(this.packageName);
         final JSONArray examples_json_array = JSON.parseArray(examples_json);
         this.examples = Example.getExamples(examples_json);
 

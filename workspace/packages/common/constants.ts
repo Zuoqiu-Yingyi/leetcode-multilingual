@@ -47,10 +47,10 @@ export const SOLUTIONS_DIRECTORY_MAP = new Map(Object.entries(SOLUTIONS_DIRECTOR
  */
 export const SOLUTIONS_TEST_DIRECTORY = {
     ...SOLUTIONS_DIRECTORY,
-    [Language.java]: "./solutions/java/src/test/java",
+    [Language.java]: "./solutions/java/lib/src/test/java",
 } as const;
 
-export const SOLUTIONS_TEST_DIRECTORY_MAP = new Map(Object.entries(SOLUTIONS_DIRECTORY)) as Map<Language, string>;
+export const SOLUTIONS_TEST_DIRECTORY_MAP = new Map(Object.entries(SOLUTIONS_TEST_DIRECTORY)) as Map<Language, string>;
 
 /**
  * 题解测试用例文件目录

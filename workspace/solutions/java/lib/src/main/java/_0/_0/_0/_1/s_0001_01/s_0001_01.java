@@ -4,7 +4,7 @@
  * [1] 两数之和
  */
 
-package _0._0._0._1;
+package _0._0._0._1.s_0001_01;
 
 import java.util.HashMap;
 import java.util.Map;
