@@ -13,5 +13,13 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-export * from "./id";
-export * from "./solution";
+/**
+ * 题解信息
+ */
+export interface ISolutionInfo {
+    id: number;
+    difficulty: E.Difficulty;
+    name: string;
+    language: E.Language;
+    ext: E.Extension;
+}

@@ -10,7 +10,7 @@
  * @param {number} target
  * @return {[number, number] | void}
  */
-function twoSum(nums, target) {
+const twoSum = function (nums, target) {
     const map = {};
     for (let i = 0; i < nums.length; i++) {
         const num = nums[i];

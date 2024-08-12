@@ -1,5 +1,9 @@
 # 更改日志 | Change Log
 
+## 2024-08-12
+
+- 添加题解文件模板 | Add solution file template
+
 ## 2024-08-11
 
 - 添加 `java` 题解的自动化测试 | Add automated tests for `java` solutions

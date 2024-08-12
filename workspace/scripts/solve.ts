@@ -21,24 +21,18 @@ import chalk from "chalk";
 import chokidar from "chokidar";
 
 import { C, E, U } from "@repo/common";
-import { renderTestFile } from "@repo/templates";
+import {
+    renderSolutionFile,
+    renderTestFile,
+} from "@repo/templates";
 
 import type fs from "node:fs";
+
+import type { ISolutionInfo } from "@repo/common/types";
 
 console.log(import.meta.url);
 
 type TEntryEventName = "add" | "addDir" | "change" | "unlink" | "unlinkDir";
-
-/**
- * 题解信息
- */
-interface ISolutionInfo {
-    id: number;
-    difficulty: E.Difficulty;
-    name: string;
-    language: E.Language;
-    ext: E.Extension;
-}
 
 /**
  * 文件操作事件
@@ -46,6 +40,7 @@ interface ISolutionInfo {
 interface IFileEvent {
     path: string;
     name?: "add" | "change" | "unlink";
+    index?: number;
 }
 
 /**
@@ -166,11 +161,16 @@ async function createSolutionFile(
                 /* 在指定位置创建题解模板文件 */
                 const content = await Bun.file(original).text();
 
-                // TODO: 使用模板初始化题解文件
-
+                const solution_file_content = await renderSolutionFile(
+                    {
+                        ...info,
+                        index,
+                    },
+                    content,
+                ) ?? content.replaceAll("\r\n", "\n");
                 await Bun.write(
                     solution_file_path,
-                    content.replaceAll("\r\n", "\n"),
+                    solution_file_content,
                     { createPath: true },
                 );
 
@@ -179,6 +179,7 @@ async function createSolutionFile(
                 return {
                     path: solution_file_path,
                     name: "add",
+                    index,
                 };
             }
         }
