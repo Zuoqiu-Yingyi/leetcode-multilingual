@@ -9,6 +9,8 @@ const config = {
     "*.go": "gofmt -w",
     "*.java": "clang-format -i --style=file:./.clang-format",
     // "*.java": (_) => "./solutions/java/gradlew -p ./solutions/java spotlessApply",
+    // "*.{kt,kts}": "ktlint -F",
+    "*.{kt,kts}": (_) => "./solutions/kotlin/gradlew -p ./solutions/kotlin spotlessApply",
 };
 
 export default config;

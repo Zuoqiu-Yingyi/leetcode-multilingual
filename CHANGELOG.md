@@ -1,5 +1,9 @@
 # 更改日志 | Change Log
 
+## 2024-08-13
+
+- 初始化 `kotlin` 题解项目 | Initialize `kotlin` solutions project
+
 ## 2024-08-12
 
 - 添加题解文件模板 | Add solution file template

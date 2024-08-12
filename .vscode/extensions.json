@@ -3,6 +3,7 @@
         "dbaeumer.vscode-eslint",
         "editorconfig.editorconfig",
         "leetcode.vscode-leetcode",
+        "mathiasfrohlich.kotlin",
         "ms-vscode.vscode-typescript-next",
         "redhat.java",
         "richardwillis.vscode-spotless-gradle",

@@ -2,13 +2,16 @@ antfu
 aosp
 classpath
 commitlint
+diffplug
 dprint
 fastjson
 foojay
 gofmt
 gradlew
+ktlint
 leetcode
 nums
+sourcesets
 tsdoc
 Yingyi
 Zuoqiu
