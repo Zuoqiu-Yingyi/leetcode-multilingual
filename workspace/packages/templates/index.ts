@@ -20,22 +20,14 @@ import Mustache, {
     type OpeningAndClosingTags,
 } from "mustache";
 
-import { C, E, U } from "@repo/common";
+import { C, U } from "@repo/common";
 
+import type { E } from "@repo/common";
 import type { ISolutionFileContent } from "@repo/common/utils";
 
 export const TEMPLATES_DIRECTORY_NAME = "templates";
 export const TEMPLATES_TEST_DIRECTORY_NAME = "test";
 export const TEMPLATES_SOLUTION_DIRECTORY_NAME = "solution";
-
-export const TEMPLATE_FILE_NAME = {
-    [E.Language.java]: "java.mustache",
-    [E.Language.golang]: "golang.mustache",
-    [E.Language.javascript]: "ecmascript.mustache",
-    [E.Language.typescript]: "ecmascript.mustache",
-} as const as Record<E.Language, string>;
-
-export const TEMPLATE_FILE_NAME_MAP = new Map(Object.entries(TEMPLATE_FILE_NAME)) as Map<E.Language, string>;
 
 export const MUSTACHE_TAGS: OpeningAndClosingTags = ["/*{{", "}}*/"] as const;
 
@@ -86,7 +78,7 @@ export async function renderSolutionFile(
     info: ISolutionInfo,
     content: string,
 ): Promise<string | void> {
-    const template_file_name = TEMPLATE_FILE_NAME_MAP.get(info.language);
+    const template_file_name = C.TEMPLATE_FILE_NAME_MAP.get(info.language);
     if (template_file_name) {
         const template_file_path = path.join(
             import.meta.dir,
@@ -124,7 +116,7 @@ export async function renderSolutionFile(
  * @returns 测试文件内容
  */
 export async function renderTestFile(info: ISolutionInfo): Promise<string | void> {
-    const template_file_name = TEMPLATE_FILE_NAME_MAP.get(info.language);
+    const template_file_name = C.TEMPLATE_FILE_NAME_MAP.get(info.language);
     if (template_file_name) {
         const template_file_path = path.join(
             import.meta.dir,

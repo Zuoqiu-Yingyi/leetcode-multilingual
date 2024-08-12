@@ -80,6 +80,7 @@ function solutionDirectory(
         const paths = U.id2paths(id, "_");
         switch (language) {
             case E.Language.java:
+            case E.Language.kotlin:
             case E.Language.golang:
             case E.Language.javascript:
             case E.Language.typescript:
@@ -105,6 +106,7 @@ function solutionTestDirectory(
         const paths = U.id2paths(id, "_");
         switch (language) {
             case E.Language.java:
+            case E.Language.kotlin:
             case E.Language.golang:
             case E.Language.javascript:
             case E.Language.typescript:
@@ -128,6 +130,7 @@ function solutionFileName(
     const name = `s_${String(info.id).padStart(C.ID_LENGTH, "0")}_${String(index).padStart(C.SOLUTION_INDEX_LENGTH, "0")}`;
     switch (info.language) {
         case E.Language.java:
+        case E.Language.kotlin:
         case E.Language.golang:
             return `${name}/${name}${info.ext}`;
         case E.Language.javascript:
@@ -201,6 +204,7 @@ async function createSolutionTestFile(
         const test_directory_path = solutionTestDirectory(info.language, info.id);
         const id = U.idPadZero(info.id);
         switch (info.language) {
+            // TODO: case E.Language.kotlin:
             case E.Language.java:
             case E.Language.golang: {
                 const test_file_path = path.join(test_directory_path, `s_${id}_test${info.ext}`);
@@ -358,6 +362,7 @@ async function solutionsHandler(
                 switch (file_info.language) {
                     case E.Language.java:
                     case E.Language.golang:
+                    case E.Language.kotlin:
                     case E.Language.javascript:
                     case E.Language.typescript: {
                         examples_file = await createSolutionTestExamplesFile(file_info);

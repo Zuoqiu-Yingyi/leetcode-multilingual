@@ -35,6 +35,7 @@ export const SOLUTIONS_TEMPORARY_DIRECTORY = ".solutions";
  */
 export const SOLUTIONS_DIRECTORY = {
     [Language.java]: "./solutions/java/lib/src/main/java",
+    [Language.kotlin]: "./solutions/kotlin/lib/src/main/kotlin",
     [Language.golang]: "./solutions/go",
     [Language.javascript]: "./solutions/ecmascript/src",
     [Language.typescript]: "./solutions/ecmascript/src",
@@ -48,6 +49,7 @@ export const SOLUTIONS_DIRECTORY_MAP = new Map(Object.entries(SOLUTIONS_DIRECTOR
 export const SOLUTIONS_TEST_DIRECTORY = {
     ...SOLUTIONS_DIRECTORY,
     [Language.java]: "./solutions/java/lib/src/test/java",
+    [Language.kotlin]: "./solutions/kotlin/lib/src/test/kotlin",
 } as const;
 
 export const SOLUTIONS_TEST_DIRECTORY_MAP = new Map(Object.entries(SOLUTIONS_TEST_DIRECTORY)) as Map<Language, string>;
@@ -71,6 +73,8 @@ export const SOLUTIONS_TEST_EXAMPLES_CONTENT = `\
 export const SOLUTION_FUNCTION_NAME_REGEXP = {
     // public int[] twoSum(int[] nums, int target) {
     [Language.java]: /^\s*public\s+(?<return_type>\S+)\s+(?<function_name>\w+)\s*\((?<arguments>.*)\)\s*\{\s*$/m,
+    // fun twoSum(nums: IntArray, target: Int): IntArray {
+    [Language.kotlin]: /^\s*fun\s+(?<function_name>\w+)\s*\((?<arguments>.*)\)\s*:\s*(?<return_type>\S+)\s*\{\s*?/m,
     // func twoSum(nums []int, target int) []int {
     [Language.golang]: /^\s*func\s+(?<function_name>\w+)\s*\((?<arguments>.*)\)\s+(?<return_type>\S+)\s*\{\s*$/m,
     // const twoSum = function (nums, target) {
@@ -80,3 +84,16 @@ export const SOLUTION_FUNCTION_NAME_REGEXP = {
 } as const;
 
 export const SOLUTION_FUNCTION_NAME_REGEXP_MAP = new Map(Object.entries(SOLUTION_FUNCTION_NAME_REGEXP)) as Map<Language, RegExp>;
+
+/**
+ * 题解模板文件名
+ */
+export const TEMPLATE_FILE_NAME = {
+    [Language.java]: "java.mustache",
+    [Language.kotlin]: "kotlin.mustache",
+    [Language.golang]: "golang.mustache",
+    [Language.javascript]: "ecmascript.mustache",
+    [Language.typescript]: "ecmascript.mustache",
+} as const as Record<Language, string>;
+
+export const TEMPLATE_FILE_NAME_MAP = new Map(Object.entries(TEMPLATE_FILE_NAME)) as Map<Language, string>;

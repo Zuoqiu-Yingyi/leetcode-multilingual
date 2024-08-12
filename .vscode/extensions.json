@@ -2,6 +2,7 @@
     "recommendations": [
         "dbaeumer.vscode-eslint",
         "editorconfig.editorconfig",
+        "fwcd.kotlin",
         "leetcode.vscode-leetcode",
         "mathiasfrohlich.kotlin",
         "ms-vscode.vscode-typescript-next",

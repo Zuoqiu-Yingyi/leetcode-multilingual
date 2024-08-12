@@ -69,6 +69,14 @@ configure<com.diffplug.gradle.spotless.SpotlessExtension> {
         // REF: https://github.com/diffplug/spotless/tree/main/plugin-gradle#ktlint
         ktlint("1.3.1")
             .setEditorConfigPath("$projectDir/../../../../.editorconfig")
+            .editorConfigOverride(
+                // REF: https://pinterest.github.io/ktlint/latest/rules/standard/
+                mapOf(
+                    "ktlint_standard_filename" to "disabled",
+                    "ktlint_standard_package-name" to "disabled",
+                    "ktlint_standard_class-naming" to "disabled",
+                )
+            )
 
         // make sure every file has the following copyright header.
         // optionally, Spotless can set copyright years by digging

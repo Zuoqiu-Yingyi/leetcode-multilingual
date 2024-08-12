@@ -3,6 +3,7 @@
 ## 2024-08-13
 
 - 初始化 `kotlin` 题解项目 | Initialize `kotlin` solutions project
+- 添加 `kotlin` 题解文件模板 | Add `kotlin` solution file template
 
 ## 2024-08-12
 
