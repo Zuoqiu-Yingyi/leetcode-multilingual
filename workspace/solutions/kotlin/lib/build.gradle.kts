@@ -36,6 +36,9 @@ dependencies {
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation(libs.guava)
+
+    // REF: https://kotlinlang.org/docs/reflection.html#jvm-dependency
+    implementation(kotlin("reflect"))
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -72,9 +75,11 @@ configure<com.diffplug.gradle.spotless.SpotlessExtension> {
             .editorConfigOverride(
                 // REF: https://pinterest.github.io/ktlint/latest/rules/standard/
                 mapOf(
-                    "ktlint_standard_filename" to "disabled",
-                    "ktlint_standard_package-name" to "disabled",
                     "ktlint_standard_class-naming" to "disabled",
+                    "ktlint_standard_filename" to "disabled",
+                    "ktlint_standard_max-line-length" to "disabled",
+                    "ktlint_standard_package-name" to "disabled",
+                    "ktlint_standard_property-naming" to "disabled",
                 )
             )
 

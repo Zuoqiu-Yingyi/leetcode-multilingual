@@ -204,8 +204,8 @@ async function createSolutionTestFile(
         const test_directory_path = solutionTestDirectory(info.language, info.id);
         const id = U.idPadZero(info.id);
         switch (info.language) {
-            // TODO: case E.Language.kotlin:
             case E.Language.java:
+            case E.Language.kotlin:
             case E.Language.golang: {
                 const test_file_path = path.join(test_directory_path, `s_${id}_test${info.ext}`);
                 if (!(await fsAsync.exists(test_file_path))) {

@@ -22,5 +22,3 @@ class Solution {
     }
 }
 // @lc code=end
-
-public class s_0001_01 : Solution

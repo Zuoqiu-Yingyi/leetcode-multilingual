@@ -42,16 +42,6 @@ public class Test_ {
     }
 
     /**
-     * 通过反射获取题解的包名, 可用于获取题解的 ID
-     * @param Solution 题解类
-     * @return 题解的包名
-     */
-    private static final String getPackageName(final Class<?> Solution)
-    {
-        return Solution.getPackageName();
-    }
-
-    /**
      * 通过反射获取方法的参数个数
      * @param method 方法
      * @return 方法的参数个数
@@ -162,9 +152,9 @@ public class Test_ {
      * @param packageName 测试类的包名
      * @param Solutions 题解类列表
      */
-    public Test_(final String packageName, final Class<?>... Solutions)
+    public Test_(final Class<?> SolutionTest, final Class<?>... Solutions)
     {
-        this.packageName = packageName;
+        this.packageName = SolutionTest.getPackageName();
         this.Solutions = Solutions;
     }
 

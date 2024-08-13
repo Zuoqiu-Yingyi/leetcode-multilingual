@@ -26,20 +26,38 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+/**
+ * 题解测试示例
+ */
 public class Example {
     // System.getProperty("user.dir") -> workspace/solutions/java/lib
     public static final String SOLUTIONS_TEST_EXAMPLES_DIRECTORY = "./../../../packages/examples";
 
+    /**
+     * 将包名转换为题解 ID
+     * @param packageName 包名 (格式: "_0._1._2._3")
+     * @return 题解 ID (格式: 0123)
+     */
     public static String package2id(final String packageName)
     {
         return packageName.replace("_", "").replace(".", "");
     }
 
+    /**
+     * 将包名转换为路径
+     * @param packageName 包名 (格式: "_0._1._2._3")
+     * @return 路径 (格式: "0/1/2/3")
+     */
     public static final String package2path(final String packageName)
     {
         return packageName.replace("_", "").replace(".", "/");
     }
 
+    /**
+     * 读取示例文件
+     * @param packageName 包名 (格式: "_0._1._2._3")
+     * @return JSON 字符串
+     */
     public static final String readExamplesFile(final String packageName)
     {
         try {
@@ -53,6 +71,11 @@ public class Example {
         }
     }
 
+    /**
+     * 获取示例列表
+     * @param examples_json 示例 JSON 字符串
+     * @return 示例列表
+     */
     public static final List<Example> getExamples(final String examples_json)
     {
         assertNotEquals(examples_json, null, "Examples file not found");
@@ -60,9 +83,21 @@ public class Example {
         return examples;
     }
 
+    /**
+     * 题解示例输入
+     */
     public Object[] input = new Object[0];
+
+    /**
+     * 题解示例输出
+     */
     public Object output = null;
 
+    /**
+     * 设置题解示例输入
+     * @param exampleJSONObject 示例 JSON 对象
+     * @param parameterTypeNames 参数类型名称列表
+     */
     public void setInput(final JSONObject exampleJSONObject, final String[] parameterTypeNames)
     {
         final String key = "input";
@@ -94,6 +129,11 @@ public class Example {
         this.input = input;
     }
 
+    /**
+     * 设置题解示例输出
+     * @param exampleJSONObject 示例 JSON 对象
+     * @param returnTypeName 返回值类型名称
+     */
     public void setOutput(final JSONObject exampleJSONObject, final String returnTypeName)
     {
         final String key = "output";

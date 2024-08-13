@@ -9,7 +9,7 @@ class s_0001_test {
     void test()
     {
         Test_ test = new Test_(
-            this.getClass().getPackageName(),
+            this.getClass(),
             s_0001_01.class
         );
         test.run();

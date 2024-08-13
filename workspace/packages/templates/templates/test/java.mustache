@@ -9,8 +9,9 @@ class s_/*{{ id }}*/_test {
     void test()
     {
         Test_ test = new Test_(
-            this.getClass().getPackageName(),
-            s_/*{{ id }}*/_/*{{ index }}*/.class);
+            this.getClass(),
+            s_/*{{ id }}*/_/*{{ index }}*/.class
+        );
         test.run();
     }
 }
