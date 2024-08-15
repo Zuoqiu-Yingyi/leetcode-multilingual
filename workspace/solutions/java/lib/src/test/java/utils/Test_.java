@@ -18,11 +18,10 @@ package utils;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -115,9 +114,7 @@ public class Test_ {
     private static final void testExample(final Object solution, final Example example, final int solutionIndex, final int exampleIndex) throws Exception
     {
         // 题解入口方法
-        Method[] methods = solution.getClass().getDeclaredMethods();
-        assertEquals(methods.length, 1, "Number of solution methods is not 1");
-        Method method = methods[0];
+        Method method = Test_.getMethod(solution.getClass());
 
         final Object result = method.invoke(solution, example.input);
 
@@ -126,10 +123,18 @@ public class Test_ {
 
         assertEquals(result_type_name, output_type_name, String.format("Solution result type <%s> != expected type <%s>", result_type_name, output_type_name));
 
+        final String input_json = JSON.toJSONString(example.input);
         final String result_json = JSON.toJSONString(result);
         final String output_json = JSON.toJSONString(example.output);
 
-        final String message = String.format("\nsolution: %d\nexample:  %d\ninput:    %s\nresult:   %s\nexpected: %s\n", solutionIndex, exampleIndex, JSON.toJSONString(example.input), result_json, output_json);
+        final String message = String.format(
+            "\nsolution: %d\nexample:  %d\ninput:    %s\nresult:   %s\nexpected: %s\n",
+            solutionIndex,
+            exampleIndex,
+            input_json,
+            result_json,
+            output_json
+        );
 
         assertEquals(result_json, output_json, message);
 
@@ -215,15 +220,8 @@ public class Test_ {
         }
 
         final String examples_json = Example.readExamplesFile(this.packageName);
-        final JSONArray examples_json_array = JSON.parseArray(examples_json);
-        this.examples = Example.getExamples(examples_json);
+        assertNotEquals(examples_json, null, "Examples file not found");
 
-        final int examples_count = examples.size();
-        for (int i = 0; i < examples_count; ++i) {
-            final JSONObject example_json = examples_json_array.getJSONObject(i);
-            final Example example = examples.get(i);
-            example.setInput(example_json, method_parameter_type_names);
-            example.setOutput(example_json, method_return_type_name);
-        }
+        this.examples = Example.fromJson(examples_json, method_parameter_type_names, method_return_type_name);
     }
 }

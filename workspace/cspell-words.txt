@@ -8,7 +8,9 @@ fastjson
 foojay
 gofmt
 gradlew
+kotlinx
 ktlint
+lateinit
 leetcode
 nums
 sourcesets

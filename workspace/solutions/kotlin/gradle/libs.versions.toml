@@ -3,18 +3,21 @@
 
 [versions]
 commons-math3 = "3.6.1"
-# diktat = "2.0.0"
 guava = "33.1.0-jre"
 junit-jupiter-engine = "5.10.2"
-kotlin-jvm = "2.0.10"
+kotlin = "2.0.10"
+kotlin-serialization-json = "1.7.1"
 spotless = "7.0.0.BETA1"
+# diktat = "2.0.0"
 
 [libraries]
-commons-math3 = { module = "org.apache.commons:commons-math3", version.ref = "commons-math3" }
-guava = { module = "com.google.guava:guava", version.ref = "guava" }
-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter-engine" }
+commons-math3 = { group = "org.apache.commons", name = "commons-math3", version.ref = "commons-math3" }
+guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
+junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit-jupiter-engine" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization-json" }
 
 [plugins]
-# diktat = { id = "com.saveourtool.diktat", version.ref = "diktat" }
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-jvm" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+# diktat = { id = "com.saveourtool.diktat", version.ref = "diktat" }

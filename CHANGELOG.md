@@ -1,5 +1,9 @@
 # 更改日志 | Change Log
 
+## 2024-08-16
+
+- 添加 `kotlin` 题解的自动化测试 | Add automated tests for `kotlin` solutions
+
 ## 2024-08-14
 
 - 添加 `kotlin` 题解测试模板 | Add `kotlin` solution test template

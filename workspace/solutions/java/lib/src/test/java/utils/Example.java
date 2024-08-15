@@ -16,7 +16,6 @@
 package utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
@@ -72,14 +71,24 @@ public class Example {
     }
 
     /**
-     * 获取示例列表
-     * @param examples_json 示例 JSON 字符串
+     * 创建示例列表
+     * @param json 示例 JSON 字符串
+     * @param methodParameterTypeNames 方法参数类型名称列表
+     * @param methodReturnTypeName 方法返回值类型名称
      * @return 示例列表
      */
-    public static final List<Example> getExamples(final String examples_json)
+    public static final List<Example> fromJson(final String json, final String[] methodParameterTypeNames, final String methodReturnTypeName)
     {
-        assertNotEquals(examples_json, null, "Examples file not found");
-        final List<Example> examples = JSON.parseArray(examples_json, Example.class);
+        final JSONArray examples_json_array = JSON.parseArray(json);
+        final List<Example> examples = JSON.parseArray(json, Example.class);
+
+        final int examples_count = examples.size();
+        for (int i = 0; i < examples_count; ++i) {
+            final JSONObject example_json = examples_json_array.getJSONObject(i);
+            final Example example = examples.get(i);
+            example.setInput(example_json, methodParameterTypeNames);
+            example.setOutput(example_json, methodReturnTypeName);
+        }
         return examples;
     }
 
@@ -95,13 +104,13 @@ public class Example {
 
     /**
      * 设置题解示例输入
-     * @param exampleJSONObject 示例 JSON 对象
+     * @param exampleJsonObject 示例 JSON 对象
      * @param parameterTypeNames 参数类型名称列表
      */
-    public void setInput(final JSONObject exampleJSONObject, final String[] parameterTypeNames)
+    public void setInput(final JSONObject exampleJsonObject, final String[] parameterTypeNames)
     {
         final String key = "input";
-        final JSONArray inputJSONArray = exampleJSONObject.getJSONArray(key);
+        final JSONArray inputJSONArray = exampleJsonObject.getJSONArray(key);
         assertEquals(inputJSONArray.size(), parameterTypeNames.length, "Number of input != Number of parameter");
         final int input_len = inputJSONArray.size();
         final Object[] input = new Object[inputJSONArray.size()];
@@ -131,21 +140,21 @@ public class Example {
 
     /**
      * 设置题解示例输出
-     * @param exampleJSONObject 示例 JSON 对象
+     * @param exampleJsonObject 示例 JSON 对象
      * @param returnTypeName 返回值类型名称
      */
-    public void setOutput(final JSONObject exampleJSONObject, final String returnTypeName)
+    public void setOutput(final JSONObject exampleJsonObject, final String returnTypeName)
     {
         final String key = "output";
         switch (returnTypeName) {
         case "String":
-            this.output = exampleJSONObject.getString(key);
+            this.output = exampleJsonObject.getString(key);
             break;
         case "int":
-            this.output = exampleJSONObject.getIntValue(key);
+            this.output = exampleJsonObject.getIntValue(key);
             break;
         case "int[]":
-            this.output = exampleJSONObject.getJSONArray(key)
+            this.output = exampleJsonObject.getJSONArray(key)
                               .toJavaList(Integer.class)
                               .stream()
                               .mapToInt(Integer::intValue)
@@ -153,7 +162,7 @@ public class Example {
             break;
 
         default:
-            this.output = exampleJSONObject.get(key);
+            this.output = exampleJsonObject.get(key);
             break;
         }
     }

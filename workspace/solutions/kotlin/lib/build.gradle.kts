@@ -7,14 +7,19 @@
 
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
+    // kotlin("jvm")
     alias(libs.plugins.kotlin.jvm)
+
+    // REF: https://kotlinlang.org/docs/serialization.html#add-plugins-and-dependencies
+    // kotlin("plugin.serialization")
+    alias(libs.plugins.kotlin.serialization)
 
     // kotlin v1.9.25
     // alias(libs.plugins.diktat)
     alias(libs.plugins.spotless)
 
     // Apply the java-library plugin for API and implementation separation.
-    "java-library"
+    // "java-library"
 }
 
 repositories {
@@ -39,6 +44,9 @@ dependencies {
 
     // REF: https://kotlinlang.org/docs/reflection.html#jvm-dependency
     implementation(kotlin("reflect"))
+
+    // REF: https://kotlinlang.org/docs/serialization.html#add-plugins-and-dependencies
+    implementation(libs.kotlinx.serialization.json)
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
