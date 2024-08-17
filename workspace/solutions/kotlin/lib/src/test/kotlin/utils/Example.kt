@@ -81,7 +81,7 @@ public class Example {
          * @return 题解 ID (格式: 0123)
          */
         public final fun package2id(packageName: String): String = packageName
-            .replace("_", "")
+            .replace("s", "")
             .replace(".", "")
 
         /**
@@ -90,7 +90,7 @@ public class Example {
          * @return 路径 (格式: "0/1/2/3")
          */
         public final fun package2path(packageName: String): String = packageName
-            .replace("_", "")
+            .replace("s", "")
             .replace(".", "/")
 
         /**

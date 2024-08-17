@@ -39,7 +39,7 @@ public class Example {
      */
     public static String package2id(final String packageName)
     {
-        return packageName.replace("_", "").replace(".", "");
+        return packageName.replace("s", "").replace(".", "");
     }
 
     /**
@@ -49,7 +49,7 @@ public class Example {
      */
     public static final String package2path(final String packageName)
     {
-        return packageName.replace("_", "").replace(".", "/");
+        return packageName.replace("s", "").replace(".", "/");
     }
 
     /**

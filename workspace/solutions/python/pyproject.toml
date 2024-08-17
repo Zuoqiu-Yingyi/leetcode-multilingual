@@ -1,0 +1,31 @@
+[project]
+    name = "solutions"
+    version = "0.1.0"
+    description = "LeetCode solutions with Python"
+    authors = [
+        { name = "Zuoqiu Yingyi", email = "49649786+Zuoqiu-Yingyi@users.noreply.github.com" },
+    ]
+    dependencies = []
+    readme = "README.md"
+    requires-python = ">= 3.12"
+
+[build-system]
+    requires = [
+        "hatchling",
+    ]
+    build-backend = "hatchling.build"
+
+[tool.rye]
+    managed = true
+    dev-dependencies = [
+        "pytest>=8.3.2",
+        "ruff>=0.6.1",
+    ]
+
+[tool.hatch.metadata]
+    allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+    packages = [
+        "src",
+    ]

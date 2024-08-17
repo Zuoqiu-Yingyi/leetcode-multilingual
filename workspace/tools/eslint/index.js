@@ -170,6 +170,29 @@ export default antfu({
             singleAttributePerLine: true,
         },
     },
+    toml: {
+        overrides: {
+            "toml/array-bracket-newline": [
+                "warn",
+                {
+                    multiline: true,
+                    minItems: 1,
+                },
+            ],
+            "toml/array-element-newline": [
+                "warn",
+                "always",
+            ],
+            "toml/indent": [
+                "warn",
+                4,
+                {
+                    subTables: 1,
+                    keyValuePairs: 1,
+                },
+            ],
+        },
+    },
     yaml: {
         overrides: {
             "yaml/indent": [

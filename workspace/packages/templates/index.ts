@@ -45,9 +45,9 @@ export interface ISolutionInfo {
  */
 export interface ITemplateRenderInfo {
     id: string; // 0001
-    path: string; // _0/_0/_0/_1
+    path: string; // s0/s0/s0/s1
     index: string; // 01
-    package: string; // _0._0._0._1
+    package: string; // s0.s0.s0.s1
 }
 
 /**
@@ -63,9 +63,9 @@ export interface ISolutionTemplateRenderInfo extends ITemplateRenderInfo, ISolut
 export function info2view(info: ISolutionInfo): ITemplateRenderInfo {
     return {
         id: U.idPadZero(info.id),
-        path: U.id2paths(info.id, "_").join("/"),
-        index: U.idPadZero(info.index ?? 1, C.SOLUTION_INDEX_LENGTH),
-        package: U.id2paths(info.id, "_").join("."),
+        path: U.id2paths(info.id, C.ID_PREFIX).join("/"),
+        index: U.idPadZero(info.index ?? 0, C.SOLUTION_INDEX_LENGTH),
+        package: U.id2paths(info.id, C.ID_PREFIX).join("."),
     };
 }
 

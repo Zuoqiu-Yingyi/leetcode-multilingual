@@ -77,11 +77,12 @@ function solutionDirectory(
 ): string {
     const source_root_directory = C.SOLUTIONS_DIRECTORY_MAP.get(language);
     if (source_root_directory) {
-        const paths = U.id2paths(id, "_");
+        const paths = U.id2paths(id, C.ID_PREFIX);
         switch (language) {
             case E.Language.java:
             case E.Language.kotlin:
             case E.Language.golang:
+            case E.Language.python3:
             case E.Language.javascript:
             case E.Language.typescript:
             default:
@@ -103,11 +104,12 @@ function solutionTestDirectory(
 ): string {
     const source_root_directory = C.SOLUTIONS_TEST_DIRECTORY_MAP.get(language);
     if (source_root_directory) {
-        const paths = U.id2paths(id, "_");
+        const paths = U.id2paths(id, C.ID_PREFIX);
         switch (language) {
             case E.Language.java:
             case E.Language.kotlin:
             case E.Language.golang:
+            case E.Language.python3:
             case E.Language.javascript:
             case E.Language.typescript:
             default:
@@ -133,6 +135,7 @@ function solutionFileName(
         case E.Language.kotlin:
         case E.Language.golang:
             return `${name}/${name}${info.ext}`;
+        case E.Language.python3:
         case E.Language.javascript:
         case E.Language.typescript:
         default:
@@ -153,7 +156,7 @@ async function createSolutionFile(
     try {
         const solution_directory_path = solutionDirectory(info.language, info.id);
 
-        for (let index = 1; true; index++) {
+        for (let index = 0; true; index++) {
             const solution_file_path = path.join(solution_directory_path, solutionFileName(info, index));
             if (await fsAsync.exists(solution_file_path)) {
                 continue;
@@ -204,9 +207,11 @@ async function createSolutionTestFile(
         const test_directory_path = solutionTestDirectory(info.language, info.id);
         const id = U.idPadZero(info.id);
         switch (info.language) {
+            /* 创建测试文件 */
             case E.Language.java:
             case E.Language.kotlin:
-            case E.Language.golang: {
+            case E.Language.golang:
+            case E.Language.python3: {
                 const test_file_path = path.join(test_directory_path, `s_${id}_test${info.ext}`);
                 if (!(await fsAsync.exists(test_file_path))) {
                     const test_file_content = await renderTestFile(info);
@@ -229,9 +234,10 @@ async function createSolutionTestFile(
                 }
                 break;
             }
+
+            /* 覆写测试文件以触发 bun 的测试 */
             case E.Language.javascript:
             case E.Language.typescript: {
-                /* 覆写测试文件以触发 bun 的测试 */
                 const test_file_path = path.join(test_directory_path, `s_${id}_test.ts`);
                 const test_file_content = await renderTestFile(info);
                 if (test_file_content) {
@@ -363,6 +369,7 @@ async function solutionsHandler(
                     case E.Language.java:
                     case E.Language.golang:
                     case E.Language.kotlin:
+                    case E.Language.python3:
                     case E.Language.javascript:
                     case E.Language.typescript: {
                         examples_file = await createSolutionTestExamplesFile(file_info);

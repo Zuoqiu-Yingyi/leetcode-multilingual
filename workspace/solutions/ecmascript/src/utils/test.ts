@@ -58,7 +58,7 @@ export async function t<
 
     const full_paths = dir.split(path.sep);
     const _paths = full_paths.slice(full_paths.length - C.ID_LENGTH);
-    const paths = _paths.map((path) => path.replace(/^_*/, ""));
+    const paths = _paths.map((path) => path.replace(/^s*/, ""));
     const id = paths.join("");
     const examples_path = paths.join("/");
     const solutions_path = _paths.join("/");
@@ -71,6 +71,7 @@ export async function t<
             `${id}.json`,
         );
         try {
+            // !使用异步文件操作后调用 test 会导致其回调无法执行
             const json = fs.readFileSync(
                 examples_file_path,
                 "utf-8",
@@ -84,8 +85,14 @@ export async function t<
         }
     }
 
+    // !使用异步文件操作后调用 test 会导致其回调无法执行
     const files = fs.readdirSync(dir);
-    const names = files.filter((name) => /^s_\d+_\d+\.(?:js|ts)$/.test(name));
+    const names = files.filter((name) => C.SOLUTION_FILE_NAME_REGEXP.test(name));
+    test.expect(
+        names.length,
+        "No solutions",
+    ).toBeGreaterThan(0);
+
     const solutions = await Promise.all(names.map((name) => (async () => ({
         name,
         func: (await import(`@/${solutions_path}/${name}`)).default,
@@ -93,8 +100,7 @@ export async function t<
 
     test.describe.each(solutions)(id, async ({ name, func }) => {
         // REF: https://github.com/oven-sh/bun/issues/13090
-        // !使用异步文件操作后调用 test 会导致其回调无法执行
-        // !多次调用 t 函数也会导致 test 回调无法执行
+        // !多次调用 t 函数会导致 test 回调无法执行
         // *可以通过直接将 test 模块作为参数传入的方式解决
         test.test.each(examples)(`${name} - ${func.name}`, ({ input, output }) => {
             test.expect(

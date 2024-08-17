@@ -16,7 +16,12 @@
 import { Language } from "./enums";
 
 /**
- * ID 长度
+ * 题目 ID 前缀
+ */
+export const ID_PREFIX = "s";
+
+/**
+ * 题目 ID 长度
  */
 export const ID_LENGTH = 4;
 
@@ -31,12 +36,18 @@ export const SOLUTION_INDEX_LENGTH = 2;
 export const SOLUTIONS_TEMPORARY_DIRECTORY = ".solutions";
 
 /**
+ * 题解文件名正则
+ */
+export const SOLUTION_FILE_NAME_REGEXP = /^s_\d{4}_\d{2}\.(?:js|ts)$/;
+
+/**
  * 题解目录
  */
 export const SOLUTIONS_DIRECTORY = {
     [Language.java]: "./solutions/java/lib/src/main/java",
     [Language.kotlin]: "./solutions/kotlin/lib/src/main/kotlin",
     [Language.golang]: "./solutions/go",
+    [Language.python3]: "./solutions/python/src",
     [Language.javascript]: "./solutions/ecmascript/src",
     [Language.typescript]: "./solutions/ecmascript/src",
 } as const;
@@ -92,6 +103,7 @@ export const TEMPLATE_FILE_NAME = {
     [Language.java]: "java.mustache",
     [Language.kotlin]: "kotlin.mustache",
     [Language.golang]: "golang.mustache",
+    [Language.python3]: "python3.mustache",
     [Language.javascript]: "ecmascript.mustache",
     [Language.typescript]: "ecmascript.mustache",
 } as const as Record<Language, string>;

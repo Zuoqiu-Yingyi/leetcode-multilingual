@@ -1,5 +1,9 @@
 # 更改日志 | Change Log
 
+## 2024-08-17
+
+- 添加 `python` 题解项目 | Add `python` solutions project
+
 ## 2024-08-16
 
 - 添加 `kotlin` 题解的自动化测试 | Add automated tests for `kotlin` solutions

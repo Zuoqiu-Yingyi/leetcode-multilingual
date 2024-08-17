@@ -19,4 +19,7 @@ ignorePaths:
   - package.json
   - packages/examples/**/*.json
   - pnpm-lock.yaml
+  - pyproject.toml
+  - requirements-dev.lock
+  - requirements.lock
   - temp
