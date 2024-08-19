@@ -23,3 +23,5 @@ impl Solution {
     }
 }
 // @lc code=end
+
+pub const SOLUTION: super::TSolution = Solution::two_sum;

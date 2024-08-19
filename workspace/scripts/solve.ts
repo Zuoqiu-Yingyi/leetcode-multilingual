@@ -211,7 +211,7 @@ async function createSolutionTestFile(
         const id = U.idPadZero(info.id);
         switch (info.language) {
             /* 创建测试文件 */
-            // case E.Language.rust:
+            case E.Language.rust:
             case E.Language.java:
             case E.Language.kotlin:
             case E.Language.golang:

@@ -3,6 +3,7 @@
 ## 2024-08-19
 
 - 添加 `rust` 题解项目 | Add `rust` solutions project
+- 添加 `rust` 题解自动化测试 | Add automated tests for `rust` solutions
 
 ## 2024-08-17
 

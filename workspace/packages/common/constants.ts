@@ -83,14 +83,24 @@ export const SOLUTIONS_TEST_EXAMPLES_CONTENT = `\
  * 题解函数名称提取正则表达式
  */
 export const SOLUTION_FUNCTION_NAME_REGEXP = {
+    // pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
+    [Language.rust]: /^\s*pub\s+fn\s+(?<function_name>\w+)\s*\((?<arguments>.*)\)\s*->\s*(?<return_type>\S+)\s*\{\s*$/m,
+
     // public int[] twoSum(int[] nums, int target) {
     [Language.java]: /^\s*public\s+(?<return_type>\S+)\s+(?<function_name>\w+)\s*\((?<arguments>.*)\)\s*\{\s*$/m,
+
     // fun twoSum(nums: IntArray, target: Int): IntArray {
     [Language.kotlin]: /^\s*fun\s+(?<function_name>\w+)\s*\((?<arguments>.*)\)\s*:\s*(?<return_type>\S+)\s*\{\s*?/m,
+
     // func twoSum(nums []int, target int) []int {
     [Language.golang]: /^\s*func\s+(?<function_name>\w+)\s*\((?<arguments>.*)\)\s+(?<return_type>\S+)\s*\{\s*$/m,
+
+    // def twoSum(self, nums: List[int], target: int) -> List[int]:
+    [Language.python3]: /^\s*def\s+(?<function_name>\w+)\s*\((?<arguments>.*)\)\s*->\s*(?<return_type>\S+)\s*:\s*$/m,
+
     // const twoSum = function (nums, target) {
     [Language.javascript]: /^\s*const\s+(?<function_name>\w+)\s*=\s*function\s*\((?<arguments>.*)\)\s*\{\s*$/m,
+
     // function twoSum(nums: number[], target: number): number[] {
     [Language.typescript]: /^\s*function\s+(?<function_name>\w+)\s*\((?<arguments>.*)\)\s*:\s*(?<return_type>\S+)\s*\{\s*?/m,
 } as const;
@@ -101,6 +111,7 @@ export const SOLUTION_FUNCTION_NAME_REGEXP_MAP = new Map(Object.entries(SOLUTION
  * 题解模板文件名
  */
 export const TEMPLATE_FILE_NAME = {
+    [Language.rust]: "rust.mustache",
     [Language.java]: "java.mustache",
     [Language.kotlin]: "kotlin.mustache",
     [Language.golang]: "golang.mustache",

@@ -1,17 +1,18 @@
 #[cfg(test)]
 mod tests {
-    use super::super::s_0001_00;
+    use super::super::s_/*{{ id }}*/_/*{{ index}}*/;
     use crate::utils::{json::ValueExtension, test::t};
 
     #[test]
     fn test() {
         t(
             module_path!(),
-            &vec![s_0001_00::SOLUTION],
+            &vec![s_/*{{ id }}*/_/*{{ index}}*/::SOLUTION],
             |solve, input| {
                 serde_json::Value::from(solve(
-                    input[0].to_i32_array().unwrap(),
-                    input[1].to_i32().unwrap(),
+                    // input[0],
+                    // input[2],
+                    // ...
                 ))
             },
         );

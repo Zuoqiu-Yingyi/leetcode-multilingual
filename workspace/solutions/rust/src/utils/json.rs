@@ -13,7 +13,27 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-pub mod example;
-pub mod json;
-pub mod structure;
-pub mod test;
+pub trait ValueExtension {
+    fn to_i32(&self) -> Option<i32>;
+    fn to_i32_array(&self) -> Option<Vec<i32>>;
+}
+
+impl ValueExtension for serde_json::Value {
+    fn to_i32(&self) -> Option<i32> {
+        match self.as_i64() {
+            Some(v) => Some(v as i32),
+            None => None,
+        }
+    }
+
+    fn to_i32_array(&self) -> Option<Vec<i32>> {
+        match self.as_array() {
+            Some(arr) => Some(arr.iter().map(to_i32).collect()),
+            None => None,
+        }
+    }
+}
+
+pub fn to_i32(value: &serde_json::Value) -> i32 {
+    value.as_i64().unwrap() as i32
+}

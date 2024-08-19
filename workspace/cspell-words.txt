@@ -19,7 +19,9 @@ nums
 pyproject
 pytest
 rustfmt
+serde
 sourcesets
+struct
 tsdoc
 vararg
 Yingyi
