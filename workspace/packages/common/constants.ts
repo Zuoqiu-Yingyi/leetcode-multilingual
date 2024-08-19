@@ -44,6 +44,7 @@ export const SOLUTION_FILE_NAME_REGEXP = /^s_\d{4}_\d{2}\.(?:js|ts)$/;
  * 题解目录
  */
 export const SOLUTIONS_DIRECTORY = {
+    [Language.rust]: "./solutions/rust/src",
     [Language.java]: "./solutions/java/lib/src/main/java",
     [Language.kotlin]: "./solutions/kotlin/lib/src/main/kotlin",
     [Language.golang]: "./solutions/go",

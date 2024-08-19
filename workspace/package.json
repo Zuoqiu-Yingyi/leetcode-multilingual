@@ -47,6 +47,7 @@
         "test:java": "nu ./scripts/test/java.nu",
         "test:kt": "nu ./scripts/test/kotlin.nu",
         "test:py": "nu ./scripts/test/python.nu",
+        "test:rs": "nu ./scripts/test/rust.nu",
 
         "format": "nu ./scripts/format/all.nu",
         "format:es": "nu ./scripts/format/ecmascript.nu",
@@ -55,6 +56,7 @@
         "format:java:spotless": "cd ./solutions/java && gradlew spotlessApply",
         "format:kt": "nu ./scripts/format/kotlin.nu",
         "format:py": "nu ./scripts/format/python.nu",
+        "format:rs": "nu ./scripts/format/rust.nu",
 
         "lint:eslint": "eslint --max-warnings 0 .",
         "format:eslint": "eslint --fix .",

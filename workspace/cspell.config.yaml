@@ -10,8 +10,11 @@ dictionaries:
 ignorePaths:
   - .clang-format
   - .gitignore
+  - Cargo.lock
+  - Cargo.toml
   - build
   - cspell-words.txt
+  - debug
   - gradle
   - gradlew
   - gradlew.bat
@@ -22,4 +25,7 @@ ignorePaths:
   - pyproject.toml
   - requirements-dev.lock
   - requirements.lock
+  - target
   - temp
+
+...

@@ -13,6 +13,7 @@ const config = {
     // "*.{kt,kts}": "ktlint -F",
     "*.{kt,kts}": (_) => "./solutions/kotlin/gradlew -p ./solutions/kotlin spotlessKotlinApply",
     "*.py": "rye run --pyproject ./solutions/python/pyproject.toml ruff format",
+    "*.rs": "rustfmt --config-path ./solutions/rust/rustfmt.toml",
 };
 
 export default config;

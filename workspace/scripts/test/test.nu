@@ -22,3 +22,8 @@ export def test-python [] {
     cd "./solutions/python"
     ^rye test
 }
+
+export def test-rust [] {
+    cd "./solutions/rust"
+    ^cargo test
+}

@@ -18,6 +18,7 @@ leetcode
 nums
 pyproject
 pytest
+rustfmt
 sourcesets
 tsdoc
 vararg

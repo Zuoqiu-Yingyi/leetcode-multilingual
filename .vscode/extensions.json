@@ -8,6 +8,7 @@
         "ms-vscode.vscode-typescript-next",
         "redhat.java",
         "richardwillis.vscode-spotless-gradle",
+        "rust-lang.rust-analyzer",
         "vscjava.vscode-gradle",
         "vscjava.vscode-java-debug",
         "vscjava.vscode-java-dependency",

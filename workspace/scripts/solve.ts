@@ -79,6 +79,7 @@ function solutionDirectory(
     if (source_root_directory) {
         const paths = U.id2paths(id, C.ID_PREFIX);
         switch (language) {
+            case E.Language.rust:
             case E.Language.java:
             case E.Language.kotlin:
             case E.Language.golang:
@@ -106,6 +107,7 @@ function solutionTestDirectory(
     if (source_root_directory) {
         const paths = U.id2paths(id, C.ID_PREFIX);
         switch (language) {
+            case E.Language.rust:
             case E.Language.java:
             case E.Language.kotlin:
             case E.Language.golang:
@@ -135,6 +137,7 @@ function solutionFileName(
         case E.Language.kotlin:
         case E.Language.golang:
             return `${name}/${name}${info.ext}`;
+        case E.Language.rust:
         case E.Language.python3:
         case E.Language.javascript:
         case E.Language.typescript:
@@ -208,6 +211,7 @@ async function createSolutionTestFile(
         const id = U.idPadZero(info.id);
         switch (info.language) {
             /* 创建测试文件 */
+            // case E.Language.rust:
             case E.Language.java:
             case E.Language.kotlin:
             case E.Language.golang:
@@ -366,6 +370,7 @@ async function solutionsHandler(
             if (file_info) {
                 // console.log(file_info);
                 switch (file_info.language) {
+                    case E.Language.rust:
                     case E.Language.java:
                     case E.Language.golang:
                     case E.Language.kotlin:

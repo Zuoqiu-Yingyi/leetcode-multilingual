@@ -25,3 +25,8 @@ export def format-python [] {
     cd "./solutions/python"
     ^rye run ruff format
 }
+
+export def format-rust [] {
+    cd "./solutions/rust"
+    ^cargo fmt
+}
