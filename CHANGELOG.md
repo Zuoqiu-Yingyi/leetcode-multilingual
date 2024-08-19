@@ -1,5 +1,9 @@
 # 更改日志 | Change Log
 
+## 2024-08-20
+
+- 添加项目文档说明 | Add project documentation
+
 ## 2024-08-19
 
 - 添加 `rust` 题解项目 | Add `rust` solutions project

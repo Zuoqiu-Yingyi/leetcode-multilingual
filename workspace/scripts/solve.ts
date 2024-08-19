@@ -421,3 +421,15 @@ const solutions_watcher = chokidar.watch(
 );
 
 solutions_watcher.on("all", solutionsHandler);
+
+// TODO: 监听 solutions/go/**/s_*_*.go 变化
+// 更新 solutions/go/**/s_*_test.go 文件并运行测试
+
+// TODO: 监听 solutions/java/lib/src/main/java/**/s_*_*.java 变化
+// 更新 solutions/java/lib/src/test/java/**/s_*_test.java 文件并运行测试
+
+// TODO: 监听 solutions/kotlin/lib/src/main/kotlin/**/s_*_*.kt 变化
+// 更新 solutions/kotlin/lib/src/test/kotlin/**/s_*_test.kt 文件并运行测试
+
+// TODO: 监听 solutions/rust/src/**/s_*_*.rs 变化
+// 更新 solutions/rust/src/**/s_*_test.rs 与 solutions/rust/src/**/mod.rs 文件并运行测试
