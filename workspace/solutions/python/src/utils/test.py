@@ -30,15 +30,16 @@ EXAMPLES_DIRECTORY_PATH = pathlib.Path.cwd() / "./../../packages/examples"
 def t(spec: ModuleSpec) -> None:
     # 获取题解模块路径列表
     directory = pathlib.Path(spec.origin).parent
-    solution_file_paths = [
-        entry
-        for entry in directory.iterdir()
-        if entry.is_file() and SOLUTION_FILE_NAME_REGEXP.match(entry.name) is not None
-    ]
+    solution_file_paths = [entry for entry in directory.iterdir() if entry.is_file() and SOLUTION_FILE_NAME_REGEXP.match(entry.name) is not None]
     assert len(solution_file_paths) > 0, "No solutions"
 
     # 加载示例文件
-    paths = [*map(lambda s: s.removeprefix("s"), directory.parts[-ID_LENGTH:])]
+    paths = [
+        *map(
+            lambda s: s.removeprefix("s"),
+            directory.parts[-ID_LENGTH:],
+        )
+    ]
     id = "".join(paths)
     example_path = EXAMPLES_DIRECTORY_PATH / "/".join(paths) / f"{id}.json"
     assert example_path.is_file(), f"No example file: {example_path}"
@@ -48,16 +49,9 @@ def t(spec: ModuleSpec) -> None:
 
     # 遍历题解模块
     for solution_index, solution_file_path in enumerate(solution_file_paths):
-        module = importlib.import_module(
-            f"src.{'.'.join(solution_file_path.parts[-ID_LENGTH - 1:-1])}.{solution_file_path.stem}"
-        )
+        module = importlib.import_module(f"src.{'.'.join(solution_file_path.parts[-ID_LENGTH - 1:-1])}.{solution_file_path.stem}")
         solution = module.Solution()
-        methods = [
-            method_name
-            for method_name in dir(solution)
-            if callable(getattr(solution, method_name))
-            and not method_name.startswith("_")
-        ]
+        methods = [method_name for method_name in dir(solution) if callable(getattr(solution, method_name)) and not method_name.startswith("_")]
         assert len(methods) > 0, "No solution method"
         assert len(methods) == 1, "Too many solution methods"
         method = getattr(solution, methods[0])

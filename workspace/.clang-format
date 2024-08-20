@@ -87,53 +87,94 @@ AlignTrailingComments:
   OverEmptyLines: 0
 
 AllowAllArgumentsOnNextLine: true
+
 AllowAllParametersOfDeclarationOnNextLine: true
+
 AllowBreakBeforeNoexceptSpecifier: Never
+
 AllowShortBlocksOnASingleLine: Empty
-AllowShortCaseLabelsOnASingleLine: false
+
+# ^v19
+# AllowShortCaseExpressionOnASingleLine: true
+
+AllowShortCaseLabelsOnASingleLine: true
+
 AllowShortCompoundRequirementOnASingleLine: true
-AllowShortEnumsOnASingleLine: true
-AllowShortFunctionsOnASingleLine: All
+
+AllowShortEnumsOnASingleLine: false
+
+AllowShortFunctionsOnASingleLine: Empty
+
 AllowShortIfStatementsOnASingleLine: Never
-AllowShortLambdasOnASingleLine: All
+
+AllowShortLambdasOnASingleLine: Empty
+
 AllowShortLoopsOnASingleLine: false
+
 AlwaysBreakAfterDefinitionReturnType: None
+
+# ^v19 ✖
+# * ➡ BreakAfterReturnType
 AlwaysBreakAfterReturnType: None
-AlwaysBreakBeforeMultilineStrings: false
+
+AlwaysBreakBeforeMultilineStrings: true
+
 AlwaysBreakTemplateDeclarations: MultiLine
+
 AttributeMacros:
   - __capability
-BinPackArguments: true
-BinPackParameters: true
-BitFieldColonSpacing: Both
+
+BinPackArguments: false
+
+BinPackParameters: false
+
+BitFieldColonSpacing: Before
+
 BraceWrapping:
   AfterCaseLabel: false
   AfterClass: false
   AfterControlStatement: Never
   AfterEnum: false
   AfterExternBlock: false
-  AfterFunction: true
+  AfterFunction: false
   AfterNamespace: false
   AfterObjCDeclaration: false
   AfterStruct: false
   AfterUnion: false
-  BeforeCatch: false
-  BeforeElse: false
+  BeforeCatch: true
+  BeforeElse: true
   BeforeLambdaBody: false
   BeforeWhile: false
   IndentBraces: false
-  SplitEmptyFunction: true
-  SplitEmptyRecord: true
-  SplitEmptyNamespace: true
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+
+# default: ContinuationIndentWidth
+# BracedInitializerIndentWidth: 4
+
 BreakAdjacentStringLiterals: true
+
 BreakAfterAttributes: Leave
-BreakAfterJavaFieldAnnotations: false
+
+BreakAfterJavaFieldAnnotations: true
+
+# ^v19
+# * ⬅ AlwaysBreakAfterReturnType
+# BreakAfterReturnType: None
+
 BreakArrays: true
-BreakBeforeBinaryOperators: All
+
+BreakBeforeBinaryOperators: NonAssignment
+
+BreakBeforeBraces: Custom
+
 BreakBeforeConceptDeclarations: Always
-BreakBeforeBraces: WebKit
-BreakBeforeInlineASMColon: OnlyMultiline
+
+BreakBeforeInlineASMColon: Always
+
 BreakBeforeTernaryOperators: true
+
 BreakConstructorInitializers: BeforeComma
 BreakInheritanceList: BeforeColon
 BreakStringLiterals: true
@@ -277,7 +318,7 @@ StatementAttributeLikeMacros:
 StatementMacros:
   - Q_UNUSED
   - QT_REQUIRE_VERSION
-TabWidth: 8
+TabWidth: 4
 UseTab: Never
 VerilogBreakBetweenInstancePorts: true
 WhitespaceSensitiveMacros:

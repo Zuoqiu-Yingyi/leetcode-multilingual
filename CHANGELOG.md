@@ -3,6 +3,7 @@
 ## 2024-08-20
 
 - 添加项目文档说明 | Add project documentation
+- 优化代码格式化配置 | Optimize code formatting configuration
 
 ## 2024-08-19
 

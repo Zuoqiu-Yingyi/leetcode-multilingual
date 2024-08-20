@@ -11,8 +11,7 @@ import java.util.Map;
 
 // @lc code=start
 class Solution {
-    public int[] twoSum(int[] nums, int target)
-    {
+    public int[] twoSum(int[] nums, int target) {
         final Map<Integer, Integer> map = new HashMap<Integer, Integer>();
         for (int i = 0;; ++i) {
             final int num = nums[i];

@@ -37,8 +37,7 @@ public class Example {
      * @param packageName 包名 (格式: "_0._1._2._3")
      * @return 题解 ID (格式: 0123)
      */
-    public static String package2id(final String packageName)
-    {
+    public static String package2id(final String packageName) {
         return packageName.replace("s", "").replace(".", "");
     }
 
@@ -47,8 +46,7 @@ public class Example {
      * @param packageName 包名 (格式: "_0._1._2._3")
      * @return 路径 (格式: "0/1/2/3")
      */
-    public static final String package2path(final String packageName)
-    {
+    public static final String package2path(final String packageName) {
         return packageName.replace("s", "").replace(".", "/");
     }
 
@@ -57,15 +55,15 @@ public class Example {
      * @param packageName 包名 (格式: "_0._1._2._3")
      * @return JSON 字符串
      */
-    public static final String readExamplesFile(final String packageName)
-    {
+    public static final String readExamplesFile(final String packageName) {
         try {
             final String id = Example.package2id(packageName);
             final String path = Example.package2path(packageName);
             final Path file_path = Paths.get(Example.SOLUTIONS_TEST_EXAMPLES_DIRECTORY, path, id + ".json");
             final String json = Files.readString(file_path);
             return json;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return null;
         }
     }
@@ -77,8 +75,7 @@ public class Example {
      * @param methodReturnTypeName 方法返回值类型名称
      * @return 示例列表
      */
-    public static final List<Example> fromJson(final String json, final String[] methodParameterTypeNames, final String methodReturnTypeName)
-    {
+    public static final List<Example> fromJson(final String json, final String[] methodParameterTypeNames, final String methodReturnTypeName) {
         final JSONArray examples_json_array = JSON.parseArray(json);
         final List<Example> examples = JSON.parseArray(json, Example.class);
 
@@ -107,8 +104,7 @@ public class Example {
      * @param exampleJsonObject 示例 JSON 对象
      * @param parameterTypeNames 参数类型名称列表
      */
-    public void setInput(final JSONObject exampleJsonObject, final String[] parameterTypeNames)
-    {
+    public void setInput(final JSONObject exampleJsonObject, final String[] parameterTypeNames) {
         final String key = "input";
         final JSONArray inputJSONArray = exampleJsonObject.getJSONArray(key);
         assertEquals(inputJSONArray.size(), parameterTypeNames.length, "Number of input != Number of parameter");
@@ -143,8 +139,7 @@ public class Example {
      * @param exampleJsonObject 示例 JSON 对象
      * @param returnTypeName 返回值类型名称
      */
-    public void setOutput(final JSONObject exampleJsonObject, final String returnTypeName)
-    {
+    public void setOutput(final JSONObject exampleJsonObject, final String returnTypeName) {
         final String key = "output";
         switch (returnTypeName) {
         case "String":

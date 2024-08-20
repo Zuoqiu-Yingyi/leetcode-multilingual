@@ -215,8 +215,9 @@ export default antfu({
         },
     },
     ignores: [
-        "./dist",
-        "./temp",
+        "**/build",
+        "**/dist",
+        "**/temp",
     ],
 }, {
     plugins: {

@@ -2,7 +2,7 @@
     "name": "@repo/eslint",
     "type": "module",
     "private": false,
-    "main": "index.js",
+    "main": "eslint.config.js",
     "scripts": {
         "lint:eslint": "eslint --max-warnings 0 .",
         "format:eslint": "eslint --fix .",

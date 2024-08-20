@@ -1,0 +1,3 @@
+# REF: https://docs.astral.sh/ruff/configuration/
+
+line-length = 320

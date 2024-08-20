@@ -6,8 +6,7 @@ import utils.Test_;
 
 class s_0001_test {
     @Test
-    void test()
-    {
+    void test() {
         Test_ test = new Test_(
             this.getClass(),
             s_0001_00.class

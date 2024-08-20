@@ -33,8 +33,7 @@ public class Test_ {
      * @param Solution 题解类
      * @return 题解的入口方法
      */
-    private static final Method getMethod(final Class<?> Solution)
-    {
+    private static final Method getMethod(final Class<?> Solution) {
         Method[] methods = Solution.getDeclaredMethods();
         assertEquals(methods.length, 1, "Number of solution methods is not 1");
         return methods[0];
@@ -45,8 +44,7 @@ public class Test_ {
      * @param method 方法
      * @return 方法的参数个数
      */
-    private static final int getMethodParameterCount(final Method method)
-    {
+    private static final int getMethodParameterCount(final Method method) {
         return method.getParameterCount();
     }
 
@@ -55,8 +53,7 @@ public class Test_ {
      * @param method 方法
      * @return 方法的参数类型列表
      */
-    private static final Class<?>[] getMethodParameterTypes(final Method method)
-    {
+    private static final Class<?>[] getMethodParameterTypes(final Method method) {
         Class<?>[] parameter_types = method.getParameterTypes();
         return parameter_types;
     }
@@ -66,8 +63,7 @@ public class Test_ {
      * @param method 方法
      * @return 方法的返回值类型
      */
-    private static final Class<?> getMethodReturnType(final Method method)
-    {
+    private static final Class<?> getMethodReturnType(final Method method) {
         Class<?> return_type = method.getReturnType();
         return return_type;
     }
@@ -77,8 +73,7 @@ public class Test_ {
      * @param method 方法
      * @return 方法的参数类型名称列表
      */
-    private static final String[] getMethodParameterTypeNames(final Method method)
-    {
+    private static final String[] getMethodParameterTypeNames(final Method method) {
         Class<?>[] parameter_types = Test_.getMethodParameterTypes(method);
         final String[] parameter_type_names = new String[parameter_types.length];
         for (int i = 0; i < parameter_types.length; ++i) {
@@ -96,8 +91,7 @@ public class Test_ {
      * @param method 方法
      * @return 方法的返回值类型名称
      */
-    private static final String getMethodReturnTypeName(final Method method)
-    {
+    private static final String getMethodReturnTypeName(final Method method) {
         Class<?> return_type = Test_.getMethodReturnType(method);
         final String return_type_name = return_type.getSimpleName();
         return return_type_name;
@@ -111,8 +105,7 @@ public class Test_ {
      * @param exampleIndex 示例索引
      * @throws Exception
      */
-    private static final void testExample(final Object solution, final Example example, final int solutionIndex, final int exampleIndex) throws Exception
-    {
+    private static final void testExample(final Object solution, final Example example, final int solutionIndex, final int exampleIndex) throws Exception {
         // 题解入口方法
         Method method = Test_.getMethod(solution.getClass());
 
@@ -157,8 +150,7 @@ public class Test_ {
      * @param packageName 测试类的包名
      * @param Solutions 题解类列表
      */
-    public Test_(final Class<?> SolutionTest, final Class<?>... Solutions)
-    {
+    public Test_(final Class<?> SolutionTest, final Class<?>... Solutions) {
         this.packageName = SolutionTest.getPackageName();
         this.Solutions = Solutions;
     }
@@ -166,8 +158,7 @@ public class Test_ {
     /**
      * 运行测试
      */
-    public void run()
-    {
+    public void run() {
         assertDoesNotThrow(() -> this.test());
     }
 
@@ -175,8 +166,7 @@ public class Test_ {
      * 测试题解
      * @throws Exception
      */
-    private void test() throws Exception
-    {
+    private void test() throws Exception {
         this.testSolutionsTypeDefinition();
 
         int solution_index = 0;
@@ -198,8 +188,7 @@ public class Test_ {
     /**
      * 测试题解类型定义是否符合要求
      */
-    private void testSolutionsTypeDefinition()
-    {
+    private void testSolutionsTypeDefinition() {
         assertTrue(this.Solutions.length > 0, "No solutions");
 
         final Method method = Test_.getMethod(this.Solutions[0]);
