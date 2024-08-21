@@ -17,13 +17,14 @@ package utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 
 /**
  * 题解测试示例
@@ -38,7 +39,9 @@ public class Example {
      * @return 题解 ID (格式: 0123)
      */
     public static String package2id(final String packageName) {
-        return packageName.replace("s", "").replace(".", "");
+        return packageName
+            .replace("s", "")
+            .replace(".", "");
     }
 
     /**
@@ -47,7 +50,9 @@ public class Example {
      * @return 路径 (格式: "0/1/2/3")
      */
     public static final String package2path(final String packageName) {
-        return packageName.replace("s", "").replace(".", "/");
+        return packageName
+            .replace("s", "")
+            .replace(".", "/");
     }
 
     /**
@@ -75,7 +80,11 @@ public class Example {
      * @param methodReturnTypeName 方法返回值类型名称
      * @return 示例列表
      */
-    public static final List<Example> fromJson(final String json, final String[] methodParameterTypeNames, final String methodReturnTypeName) {
+    public static final List<Example> fromJson(
+        final String json,
+        final String[] methodParameterTypeNames,
+        final String methodReturnTypeName
+    ) {
         final JSONArray examples_json_array = JSON.parseArray(json);
         final List<Example> examples = JSON.parseArray(json, Example.class);
 
@@ -104,31 +113,40 @@ public class Example {
      * @param exampleJsonObject 示例 JSON 对象
      * @param parameterTypeNames 参数类型名称列表
      */
-    public void setInput(final JSONObject exampleJsonObject, final String[] parameterTypeNames) {
+    public void setInput(
+        final JSONObject exampleJsonObject,
+        final String[] parameterTypeNames
+    ) {
         final String key = "input";
         final JSONArray inputJSONArray = exampleJsonObject.getJSONArray(key);
-        assertEquals(inputJSONArray.size(), parameterTypeNames.length, "Number of input != Number of parameter");
+        assertEquals(
+            inputJSONArray.size(),
+            parameterTypeNames.length,
+            "Number of input != Number of parameter"
+        );
         final int input_len = inputJSONArray.size();
         final Object[] input = new Object[inputJSONArray.size()];
         for (int i = 0; i < input_len; ++i) {
             switch (parameterTypeNames[i]) {
-            case "String":
-                input[i] = inputJSONArray.getString(i);
-                break;
-            case "int":
-                input[i] = inputJSONArray.getIntValue(i);
-                break;
-            case "int[]":
-                input[i] = inputJSONArray.getJSONArray(i)
-                               .toJavaList(Integer.class)
-                               .stream()
-                               .mapToInt(Integer::intValue)
-                               .toArray();
-                break;
+                case "String":
+                    input[i] = inputJSONArray.getString(i);
+                    break;
+                case "int":
+                    input[i] = inputJSONArray.getIntValue(i);
+                    break;
+                case "int[]":
+                    input[i] =
+                        inputJSONArray
+                            .getJSONArray(i)
+                            .toJavaList(Integer.class)
+                            .stream()
+                            .mapToInt(Integer::intValue)
+                            .toArray();
+                    break;
 
-            default:
-                input[i] = inputJSONArray.get(i);
-                break;
+                default:
+                    input[i] = inputJSONArray.get(i);
+                    break;
             }
         }
         this.input = input;
@@ -139,26 +157,31 @@ public class Example {
      * @param exampleJsonObject 示例 JSON 对象
      * @param returnTypeName 返回值类型名称
      */
-    public void setOutput(final JSONObject exampleJsonObject, final String returnTypeName) {
+    public void setOutput(
+        final JSONObject exampleJsonObject,
+        final String returnTypeName
+    ) {
         final String key = "output";
         switch (returnTypeName) {
-        case "String":
-            this.output = exampleJsonObject.getString(key);
-            break;
-        case "int":
-            this.output = exampleJsonObject.getIntValue(key);
-            break;
-        case "int[]":
-            this.output = exampleJsonObject.getJSONArray(key)
-                              .toJavaList(Integer.class)
-                              .stream()
-                              .mapToInt(Integer::intValue)
-                              .toArray();
-            break;
+            case "String":
+                this.output = exampleJsonObject.getString(key);
+                break;
+            case "int":
+                this.output = exampleJsonObject.getIntValue(key);
+                break;
+            case "int[]":
+                this.output =
+                    exampleJsonObject
+                        .getJSONArray(key)
+                        .toJavaList(Integer.class)
+                        .stream()
+                        .mapToInt(Integer::intValue)
+                        .toArray();
+                break;
 
-        default:
-            this.output = exampleJsonObject.get(key);
-            break;
+            default:
+                this.output = exampleJsonObject.get(key);
+                break;
         }
     }
 }

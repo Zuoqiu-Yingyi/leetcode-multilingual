@@ -24,6 +24,7 @@ class Solution {
         }
     }
 }
+
 // @lc code=end
 
-public class s_0001_00 extends Solution { }
+public class s_0001_00 extends Solution {}

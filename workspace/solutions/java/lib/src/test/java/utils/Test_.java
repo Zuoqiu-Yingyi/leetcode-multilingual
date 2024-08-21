@@ -21,9 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.alibaba.fastjson2.JSON;
 import java.lang.reflect.Method;
 import java.util.List;
+
+import com.alibaba.fastjson2.JSON;
 
 public class Test_ {
     // System.getProperty("user.dir") -> workspace/solutions/java/lib
@@ -35,7 +36,11 @@ public class Test_ {
      */
     private static final Method getMethod(final Class<?> Solution) {
         Method[] methods = Solution.getDeclaredMethods();
-        assertEquals(methods.length, 1, "Number of solution methods is not 1");
+        assertEquals(
+            methods.length,
+            1,
+            "Number of solution methods is not 1"
+        );
         return methods[0];
     }
 
@@ -105,7 +110,12 @@ public class Test_ {
      * @param exampleIndex 示例索引
      * @throws Exception
      */
-    private static final void testExample(final Object solution, final Example example, final int solutionIndex, final int exampleIndex) throws Exception {
+    private static final void testExample(
+        final Object solution,
+        final Example example,
+        final int solutionIndex,
+        final int exampleIndex
+    ) throws Exception {
         // 题解入口方法
         Method method = Test_.getMethod(solution.getClass());
 
@@ -114,7 +124,15 @@ public class Test_ {
         final String result_type_name = result.getClass().getTypeName();
         final String output_type_name = example.output.getClass().getTypeName();
 
-        assertEquals(result_type_name, output_type_name, String.format("Solution result type <%s> != expected type <%s>", result_type_name, output_type_name));
+        assertEquals(
+            result_type_name,
+            output_type_name,
+            String.format(
+                "Solution result type <%s> != expected type <%s>",
+                result_type_name,
+                output_type_name
+            )
+        );
 
         final String input_json = JSON.toJSONString(example.input);
         final String result_json = JSON.toJSONString(result);
@@ -150,7 +168,10 @@ public class Test_ {
      * @param packageName 测试类的包名
      * @param Solutions 题解类列表
      */
-    public Test_(final Class<?> SolutionTest, final Class<?>... Solutions) {
+    public Test_(
+        final Class<?> SolutionTest,
+        final Class<?>... Solutions
+    ) {
         this.packageName = SolutionTest.getPackageName();
         this.Solutions = Solutions;
     }
@@ -177,7 +198,12 @@ public class Test_ {
                 final int _solution_index = solution_index;
                 final int _example_index = example_index;
                 assertDoesNotThrow(() -> {
-                    Test_.testExample(solution, example, _solution_index, _example_index);
+                    Test_.testExample(
+                        solution,
+                        example,
+                        _solution_index,
+                        _example_index
+                    );
                 });
                 example_index++;
             }
@@ -201,16 +227,34 @@ public class Test_ {
             final String[] _method_parameter_type_names = Test_.getMethodParameterTypeNames(_method);
             final String _method_return_type_name = Test_.getMethodReturnTypeName(_method);
 
-            assertEquals(_method_parameter_count, method_parameter_count, "Method parameter count is inconsistent");
-            assertArrayEquals(_method_parameter_type_names, method_parameter_type_names, "Method parameter type names is inconsistent");
             assertEquals(
-                _method_return_type_name, method_return_type_name, "Method return type name is inconsistent"
+                _method_parameter_count,
+                method_parameter_count,
+                "Method parameter count is inconsistent"
+            );
+            assertArrayEquals(
+                _method_parameter_type_names,
+                method_parameter_type_names,
+                "Method parameter type names is inconsistent"
+            );
+            assertEquals(
+                _method_return_type_name,
+                method_return_type_name,
+                "Method return type name is inconsistent"
             );
         }
 
         final String examples_json = Example.readExamplesFile(this.packageName);
-        assertNotEquals(examples_json, null, "Examples file not found");
+        assertNotEquals(
+            examples_json,
+            null,
+            "Examples file not found"
+        );
 
-        this.examples = Example.fromJson(examples_json, method_parameter_type_names, method_return_type_name);
+        this.examples = Example.fromJson(
+            examples_json,
+            method_parameter_type_names,
+            method_return_type_name
+        );
     }
 }
