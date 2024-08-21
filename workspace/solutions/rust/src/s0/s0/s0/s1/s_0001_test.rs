@@ -4,7 +4,7 @@ mod tests {
     use crate::utils::{json::ValueExtension, test::t};
 
     #[test]
-    fn test() {
+    fn test() -> () {
         t(
             module_path!(),
             &vec![s_0001_00::SOLUTION],

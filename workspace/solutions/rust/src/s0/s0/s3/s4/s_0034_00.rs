@@ -33,7 +33,7 @@ impl Solution {
                         * left 会停留在该位置
                         由于 nums[middle] < x
                         * 因此 left 即为答案
-                    若 x < nums[middle + 1] 时
+                    若 nums[middle + 1] > x 时
                         可知搜索的 x 不存在
                         下一轮搜索区间为 [middle + 1, right)
                         由于 x < nums[middle + 1] <= nums[right]
@@ -43,7 +43,7 @@ impl Solution {
                     当 left 停止移动时
                         若 left < right
                             则循环继续, right 会继续减小, 直到 right <= left 循环结束
-                        若 right <= left
+                        若 left >= right
                             * 则循环结束, 返回 left
                     ---
                     由于 middle ∈ [left, right)
@@ -63,30 +63,44 @@ impl Solution {
                     right = middle;
                 }
             }
+            /*
+            若目标 x 存在
+                left 为目标 x 的位置
+            若目标 x 不存在
+                left 为比 x 大的第一个位置
+             */
             left
         };
 
         /*
-        若 target 存在, 则 l 为最左侧的 target 的位置
-        若 target 不存在, 则 l 为比 target 大的第一个位置
+        若 target 存在
+            则 l 为最左侧的 target 的位置
+        若 target 不存在
+            则 l 为比 target 大的第一个位置
          */
         let l = search(target);
 
         /*
-        若 target 存在, 则 r 为最右侧的 target 的后一个位置
-        若 target 不存在, 则 r 为比 target 大的第一个位置
+        若 target 存在
+            则 r 为最右侧的 target 的后一个位置
+        若 target 不存在
+            则 r 为比 target 大的第一个位置
          */
         let r = search(target + 1);
 
         /*
+        若 target 存在
+            则 l 为最左侧的 target 的位置
+            r 为最右侧的 target 的后一个位置
+            此时 l < r
         若 target 不存在
-        则 l 与 r 均为比 target 大的第一个位置
-        因此 l == r
+            则 l 与 r 均为比 target 大的第一个位置
+            此时 l == r
          */
-        if l == r {
-            return vec![-1, -1];
-        } else {
+        if l < r {
             return vec![l as i32, (r - 1) as i32];
+        } else {
+            return vec![-1, -1];
         }
     }
 }
