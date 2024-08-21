@@ -72,14 +72,6 @@ export const SOLUTIONS_TEST_DIRECTORY_MAP = new Map(Object.entries(SOLUTIONS_TES
 export const SOLUTIONS_TEST_EXAMPLES_DIRECTORY = "./packages/examples";
 
 /**
- * 题解测试用例文件内容
- */
-export const SOLUTIONS_TEST_EXAMPLES_CONTENT = `\
-[
-]
-`;
-
-/**
  * 题解函数名称提取正则表达式
  */
 export const SOLUTION_FUNCTION_NAME_REGEXP = {

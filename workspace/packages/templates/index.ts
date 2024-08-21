@@ -28,6 +28,7 @@ import type { ISolutionFileContent } from "@repo/common/utils";
 export const TEMPLATES_DIRECTORY_NAME = "templates";
 export const TEMPLATES_TEST_DIRECTORY_NAME = "test";
 export const TEMPLATES_SOLUTION_DIRECTORY_NAME = "solution";
+export const TEMPLATES_EXAMPLE_FILE_NAME = "example.json";
 
 export const MUSTACHE_TAGS: OpeningAndClosingTags = ["/*{{", "}}*/"] as const;
 
@@ -137,5 +138,31 @@ export async function renderTestFile(info: ISolutionInfo): Promise<string | void
                 },
             ).trim()}\n`;
         }
+    }
+}
+
+/**
+ * 渲染测试示例文件
+ * @param info - 题解信息
+ * @returns 示例文件内容
+ */
+export async function renderExamplesFile(info: ISolutionInfo): Promise<string | void> {
+    const template_file_path = path.join(
+        import.meta.dir,
+        TEMPLATES_DIRECTORY_NAME,
+        TEMPLATES_EXAMPLE_FILE_NAME,
+    );
+    if (await fsAsync.exists(template_file_path)) {
+        const template_file = Bun.file(template_file_path);
+        const template_content = await template_file.text();
+        return `${Mustache.render(
+            template_content,
+            info2view(info),
+            undefined,
+            {
+                escape: (value) => value,
+                tags: MUSTACHE_TAGS,
+            },
+        ).trim()}\n`;
     }
 }

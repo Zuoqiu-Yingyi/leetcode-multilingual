@@ -22,6 +22,7 @@ import chokidar from "chokidar";
 
 import { C, E, U } from "@repo/common";
 import {
+    renderExamplesFile,
     renderSolutionFile,
     renderTestFile,
 } from "@repo/templates";
@@ -273,24 +274,32 @@ async function createSolutionTestFile(
  * @param info - 题解信息
  * @returns 测试用例文件路径
  */
-async function createSolutionTestExamplesFile(info: ISolutionInfo): Promise<IFileEvent | void> {
+async function createExamplesFile(info: ISolutionInfo): Promise<IFileEvent | void> {
     const id = U.idPadZero(info.id);
     const paths = U.id2paths(info.id);
     const examples_file_path = path.join(C.SOLUTIONS_TEST_EXAMPLES_DIRECTORY, ...paths, `${id}.json`);
     if (!(await fsAsync.exists(examples_file_path))) {
-        await Bun.write(
-            examples_file_path,
-            C.SOLUTIONS_TEST_EXAMPLES_CONTENT,
-            { createPath: true },
-        );
+        const examples_content = await renderExamplesFile(info);
+        if (examples_content) {
+            await Bun.write(
+                examples_file_path,
+                examples_content,
+                { createPath: true },
+            );
+            return {
+                path: examples_file_path,
+                name: "add",
+            };
+        }
+        else {
+            throw new Error(`Failed to render examples file: ${examples_file_path}`);
+        }
+    }
+    else {
         return {
             path: examples_file_path,
-            name: "add",
         };
     }
-    return {
-        path: examples_file_path,
-    };
 }
 
 /**
@@ -377,7 +386,7 @@ async function solutionsHandler(
                     case E.Language.python3:
                     case E.Language.javascript:
                     case E.Language.typescript: {
-                        examples_file = await createSolutionTestExamplesFile(file_info);
+                        examples_file = await createExamplesFile(file_info);
                         solution_file = await createSolutionFile(file_info, entryPath);
                         solution_test_file = await createSolutionTestFile(file_info);
                         break;
@@ -410,17 +419,17 @@ async function solutionsHandler(
 }
 
 /**
- * 监听 .solutions 目录变化
+ * 监听临时题解目录
  * REF: https://www.npmjs.com/package/chokidar
  */
-const solutions_watcher = chokidar.watch(
+const temporary_solutions_watcher = chokidar.watch(
     C.SOLUTIONS_TEMPORARY_DIRECTORY,
     {
-        // ignored: /(^|[/\\])\../, // ignore dotfiles
+        // ignored: /(^|[/\\])\../, // ignore dot-files
     },
 );
 
-solutions_watcher.on("all", solutionsHandler);
+temporary_solutions_watcher.on("all", solutionsHandler);
 
 // TODO: 监听 solutions/go/**/s_*_*.go 变化
 // 更新 solutions/go/**/s_*_test.go 文件并运行测试

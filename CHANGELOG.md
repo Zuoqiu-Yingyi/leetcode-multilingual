@@ -3,6 +3,8 @@
 ## 2024-08-21
 
 - 优化代码格式化配置 | Optimize code formatting configuration
+- 添加 `0034` 题解 | Add `0034` solution
+  - [34. 在排序数组中查找元素的第一个和最后一个位置 - 力扣（LeetCode）](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/description/)
 
 ## 2024-08-20
 
