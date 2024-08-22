@@ -35,7 +35,7 @@ pub fn read_examples_file(file_path: &PathBuf) -> Result<String, std::io::Error>
 
 pub fn get_examples_file_path(paths: &Vec<&str>) -> PathBuf {
     let id: String = paths.join("");
-    std::env::current_dir()
+    std::env::current_dir() //
         .unwrap()
         .join(EXAMPLES_DIRECTORY_PATH.join(MAIN_SEPARATOR_STR))
         .join(paths.join(MAIN_SEPARATOR_STR))
@@ -48,7 +48,10 @@ pub fn deserialize_examples_json(json: &str) -> Vec<Example> {
             .map(|v| {
                 let input = v["input"].as_array().unwrap().to_vec();
                 let output = v["output"].clone();
-                Example { input, output }
+                Example {
+                    input,
+                    output,
+                }
             })
             .collect()
     } else {

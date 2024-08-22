@@ -1,5 +1,9 @@
 # 更改日志 | Change Log
 
+## 2024-08-23
+
+- 优化代码格式化配置 | Optimize code formatting configuration
+
 ## 2024-08-21
 
 - 优化代码格式化配置 | Optimize code formatting configuration

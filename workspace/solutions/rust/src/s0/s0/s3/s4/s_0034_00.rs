@@ -8,7 +8,10 @@ pub struct Solution {}
 
 // @lc code=start
 impl Solution {
-    pub fn search_range(nums: Vec<i32>, target: i32) -> Vec<i32> {
+    pub fn search_range(
+        nums: Vec<i32>,
+        target: i32,
+    ) -> Vec<i32> {
         let n = nums.len();
         let search = |x| {
             let mut left = 0;

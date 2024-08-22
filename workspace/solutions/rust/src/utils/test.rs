@@ -18,7 +18,9 @@ use super::example;
 const ID_LENGTH: usize = 4;
 
 pub fn parse_module_path(module_path: &str) -> Vec<&str> {
-    module_path.split("::").collect::<Vec<&str>>()[1..=ID_LENGTH]
+    module_path //
+        .split("::")
+        .collect::<Vec<&str>>()[1..=ID_LENGTH]
         .iter()
         .map(|s| s.strip_prefix("s").unwrap())
         .collect()

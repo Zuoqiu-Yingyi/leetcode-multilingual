@@ -16,7 +16,11 @@ impl Solution {
     }
 
     /// 快速排序
-    fn quick_sort(nums: &mut Vec<i32>, left: usize, right: usize) -> () {
+    fn quick_sort(
+        nums: &mut Vec<i32>,
+        left: usize,
+        right: usize,
+    ) -> () {
         /*
         当 left >= right 时
             区间内元素个数小于等于 1

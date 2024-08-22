@@ -6,11 +6,11 @@ mod tests {
     #[test]
     fn test() -> () {
         t(
-            module_path!(),
+            module_path!(), //
             &vec![s_0034_00::SOLUTION],
             |solve, input| {
                 serde_json::Value::from(solve(
-                    input[0].to_i32_array().unwrap(),
+                    input[0].to_i32_array().unwrap(), //
                     input[1].to_i32().unwrap(),
                 ))
             },

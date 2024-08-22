@@ -6,9 +6,13 @@ mod tests {
     #[test]
     fn test() -> () {
         t(
-            module_path!(),
+            module_path!(), //
             &vec![s_0912_00::SOLUTION],
-            |solve, input| serde_json::Value::from(solve(input[0].to_i32_array().unwrap())),
+            |solve, input| {
+                serde_json::Value::from(solve(
+                    input[0].to_i32_array().unwrap(), //
+                ))
+            },
         );
     }
 }

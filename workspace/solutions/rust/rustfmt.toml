@@ -1,1 +1,67 @@
 # REF: https://rust-lang.github.io/rustfmt/?version=master
+
+# array_width = 60
+
+# attr_fn_like_width = 70
+
+# chain_width = 60
+
+# disable_all_formatting = false
+
+# edition = "2015"
+edition = "2024"
+
+# ✖ "Compressed", "Tall", "Vertical"
+# fn_args_layout = "Tall"
+# fn_args_layout = "Vertical"
+
+# "Compressed", "Tall", "Vertical"
+# fn_params_layout = "Tall"
+fn_params_layout = "Vertical"
+
+# force_explicit_abi = true
+
+# hard_tabs = false
+
+# "Always", "Never", "Preserve"
+# match_arm_leading_pipes = "Never"
+
+# match_block_trailing_comma = false
+match_block_trailing_comma = true
+
+# max_width = 100
+max_width = 1024
+
+# merge_derives = true
+merge_derives = false
+
+# "Auto", "Native", "Unix", "Windows"
+# newline_style = "Auto"
+newline_style = "Unix"
+
+# remove_nested_parens = true
+
+# reorder_imports = true
+
+# short_array_element_width_threshold = 50
+
+# single_line_if_else_max_width = 50
+
+# single_line_let_else_max_width = 50
+
+# struct_lit_width = 18
+struct_lit_width = 0
+
+# struct_variant_width = 35
+struct_variant_width = 0
+
+# tab_spaces = 4
+
+# use_field_init_shorthand = false
+
+# "Default", "Off", "Max"
+# use_small_heuristics = "Default"
+use_small_heuristics = "Off"
+
+# use_try_shorthand = false
+use_try_shorthand = true
