@@ -3,6 +3,8 @@
 ## 2024-08-23
 
 - 优化代码格式化配置 | Optimize code formatting configuration
+- 添加题目 `1870` 的题解 | Add the solution to the question `1870`
+  - [1870. 准时到达的列车最小时速 - 力扣（LeetCode）](https://leetcode.cn/problems/minimum-speed-to-arrive-on-time/description/)
 
 ## 2024-08-21
 
