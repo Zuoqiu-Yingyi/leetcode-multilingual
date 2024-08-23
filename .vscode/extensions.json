@@ -10,6 +10,7 @@
         "redhat.java",
         "richardwillis.vscode-spotless-gradle",
         "rust-lang.rust-analyzer",
+        "vadimcn.vscode-lldb",
         "vscjava.vscode-gradle",
         "vscjava.vscode-java-debug",
         "vscjava.vscode-java-dependency",
