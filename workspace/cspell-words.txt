@@ -2,6 +2,7 @@ antfu
 aosp
 classpath
 commitlint
+Deque
 diffplug
 dprint
 fastjson

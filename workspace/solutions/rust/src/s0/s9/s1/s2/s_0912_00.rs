@@ -15,7 +15,7 @@ impl Solution {
         return nums;
     }
 
-    /// 快速排序
+    /// 快速排序 (递归版本)
     fn quick_sort(
         nums: &mut Vec<i32>,
         left: usize,
