@@ -10,8 +10,10 @@ mod tests {
             &vec![s_/*{{ id }}*/_/*{{ index}}*/::SOLUTION],
             |solve, input| {
                 serde_json::Value::from(solve(
-                    // input[0],
-                    // input[2],
+                    // input[0].as_str().unwrap().to_string(),
+                    // input[1].as_f64().unwrap(),
+                    // input[2].to_i32().unwrap(),
+                    // input[3].to_i32_array().unwrap(),
                     // ...
                 ))
             },

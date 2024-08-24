@@ -1,5 +1,10 @@
 # 更改日志 | Change Log
 
+## 2024-08-24
+
+- 添加题目 `0415` 的题解 | Add the solution to the question `0415`
+  - [415. 字符串相加 - 力扣（LeetCode）](https://leetcode.cn/problems/add-strings/description/)
+
 ## 2024-08-23
 
 - 优化代码格式化配置 | Optimize code formatting configuration

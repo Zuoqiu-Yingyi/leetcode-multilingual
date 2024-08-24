@@ -40,7 +40,6 @@
         "prepare": "cd ./.. && husky ./workspace/.husky",
         "solve": "bun run --watch ./scripts/solve.ts",
         "lint-staged": "lint-staged --allow-empty",
-
         "test": "nu ./scripts/test/all.nu",
         "test:es": "nu ./scripts/test/ecmascript.nu",
         "test:go": "nu ./scripts/test/go.nu",
@@ -48,7 +47,6 @@
         "test:kt": "nu ./scripts/test/kotlin.nu",
         "test:py": "nu ./scripts/test/python.nu",
         "test:rs": "nu ./scripts/test/rust.nu",
-
         "format": "nu ./scripts/format/all.nu",
         "format:es": "nu ./scripts/format/ecmascript.nu",
         "format:go": "nu ./scripts/format/go.nu",
@@ -57,7 +55,6 @@
         "format:kt": "nu ./scripts/format/kotlin.nu",
         "format:py": "nu ./scripts/format/python.nu",
         "format:rs": "nu ./scripts/format/rust.nu",
-
         "lint:eslint": "eslint --max-warnings 0 .",
         "format:eslint": "eslint --fix .",
         "check:cspell": "cspell ."
@@ -73,17 +70,17 @@
         "@commitlint/cli": "^19.4.0",
         "@commitlint/config-conventional": "^19.2.2",
         "@commitlint/types": "^19.0.3",
-        "@types/bun": "^1.1.6",
+        "@types/bun": "^1.1.8",
         "@types/lint-staged": "^13.3.0",
-        "@types/node": "^22.4.0",
+        "@types/node": "^22.5.0",
         "@wasm-fmt/clang-format": "^18.1.8",
         "chalk": "^5.3.0",
         "chokidar": "^3.6.0",
-        "cspell": "^8.13.3",
-        "eslint": "^9.9.0",
-        "husky": "^9.1.4",
+        "cspell": "^8.14.2",
+        "eslint": "^9.9.1",
+        "husky": "^9.1.5",
         "lint-staged": "^15.2.9",
-        "nushell": "^0.96.1",
+        "nushell": "^0.96.3",
         "prettier": "^3.3.3",
         "typescript": "^5.5.4"
     }

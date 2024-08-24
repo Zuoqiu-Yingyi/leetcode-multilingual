@@ -143,11 +143,14 @@ public class Example {
          * @param jsonElement JSON 元素
          * @param typeName 类型名称
          * @return 指定类型
+         *
+         * @see [kotlinx.serialization.json](https://kotlinlang.org/api/kotlinx.serialization/kotlinx-serialization-json/kotlinx.serialization.json/)
          */
         public final fun json2any(
             jsonElement: JsonElement,
             typeName: String,
         ): Any = when (typeName) {
+            "kotlin.String" -> jsonElement.jsonPrimitive.content
             "kotlin.Int" -> jsonElement.jsonPrimitive.int
             "kotlin.Double" -> jsonElement.jsonPrimitive.double
             "kotlin.IntArray" -> jsonElement.jsonArray.map { it.jsonPrimitive.int }.toIntArray()
@@ -164,6 +167,7 @@ public class Example {
             value: Any,
             typeName: String,
         ): JsonElement = when (typeName) {
+            "kotlin.String" -> Json.encodeToJsonElement(value as String)
             "kotlin.Int" -> Json.encodeToJsonElement(value as Int)
             "kotlin.Double" -> Json.encodeToJsonElement(value as Double)
             "kotlin.IntArray" -> Json.encodeToJsonElement(value as IntArray)
