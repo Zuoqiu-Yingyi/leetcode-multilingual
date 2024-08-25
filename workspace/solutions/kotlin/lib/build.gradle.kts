@@ -86,6 +86,7 @@ configure<com.diffplug.gradle.spotless.SpotlessExtension> {
                     "ktlint_standard_class-naming" to "disabled",
                     "ktlint_standard_filename" to "disabled",
                     "ktlint_standard_max-line-length" to "disabled",
+                    "ktlint_standard_max-line-length" to "disabled",
                     "ktlint_standard_package-name" to "disabled",
                     "ktlint_standard_property-naming" to "disabled",
                 )

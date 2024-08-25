@@ -19,22 +19,23 @@
         "url": "https://github.com/Zuoqiu-Yingyi/leetcode-multilingual/issues"
     },
     "keywords": [
-        "leetcode",
-        "multilingual",
-        "solutions",
-        "monorepo",
         "c",
         "c++",
         "go",
         "java",
         "javascript",
         "kotlin",
+        "leetcode",
+        "monorepo",
+        "multilingual",
+        "python",
         "rust",
+        "solutions",
         "typescript"
     ],
     "engines": {
         "node": "22",
-        "bun": "1.1.21"
+        "bun": "1.1.26"
     },
     "scripts": {
         "prepare": "cd ./.. && husky ./workspace/.husky",
@@ -80,7 +81,7 @@
         "eslint": "^9.9.1",
         "husky": "^9.1.5",
         "lint-staged": "^15.2.9",
-        "nushell": "^0.96.3",
+        "nushell": "^0.97.1",
         "prettier": "^3.3.3",
         "typescript": "^5.5.4"
     }

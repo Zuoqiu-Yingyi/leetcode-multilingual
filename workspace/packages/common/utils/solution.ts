@@ -47,6 +47,7 @@ export function parseSolutionFileParse(
             tail: lines.slice(code_end + 1).join("\n").trim(),
         } satisfies ISolutionFileContent;
     }
+    console.error(code_start, code_end, lines.length);
     throw new Error("Invalid solution file");
 }
 

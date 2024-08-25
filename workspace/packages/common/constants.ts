@@ -91,7 +91,7 @@ export const SOLUTION_FUNCTION_NAME_REGEXP = {
     [Language.python3]: /^\s*def\s+(?<function_name>\w+)\s*\((?<arguments>.*)\)\s*->\s*(?<return_type>\S+)\s*:\s*$/m,
 
     // const twoSum = function (nums, target) {
-    [Language.javascript]: /^\s*const\s+(?<function_name>\w+)\s*=\s*function\s*\((?<arguments>.*)\)\s*\{\s*$/m,
+    [Language.javascript]: /^\s*(?:const|var)\s+(?<function_name>\w+)\s*=\s*function\s*\((?<arguments>.*)\)\s*\{\s*$/m,
 
     // function twoSum(nums: number[], target: number): number[] {
     [Language.typescript]: /^\s*function\s+(?<function_name>\w+)\s*\((?<arguments>.*)\)\s*:\s*(?<return_type>\S+)\s*\{\s*?/m,
