@@ -210,40 +210,26 @@ async function createSolutionTestFile(
     try {
         const test_directory_path = solutionTestDirectory(info.language, info.id);
         const id = U.idPadZero(info.id);
-        switch (info.language) {
-            /* 创建测试文件 */
-            case E.Language.rust:
-            case E.Language.java:
-            case E.Language.kotlin:
-            case E.Language.golang:
-            case E.Language.python3: {
-                const test_file_path = path.join(test_directory_path, `s_${id}_test${info.ext}`);
-                if (!(await fsAsync.exists(test_file_path))) {
-                    const test_file_content = await renderTestFile(info);
-                    if (test_file_content) {
-                        await Bun.write(
-                            test_file_path,
-                            test_file_content,
-                            { createPath: true },
-                        );
-                        return {
-                            path: test_file_path,
-                            name: "add",
-                        };
-                    }
-                }
-                else {
-                    return {
-                        path: test_file_path,
-                    };
-                }
-                break;
-            }
 
-            /* 覆写测试文件以触发 bun 的测试 */
-            case E.Language.javascript:
-            case E.Language.typescript: {
-                const test_file_path = path.join(test_directory_path, `s_${id}_test.ts`);
+        const test_file_path = (() => {
+            switch (info.language) {
+                /* 创建测试文件 */
+                case E.Language.rust:
+                case E.Language.java:
+                case E.Language.kotlin:
+                case E.Language.golang:
+                case E.Language.python3:
+                    return path.join(test_directory_path, `s_${id}_test${info.ext}`);
+
+                case E.Language.javascript:
+                case E.Language.typescript:
+                    return path.join(test_directory_path, `s_${id}_test.ts`);
+                default:
+                    return null;
+            }
+        })();
+        if (test_file_path) {
+            if (!(await fsAsync.exists(test_file_path))) {
                 const test_file_content = await renderTestFile(info);
                 if (test_file_content) {
                     await Bun.write(
@@ -253,15 +239,15 @@ async function createSolutionTestFile(
                     );
                     return {
                         path: test_file_path,
-                        name: (await fsAsync.exists(test_file_path))
-                            ? "change"
-                            : "add",
+                        name: "add",
                     };
                 }
-                break;
             }
-            default:
-                break;
+            else {
+                return {
+                    path: test_file_path,
+                };
+            }
         }
     }
     catch (error) {

@@ -12,7 +12,7 @@
  * @param {number[]} removable
  * @return {number}
  */
-function maximumRemovals(s, p, removable) {
+const maximumRemovals = function (s, p, removable) {
     const str_len = s.length;
     const sub_len = p.length;
 
@@ -48,7 +48,7 @@ function maximumRemovals(s, p, removable) {
         }
     }
     return left;
-}
+};
 // @lc code=end
 
 export default maximumRemovals;

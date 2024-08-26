@@ -9,7 +9,7 @@ import (
 )
 
 func TestSolutions(t *testing.T) {
-	utils.Test(
+	utils.T(
 		[]any{
 			s_0001_00.Solution,
 		},

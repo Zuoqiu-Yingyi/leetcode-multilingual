@@ -21,7 +21,7 @@ import (
 	"testing"
 )
 
-func Test[T any](solutions []T, t *testing.T) {
+func T[T any](solutions []T, t *testing.T) {
 	if len(solutions) == 0 {
 		t.Fatal("No solutions")
 	}

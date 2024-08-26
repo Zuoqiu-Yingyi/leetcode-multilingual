@@ -2,16 +2,16 @@ package /*{{ package }}*/;
 
 import /*{{ package }}*/.s_/*{{ id }}*/_/*{{ index }}*/.s_/*{{ id }}*/_/*{{ index }}*/;
 import org.junit.jupiter.api.Test;
-import utils.Test_;
+import utils.T;
 
 class s_/*{{ id }}*/_test {
     @Test
     void test()
     {
-        Test_ test = new Test_(
+        T t = new T(
             this.getClass(),
             s_/*{{ id }}*/_/*{{ index }}*/.class
         );
-        test.run();
+        t.run();
     }
 }

@@ -26,7 +26,7 @@ import java.util.List;
 
 import com.alibaba.fastjson2.JSON;
 
-public class Test_ {
+public class T {
     // System.getProperty("user.dir") -> workspace/solutions/java/lib
 
     /**
@@ -79,7 +79,7 @@ public class Test_ {
      * @return 方法的参数类型名称列表
      */
     private static final String[] getMethodParameterTypeNames(final Method method) {
-        Class<?>[] parameter_types = Test_.getMethodParameterTypes(method);
+        Class<?>[] parameter_types = T.getMethodParameterTypes(method);
         final String[] parameter_type_names = new String[parameter_types.length];
         for (int i = 0; i < parameter_types.length; ++i) {
             // getName: [I java.lang.String
@@ -97,7 +97,7 @@ public class Test_ {
      * @return 方法的返回值类型名称
      */
     private static final String getMethodReturnTypeName(final Method method) {
-        Class<?> return_type = Test_.getMethodReturnType(method);
+        Class<?> return_type = T.getMethodReturnType(method);
         final String return_type_name = return_type.getSimpleName();
         return return_type_name;
     }
@@ -117,7 +117,7 @@ public class Test_ {
         final int exampleIndex
     ) throws Exception {
         // 题解入口方法
-        Method method = Test_.getMethod(solution.getClass());
+        Method method = T.getMethod(solution.getClass());
 
         final Object result = method.invoke(solution, example.input);
 
@@ -168,7 +168,7 @@ public class Test_ {
      * @param packageName 测试类的包名
      * @param Solutions 题解类列表
      */
-    public Test_(
+    public T(
         final Class<?> SolutionTest,
         final Class<?>... Solutions
     ) {
@@ -198,7 +198,7 @@ public class Test_ {
                 final int _solution_index = solution_index;
                 final int _example_index = example_index;
                 assertDoesNotThrow(() -> {
-                    Test_.testExample(
+                    T.testExample(
                         solution,
                         example,
                         _solution_index,
@@ -217,15 +217,15 @@ public class Test_ {
     private void testSolutionsTypeDefinition() {
         assertTrue(this.Solutions.length > 0, "No solutions");
 
-        final Method method = Test_.getMethod(this.Solutions[0]);
-        final int method_parameter_count = Test_.getMethodParameterCount(method);
-        final String[] method_parameter_type_names = Test_.getMethodParameterTypeNames(method);
-        final String method_return_type_name = Test_.getMethodReturnTypeName(method);
+        final Method method = T.getMethod(this.Solutions[0]);
+        final int method_parameter_count = T.getMethodParameterCount(method);
+        final String[] method_parameter_type_names = T.getMethodParameterTypeNames(method);
+        final String method_return_type_name = T.getMethodReturnTypeName(method);
         for (Class<?> Solution : this.Solutions) {
-            final Method _method = Test_.getMethod(Solution);
-            final int _method_parameter_count = Test_.getMethodParameterCount(_method);
-            final String[] _method_parameter_type_names = Test_.getMethodParameterTypeNames(_method);
-            final String _method_return_type_name = Test_.getMethodReturnTypeName(_method);
+            final Method _method = T.getMethod(Solution);
+            final int _method_parameter_count = T.getMethodParameterCount(_method);
+            final String[] _method_parameter_type_names = T.getMethodParameterTypeNames(_method);
+            final String _method_return_type_name = T.getMethodReturnTypeName(_method);
 
             assertEquals(
                 _method_parameter_count,

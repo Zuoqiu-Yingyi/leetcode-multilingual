@@ -1,5 +1,10 @@
 # 更改日志 | Change Log
 
+## 2024-08-26
+
+- 添加题目 `0303` 的题解 | Add the solution to the question `0303`
+  - [303. 区域和检索 - 数组不可变 - 力扣（LeetCode）](https://leetcode.cn/problems/range-sum-query-immutable/description/)
+
 ## 2024-08-24
 
 - 添加题目 `0415` 的题解 | Add the solution to the question `0415`

@@ -1,16 +1,16 @@
 package /*{{ package }}*/
 
-import utils.Test_
+import utils.T
 import kotlin.test.Test
 import /*{{ package }}*/.s_/*{{ id }}*/_/*{{ index }}*/.Solution as s_/*{{ id }}*/_/*{{ index }}*/
 
 class s_/*{{ id }}*/_test {
     @Test
     fun test() {
-        val test = Test_(
+        val t = T(
             this::class,
             s_/*{{ id }}*/_/*{{ index }}*/::class,
         )
-        test.run()
+        t.run()
     }
 }

@@ -19,7 +19,7 @@ import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
 
-import { C } from "@repo/common";
+import { C, E } from "@repo/common";
 
 /**
  * 题解
@@ -30,29 +30,58 @@ export interface ISolution<F extends CallableFunction = CallableFunction> {
 }
 
 /**
- * 测试用例
+ * 测试用例 (类格式)
+ */
+export interface IClassExample<
+    INIT extends any[] = any[],
+    I extends any[] = any[],
+    O = any,
+> {
+    /**
+     * 类初始化参数
+     */
+    init: INIT;
+    /**
+     * 函数参数列表
+     */
+    inputs: I[];
+    /**
+     * 函数返回值列表
+     */
+    outputs: O[];
+}
+
+/**
+ * 测试用例 (函数格式)
  */
 export interface IExample<
     I extends any[] = any[],
     O = any,
 > {
+    /**
+     * 函数参数
+     */
     input: I;
+    /**
+     * 函数返回值
+     */
     output: O;
 }
+
+export type TExample = IClassExample | IExample;
 
 /**
  * 模块测试
  * @param test - 测试模块
  * @param dir - 目录
+ * @param format - 题解格式
  * @param examples - 测试用例
  */
-export async function t<
-    I extends any[] = any[],
-    O = any,
->(
+export async function t(
     test: typeof import("bun:test"),
     dir: string,
-    examples?: IExample<I, O>[],
+    format: E.SolutionFormat = E.SolutionFormat.function,
+    examples?: TExample[],
 ) {
     // console.debug("t", arguments);
 
@@ -76,7 +105,7 @@ export async function t<
                 examples_file_path,
                 "utf-8",
             );
-            examples = JSON.parse(json) as IExample<I, O>[];
+            examples = JSON.parse(json) as IExample[];
         }
         catch (error) {
             void error;
@@ -98,15 +127,43 @@ export async function t<
         func: (await import(`@/${solutions_path}/${name}`)).default,
     }))()));
 
-    test.describe.each(solutions)(id, async ({ name, func }) => {
+    test.describe.each(solutions)(id, async (solution) => {
         // REF: https://github.com/oven-sh/bun/issues/13090
         // !多次调用 t 函数会导致 test 回调无法执行
         // *可以通过直接将 test 模块作为参数传入的方式解决
-        test.test.each(examples)(`${name} - ${func.name}`, ({ input, output }) => {
-            test.expect(
-                func(...input),
-                `${func.name}(${JSON.stringify(input).slice(1, -1)}) != ${JSON.stringify(output)}`,
-            ).toEqual(output);
-        });
+        switch (format) {
+            case E.SolutionFormat.function: {
+                const func = solution.func;
+                test.test.each(examples as IExample[])(`${solution.name} - ${func.name}`, ({ input, output }) => {
+                    test.expect(
+                        solution.func(...input),
+                        `${func.name}(${JSON.stringify(input).slice(1, -1)}) != ${JSON.stringify(output)}`,
+                    ).toEqual(output);
+                });
+                break;
+            }
+
+            case E.SolutionFormat.class: {
+                const Solution = solution.func;
+                test.test.each(examples as IClassExample[])(`${solution.name} - ${solution.func.name}`, ({ init, inputs, outputs }) => {
+                    test.expect(
+                        inputs.length,
+                        `inputs.length != outputs.length`,
+                    ).toEqual(outputs.length);
+
+                    const solution = new Solution(...init);
+                    inputs.forEach((input, index) => {
+                        test.expect(
+                            solution.func(...input),
+                            `func(${JSON.stringify(input).slice(1, -1)}) != ${JSON.stringify(outputs[index])}`,
+                        ).toEqual(outputs[index]);
+                    });
+                });
+                break;
+            }
+
+            default:
+                break;
+        }
     });
 }
