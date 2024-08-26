@@ -22,6 +22,7 @@ import (
 	"path"
 	"reflect"
 	"strings"
+	"testing"
 )
 
 const (
@@ -57,13 +58,19 @@ func GetProblemInfoFromCWD() (root, id string, err error) {
 	return
 }
 
-type Example struct {
+type ExampleFunction struct {
 	Input  []any `json:"input"`
 	Output any   `json:"output"`
 }
 
-// loadExamples 从 JSON 文件中加载测试示例
-func loadExamples() (examples []*Example, err error) {
+type ExampleClass struct {
+	Init    []any   `json:"init"`
+	Inputs  [][]any `json:"inputs"`
+	Outputs []any   `json:"outputs"`
+}
+
+// loadExamplesContent 加载 JSON 文件内容
+func loadExamplesContent() (content []byte, err error) {
 	var root, id string
 	if root, id, err = GetProblemInfoFromCWD(); err != nil {
 		return
@@ -82,8 +89,15 @@ func loadExamples() (examples []*Example, err error) {
 	}
 
 	/* 读取文件内容 */
+	content, err = os.ReadFile(examplesFilePath)
+
+	return
+}
+
+// loadExamples 从 JSON 文件中加载测试示例 (函数格式)
+func loadExamples[T ExampleFunction | ExampleClass]() (examples []*T, err error) {
 	var content []byte
-	if content, err = os.ReadFile(examplesFilePath); err != nil {
+	if content, err = loadExamplesContent(); err != nil {
 		return
 	}
 
@@ -95,43 +109,108 @@ func loadExamples() (examples []*Example, err error) {
 	return
 }
 
-func GetExamples() (examples []*Example, err error) {
-	examples, err = loadExamples()
+func GetExamples[T ExampleFunction | ExampleClass]() (examples []*T, err error) {
+	examples, err = loadExamples[T]()
 	return
 }
 
 type ExampleValue struct {
-	Inputs  []reflect.Value
-	Outputs []reflect.Value
+	InputList  []reflect.Value
+	OutputList []reflect.Value
 }
 
-func ExamplesToExamplesValue(examples []*Example, inputTypes, outputTypes []*reflect.Type) (examplesValue []*ExampleValue, err error) {
+type ExampleClassValue struct {
+	InitList    []reflect.Value
+	InputLists  [][]reflect.Value
+	OutputLists [][]reflect.Value
+}
+
+func ExamplesToExamplesValue(examples []*ExampleFunction, inputTypes, outputTypes []*reflect.Type, t *testing.T) (examplesValue []*ExampleValue, err error) {
 	examplesValue = make([]*ExampleValue, len(examples))
 	for i, example := range examples {
 		if len(example.Input) != len(inputTypes) {
-			panic("invalid example input length")
+			t.Errorf("invalid example input length: %v != %v", len(example.Input), len(inputTypes))
 		}
 		if len(outputTypes) != 1 {
-			panic("invalid solution output length")
+			t.Errorf("invalid solution output length: %v", len(outputTypes))
 		}
 
-		Inputs := make([]reflect.Value, len(inputTypes))
+		inputList := make([]reflect.Value, len(inputTypes))
 		for j, input := range example.Input {
-			Inputs[j], err = AnyToReflectValue(input, *inputTypes[j])
+			inputList[j], err = AnyToReflectValue(input, *inputTypes[j])
 			if err != nil {
 				return
 			}
 		}
 
-		Outputs := make([]reflect.Value, 1)
-		Outputs[0], err = AnyToReflectValue(example.Output, *outputTypes[0])
+		outputList := make([]reflect.Value, 1)
+		outputList[0], err = AnyToReflectValue(example.Output, *outputTypes[0])
 		if err != nil {
 			return
 		}
 
 		examplesValue[i] = &ExampleValue{
-			Inputs:  Inputs,
-			Outputs: Outputs,
+			InputList:  inputList,
+			OutputList: outputList,
+		}
+	}
+	return
+}
+
+func ExamplesToExamplesClassValue(examples []*ExampleClass, initTypes, inputTypes, outputTypes []*reflect.Type, t *testing.T) (examplesClassValue []*ExampleClassValue, err error) {
+	examplesClassValue = make([]*ExampleClassValue, len(examples))
+	for i, example := range examples {
+		if len(example.Init) != len(initTypes) {
+			t.Errorf("invalid example init length: %v != %v", len(example.Init), len(initTypes))
+		}
+		if len(example.Inputs) != len(example.Outputs) {
+			t.Errorf("invalid example inputs/outputs length: %v != %v", len(example.Inputs), len(example.Outputs))
+		}
+		if len(outputTypes) != 1 {
+			t.Errorf("invalid solution output length: %v", len(outputTypes))
+		}
+
+		/* initList: 构造函数参数列表 */
+		initList := make([]reflect.Value, len(initTypes))
+		for j, init := range example.Init {
+			initList[j], err = AnyToReflectValue(init, *initTypes[j])
+			if err != nil {
+				return
+			}
+		}
+
+		inputLists := make([][]reflect.Value, len(example.Inputs))
+		for j, exampleInputs := range example.Inputs {
+			if len(exampleInputs) != len(inputTypes)-1 {
+				t.Errorf("invalid example input length: %v != %v", len(exampleInputs), len(inputTypes)-1)
+			}
+
+			/* inputList: 求解函数参数列表 */
+			inputList := make([]reflect.Value, len(example.Inputs[j]))
+			for k, exampleInput := range exampleInputs {
+				inputList[k], err = AnyToReflectValue(exampleInput, *inputTypes[k+1])
+				if err != nil {
+					return
+				}
+			}
+			inputLists[j] = inputList
+		}
+
+		outputLists := make([][]reflect.Value, len(example.Outputs))
+		for j, exampleOutput := range example.Outputs {
+			/* outputList: 求解函数返回值列表 */
+			outputList := make([]reflect.Value, 1)
+			outputList[0], err = AnyToReflectValue(exampleOutput, *outputTypes[0])
+			if err != nil {
+				return
+			}
+			outputLists[j] = outputList
+		}
+
+		examplesClassValue[i] = &ExampleClassValue{
+			InitList:    initList,
+			InputLists:  inputLists,
+			OutputLists: outputLists,
 		}
 	}
 	return

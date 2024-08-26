@@ -26,14 +26,6 @@ func T[T any](solutions []T, t *testing.T) {
 		t.Fatal("No solutions")
 	}
 
-	examples, err := GetExamples()
-	if err != nil {
-		t.Fatal(err)
-	}
-	if len(examples) == 0 {
-		t.Fatal("No examples")
-	}
-
 	funcType, err := GetFuncType(solutions[0])
 	if err != nil {
 		t.Fatal(err)
@@ -55,31 +47,109 @@ func T[T any](solutions []T, t *testing.T) {
 	inputTypes := GetFuncInputTypes(funcType)
 	outputTypes := GetFuncOutputTypes(funcType)
 
-	examplesValue, err := ExamplesToExamplesValue(examples, inputTypes, outputTypes)
-	if err != nil {
-		t.Fatal(err)
-	}
+	if IsTypesStruct(outputTypes) {
+		structType := *outputTypes[0]
+		if method, success := structType.MethodByName("Func"); success {
+			methodType := method.Type
+			methodInputTypes := GetFuncInputTypes(methodType)
+			methodOutputTypes := GetFuncOutputTypes(methodType)
 
-	for s, solution := range solutions {
-		solutionValue := reflect.ValueOf(solution)
-		t.Run(fmt.Sprintf("solution:%d", s), func(t *testing.T) {
-			for e, exampleValue := range examplesValue {
-				t.Run(fmt.Sprintf("example:%d", e), func(t *testing.T) {
-					outputs := ReflectValueToAny(solutionValue.Call(exampleValue.Inputs))
-					expected := ReflectValueToAny(exampleValue.Outputs)
-					if !reflect.DeepEqual(outputs, expected) {
-						inputs := ReflectValueToAny(exampleValue.Inputs)
-						t.Errorf(
-							"solution: %d, example: %d, input: %v, output: %v, expected: %v",
-							s,
-							e,
-							inputs,
-							outputs,
-							expected,
-						)
+			examples, err := GetExamples[ExampleClass]()
+			if err != nil {
+				t.Fatal(err)
+			}
+			if len(examples) == 0 {
+				t.Fatal("No examples")
+			}
+
+			examplesClassValue, err := ExamplesToExamplesClassValue(examples, inputTypes, methodInputTypes, methodOutputTypes, t)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			for s, solution := range solutions {
+				solutionValue := reflect.ValueOf(solution)
+				t.Run(fmt.Sprintf("solution:%d", s), func(t *testing.T) {
+					for e, exampleClassValue := range examplesClassValue {
+						object := solutionValue.Call(exampleClassValue.InitList)[0]
+						t.Run(fmt.Sprintf("example:%d", e), func(t *testing.T) {
+							for i, inputList := range exampleClassValue.InputLists {
+								t.Run(fmt.Sprintf("input:%d", i), func(t *testing.T) {
+									t.Logf("inputList len: %v", len(inputList))
+									outputs := ReflectValueToAny(method.Func.Call(append([]reflect.Value{object}, inputList...)))
+									expected := ReflectValueToAny(exampleClassValue.OutputLists[i])
+
+									if !reflect.DeepEqual(outputs, expected) {
+										inputs := ReflectValueToAny(inputList)
+										t.Errorf(
+											"\n"+
+												"solution:  %d\n"+
+												"example:   %d\n"+
+												"input:     %v\n"+
+												"arguments: %v\n"+
+												"result:    %v\n"+
+												"expected:  %v\n"+
+												"\n",
+											s,
+											e,
+											i,
+											inputs,
+											outputs,
+											expected,
+										)
+									}
+								})
+							}
+						})
 					}
 				})
 			}
-		})
+		} else {
+			t.Errorf("Method [Func] not found")
+		}
+	} else {
+
+		examples, err := GetExamples[ExampleFunction]()
+		if err != nil {
+			t.Fatal(err)
+		}
+		if len(examples) == 0 {
+			t.Fatal("No examples")
+		}
+
+		examplesValue, err := ExamplesToExamplesValue(examples, inputTypes, outputTypes, t)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		for s, solution := range solutions {
+			solutionValue := reflect.ValueOf(solution)
+			t.Run(fmt.Sprintf("solution:%d", s), func(t *testing.T) {
+				for e, exampleValue := range examplesValue {
+					t.Run(fmt.Sprintf("example:%d", e), func(t *testing.T) {
+						outputs := ReflectValueToAny(solutionValue.Call(exampleValue.InputList))
+						expected := ReflectValueToAny(exampleValue.OutputList)
+
+						if !reflect.DeepEqual(outputs, expected) {
+							inputs := ReflectValueToAny(exampleValue.InputList)
+							t.Errorf(
+								"\n"+
+									"solution: %d\n"+
+									"example:  %d\n"+
+									"input:    %v\n"+
+									"result:   %v\n"+
+									"expected: %v\n"+
+									"\n",
+								s,
+								e,
+								inputs,
+								outputs,
+								expected,
+							)
+						}
+					})
+				}
+			})
+		}
 	}
 }

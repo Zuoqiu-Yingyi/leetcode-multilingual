@@ -54,6 +54,14 @@ func GetFuncOutputTypes(funcType reflect.Type) (outputTypes []*reflect.Type) {
 	return
 }
 
+func IsTypesStruct(types []*reflect.Type) bool {
+	if len(types) > 0 {
+		t := *(types[0])
+		return t.Kind() == reflect.Struct
+	}
+	return false
+}
+
 func AnyToItem[T bool | string](value any) T {
 	switch v := value.(type) {
 	case T:

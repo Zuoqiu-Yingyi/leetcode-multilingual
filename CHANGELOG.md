@@ -4,6 +4,7 @@
 
 - 添加题目 `0303` 的题解 | Add the solution to the question `0303`
   - [303. 区域和检索 - 数组不可变 - 力扣（LeetCode）](https://leetcode.cn/problems/range-sum-query-immutable/description/)
+- 优化 `go` 题解的自动化测试 | Optimize automated tests for `go` solutions
 
 ## 2024-08-24
 
