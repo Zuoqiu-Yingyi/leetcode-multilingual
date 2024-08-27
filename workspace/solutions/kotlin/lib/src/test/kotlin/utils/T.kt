@@ -22,17 +22,16 @@ import kotlinx.serialization.json.buildJsonArray
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import kotlin.reflect.KVisibility
-import kotlin.reflect.full.createInstance
 import kotlin.test.*
 
-public class Test_(
+public class T(
     SolutionsTest: KClass<*>,
     vararg Solutions: KClass<*>,
 ) {
     val packageName: String
     val Solutions: Array<out KClass<*>>
 
-    lateinit var examples: List<Example>
+    lateinit var examples: List<ExampleSet>
 
     init {
         this.packageName = SolutionsTest
@@ -43,6 +42,24 @@ public class Test_(
 
     companion object {
         /**
+         * 通过反射获取题解函数的构造函数
+         * @param Solution 题解类
+         * @return 题解的入口方法
+         */
+        final fun getConstructor(Solution: KClass<*>): KCallable<*> {
+            // REF: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/
+            val constructors = Solution
+                .constructors
+                .filter { it.visibility == KVisibility.PUBLIC }
+            assertEquals(
+                constructors.size,
+                1,
+                "Number of solution constructors is not 1",
+            )
+            return constructors[0]
+        }
+
+        /**
          * 通过反射获取题解的入口方法
          * @param Solution 题解类
          * @return 题解的入口方法
@@ -51,10 +68,7 @@ public class Test_(
             // REF: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/
             val methods = Solution
                 .members
-                .filter {
-                    it.visibility == KVisibility.PUBLIC &&
-                        !it.isOpen
-                }
+                .filter { it.visibility == KVisibility.PUBLIC && !it.isOpen }
             assertEquals(
                 methods.size,
                 1,
@@ -64,11 +78,18 @@ public class Test_(
         }
 
         /**
-         * 通过反射获取方法的参数个数
-         * @param method 方法
-         * @return 方法的参数个数
+         * 通过反射获取函数的参数个数
+         * @param function 函数
+         * @return 函数的参数个数
          */
-        private final fun getMethodParameterCount(method: KCallable<*>): Int = method.parameters.size
+        private final fun getParameterCount(function: KCallable<*>): Int = function.parameters.size
+
+        /**
+         * 通过反射获取方法的参数类型名列表
+         * @param function 函数
+         * @return 函数的参数类型名列表
+         */
+        private final fun getParameterTypeNames(function: KCallable<*>): List<String> = function.parameters.map { it.type.toString() }
 
         /**
          * 通过反射获取方法的参数类型名列表
@@ -79,26 +100,28 @@ public class Test_(
         private final fun getMethodParameterTypeNames(method: KCallable<*>): List<String> = method.parameters.drop(1).map { it.type.toString() }
 
         /**
-         * 通过反射获取方法的返回类型名
-         * @param method 方法
-         * @return 方法的返回类型名
+         * 通过反射获取函数的返回类型名
+         * @param function 函数
+         * @return 函数的返回类型名
          */
-        private final fun getMethodReturnTypeName(method: KCallable<*>): String = method.returnType.toString()
+        private final fun getReturnTypeName(function: KCallable<*>): String = function.returnType.toString()
 
         /**
          * 使用一个示例测试题解
          * @param solution 题解实例
          * @param example 示例
          * @param solutionIndex 题解索引
+         * @param examplesIndex 示例集合索引
          * @param exampleIndex 示例索引
          */
         private final fun testExample(
             solution: Any,
             example: Example,
             solutionIndex: Int,
+            examplesIndex: Int,
             exampleIndex: Int,
         ) {
-            val method = Test_.getMethod(solution::class)
+            val method = T.getMethod(solution::class)
             val result = method.call(solution, *example.input)
             assertNotNull(result, "Result is null")
 
@@ -110,21 +133,21 @@ public class Test_(
                 "Solution result type <$result_type_name> != expected type <$output_type_name>",
             )
 
-            val parameter_type_names = Test_.getMethodParameterTypeNames(method)
-            val return_type_name = Test_.getMethodReturnTypeName(method)
+            val parameter_type_names = T.getMethodParameterTypeNames(method)
+            val return_type_name = T.getReturnTypeName(method)
 
             val input_json = buildJsonArray {
                 example.input.withIndex().forEach { (index, value) ->
-                    add(Example.any2json(value, parameter_type_names[index]))
+                    add(ExampleSet.any2json(value, parameter_type_names[index]))
                 }
             }
-            val result_json = Example.any2json(result, return_type_name)
-            val output_json = Example.any2json(example.output, return_type_name)
+            val result_json = ExampleSet.any2json(result, return_type_name)
+            val output_json = ExampleSet.any2json(example.output, return_type_name)
 
             assertEquals(
                 result_json,
                 output_json,
-                "\nsolution: $solutionIndex\nexample:  $exampleIndex\ninput:    $input_json\nresult:   $result_json\nexpected: $output_json\n",
+                "\nsolution: $solutionIndex\nexamples: $examplesIndex\nexample:  $exampleIndex\ninput:    $input_json\nresult:   $result_json\nexpected: $output_json\n",
             )
         }
     }
@@ -140,14 +163,19 @@ public class Test_(
         this.testSolutionsTypeDefinition()
 
         for ((solutionIndex, Solution) in this.Solutions.withIndex()) {
-            val solution = Solution.createInstance()
-            for ((exampleIndex, example) in this.examples.withIndex()) {
-                Test_.testExample(
-                    solution,
-                    example,
-                    solutionIndex,
-                    exampleIndex,
-                )
+            val constructor = T.getConstructor(Solution)
+            for ((examplesIndex, examples) in this.examples.withIndex()) {
+                val solution = constructor.call(*examples.init)
+                assertNotNull(solution, "solution instance is null")
+                for ((exampleIndex, example) in examples.examples.withIndex()) {
+                    T.testExample(
+                        solution,
+                        example,
+                        solutionIndex,
+                        examplesIndex,
+                        exampleIndex,
+                    )
+                }
             }
         }
     }
@@ -162,16 +190,35 @@ public class Test_(
         )
 
         // REF: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-callable/
-        val method = Test_.getMethod(this.Solutions[0])
-        val method_parameter_count = Test_.getMethodParameterCount(method)
-        val method_parameter_type_names = Test_.getMethodParameterTypeNames(method)
-        val method_return_type_name = Test_.getMethodReturnTypeName(method)
+        val constructor = T.getConstructor(this.Solutions[0])
+        val constructor_parameter_count = T.getParameterCount(constructor)
+        val constructor_parameter_type_names = T.getParameterTypeNames(constructor)
+
+        val method = T.getMethod(this.Solutions[0])
+        val method_parameter_count = T.getParameterCount(method)
+        val method_parameter_type_names = T.getMethodParameterTypeNames(method)
+        val method_return_type_name = T.getReturnTypeName(method)
 
         for (Solution in this.Solutions) {
-            val temp_method = Test_.getMethod(Solution)
-            val temp_method_parameter_count = Test_.getMethodParameterCount(temp_method)
-            val temp_method_parameter_type_names = Test_.getMethodParameterTypeNames(temp_method)
-            val temp_method_return_type_name = Test_.getMethodReturnTypeName(temp_method)
+            val temp_constructor = T.getConstructor(Solution)
+            val temp_constructor_parameter_count = T.getParameterCount(temp_constructor)
+            val temp_constructor_parameter_type_names = T.getParameterTypeNames(temp_constructor)
+
+            val temp_method = T.getMethod(Solution)
+            val temp_method_parameter_count = T.getParameterCount(temp_method)
+            val temp_method_parameter_type_names = T.getMethodParameterTypeNames(temp_method)
+            val temp_method_return_type_name = T.getReturnTypeName(temp_method)
+
+            assertEquals(
+                temp_constructor_parameter_count,
+                constructor_parameter_count,
+                "Constructor parameter count is inconsistent",
+            )
+            assertContentEquals(
+                temp_constructor_parameter_type_names,
+                constructor_parameter_type_names,
+                "Constructor parameter type names is inconsistent",
+            )
 
             assertEquals(
                 temp_method_parameter_count,
@@ -190,14 +237,15 @@ public class Test_(
             )
         }
 
-        val examples_json = Example.readExamplesFile(this.packageName)
+        val examples_json = ExampleSet.readExamplesFile(this.packageName)
         assertNotNull(
             examples_json,
             "No examples",
         )
 
-        this.examples = Example.fromJson(
+        this.examples = ExampleSet.fromJson(
             examples_json,
+            constructor_parameter_type_names,
             method_parameter_type_names,
             method_return_type_name,
         )

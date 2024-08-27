@@ -1,16 +1,16 @@
 package s1.s8.s7.s0
 
-import utils.Test_
+import utils.T
 import kotlin.test.Test
 import s1.s8.s7.s0.s_1870_00.Solution as s_1870_00
 
 class s_1870_test {
     @Test
     fun test() {
-        val test = Test_(
+        val t = T(
             this::class,
             s_1870_00::class,
         )
-        test.run()
+        t.run()
     }
 }
