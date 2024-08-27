@@ -21,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -28,6 +30,21 @@ import com.alibaba.fastjson2.JSON;
 
 public class T {
     // System.getProperty("user.dir") -> workspace/solutions/java/lib
+
+    /**
+     * 通过反射获取题解的构造函数
+     * @param Solution 题解类
+     * @return 题解的构造函数
+     */
+    private static final Constructor<?> getConstructor(final Class<?> Solution) {
+        Constructor<?>[] constructors = Solution.getConstructors();
+        assertEquals(
+            constructors.length,
+            1,
+            "Number of solution constructors is not 1"
+        );
+        return constructors[0];
+    }
 
     /**
      * 通过反射获取题解的入口方法
@@ -45,21 +62,21 @@ public class T {
     }
 
     /**
-     * 通过反射获取方法的参数个数
-     * @param method 方法
-     * @return 方法的参数个数
+     * 通过反射获取函数的参数个数
+     * @param function 函数
+     * @return 函数的参数个数
      */
-    private static final int getMethodParameterCount(final Method method) {
-        return method.getParameterCount();
+    private static final int getParameterCount(final Executable function) {
+        return function.getParameterCount();
     }
 
     /**
-     * 通过反射获取方法的参数类型列表
-     * @param method 方法
+     * 通过反射获取函数的参数类型列表
+     * @param function 方法
      * @return 方法的参数类型列表
      */
-    private static final Class<?>[] getMethodParameterTypes(final Method method) {
-        Class<?>[] parameter_types = method.getParameterTypes();
+    private static final Class<?>[] getParameterTypes(final Executable function) {
+        Class<?>[] parameter_types = function.getParameterTypes();
         return parameter_types;
     }
 
@@ -74,12 +91,12 @@ public class T {
     }
 
     /**
-     * 通过反射获取方法的参数类型名称列表
-     * @param method 方法
-     * @return 方法的参数类型名称列表
+     * 通过反射获取函数的参数类型名称列表
+     * @param function 函数
+     * @return 函数的参数类型名称列表
      */
-    private static final String[] getMethodParameterTypeNames(final Method method) {
-        Class<?>[] parameter_types = T.getMethodParameterTypes(method);
+    private static final String[] getParameterTypeNames(final Executable function) {
+        Class<?>[] parameter_types = T.getParameterTypes(function);
         final String[] parameter_type_names = new String[parameter_types.length];
         for (int i = 0; i < parameter_types.length; ++i) {
             // getName: [I java.lang.String
@@ -107,6 +124,7 @@ public class T {
      * @param solution 题解实例
      * @param example 示例
      * @param solutionIndex 题解索引
+     * @param examplesIndex 示例集合索引
      * @param exampleIndex 示例索引
      * @throws Exception
      */
@@ -114,6 +132,7 @@ public class T {
         final Object solution,
         final Example example,
         final int solutionIndex,
+        final int examplesIndex,
         final int exampleIndex
     ) throws Exception {
         // 题解入口方法
@@ -139,8 +158,9 @@ public class T {
         final String output_json = JSON.toJSONString(example.output);
 
         final String message = String.format(
-            "\nsolution: %d\nexample:  %d\ninput:    %s\nresult:   %s\nexpected: %s\n",
+            "\nsolution: %d\nexamples: %d\nexample:  %d\ninput:    %s\nresult:   %s\nexpected: %s\n",
             solutionIndex,
+            examplesIndex,
             exampleIndex,
             input_json,
             result_json,
@@ -161,7 +181,7 @@ public class T {
 
     private final String packageName;
     private final Class<?>[] Solutions;
-    private List<Example> examples;
+    private List<ExampleSet> examples;
 
     /**
      * 构造函数
@@ -192,20 +212,29 @@ public class T {
 
         int solution_index = 0;
         for (Class<?> Solution : this.Solutions) {
-            final Object solution = Solution.getDeclaredConstructor().newInstance();
-            int example_index = 0;
-            for (Example example : this.examples) {
-                final int _solution_index = solution_index;
-                final int _example_index = example_index;
-                assertDoesNotThrow(() -> {
-                    T.testExample(
-                        solution,
-                        example,
-                        _solution_index,
-                        _example_index
-                    );
-                });
-                example_index++;
+            int examples_index = 0;
+            for (ExampleSet exampleSet : this.examples) {
+                int example_index = 0;
+
+                final Constructor<?> constructor = T.getConstructor(Solution);
+                final Object solution = constructor.newInstance(exampleSet.init);
+                for (Example example : exampleSet.examples) {
+                    final int _solution_index = solution_index;
+                    final int _examples_index = examples_index;
+                    final int _example_index = example_index;
+
+                    assertDoesNotThrow(() -> {
+                        T.testExample(
+                            solution,
+                            example,
+                            _solution_index,
+                            _examples_index,
+                            _example_index
+                        );
+                    });
+                    example_index++;
+                }
+                examples_index++;
             }
             solution_index++;
         }
@@ -217,15 +246,34 @@ public class T {
     private void testSolutionsTypeDefinition() {
         assertTrue(this.Solutions.length > 0, "No solutions");
 
+        final Constructor<?> constructor = T.getConstructor(this.Solutions[0]);
+        final int constructor_parameter_count = T.getParameterCount(constructor);
+        final String[] constructor_parameter_type_names = T.getParameterTypeNames(constructor);
+
         final Method method = T.getMethod(this.Solutions[0]);
-        final int method_parameter_count = T.getMethodParameterCount(method);
-        final String[] method_parameter_type_names = T.getMethodParameterTypeNames(method);
+        final int method_parameter_count = T.getParameterCount(method);
+        final String[] method_parameter_type_names = T.getParameterTypeNames(method);
         final String method_return_type_name = T.getMethodReturnTypeName(method);
         for (Class<?> Solution : this.Solutions) {
+            final Constructor<?> _constructor = T.getConstructor(Solution);
+            final int _constructor_parameter_count = T.getParameterCount(_constructor);
+            final String[] _constructor_parameter_type_names = T.getParameterTypeNames(_constructor);
+
             final Method _method = T.getMethod(Solution);
-            final int _method_parameter_count = T.getMethodParameterCount(_method);
-            final String[] _method_parameter_type_names = T.getMethodParameterTypeNames(_method);
+            final int _method_parameter_count = T.getParameterCount(_method);
+            final String[] _method_parameter_type_names = T.getParameterTypeNames(_method);
             final String _method_return_type_name = T.getMethodReturnTypeName(_method);
+
+            assertEquals(
+                _constructor_parameter_count,
+                constructor_parameter_count,
+                "Constructor parameter count is inconsistent"
+            );
+            assertArrayEquals(
+                _constructor_parameter_type_names,
+                constructor_parameter_type_names,
+                "Constructor parameter type names is inconsistent"
+            );
 
             assertEquals(
                 _method_parameter_count,
@@ -244,15 +292,16 @@ public class T {
             );
         }
 
-        final String examples_json = Example.readExamplesFile(this.packageName);
+        final String examples_json = ExampleSet.readExamplesFile(this.packageName);
         assertNotEquals(
             examples_json,
             null,
             "Examples file not found"
         );
 
-        this.examples = Example.fromJson(
+        this.examples = ExampleSet.fromJson(
             examples_json,
+            constructor_parameter_type_names,
             method_parameter_type_names,
             method_return_type_name
         );
