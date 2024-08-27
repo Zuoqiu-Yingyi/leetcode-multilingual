@@ -84,8 +84,8 @@ func T[T any](solutions []T, t *testing.T) {
 										t.Errorf(
 											"\n"+
 												"solution:  %d\n"+
+												"examples:  %d\n"+
 												"example:   %d\n"+
-												"input:     %v\n"+
 												"arguments: %v\n"+
 												"result:    %v\n"+
 												"expected:  %v\n"+

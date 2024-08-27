@@ -19,3 +19,55 @@ from typing import Any, List, TypedDict
 class Example(TypedDict):
     input: List[Any]
     output: Any
+
+
+class ExampleWithInit(TypedDict):
+    init: List[Any]
+    inputs: List[List[Any]]
+    outputs: List[Any]
+
+
+class ExampleIO:
+    input: List[Any]
+    output: Any
+
+    def __init__(self, input: List[Any], output: Any):
+        self.input = input
+        self.output = output
+
+
+class ExamplesSet:
+    init: List[Any]
+    examples: List[ExampleIO]
+
+    def __init__(self, init: List[Any] | None = None, examples: List[ExampleIO] | None = None):
+        self.init = init if init else []
+        self.examples = examples if examples else []
+
+    @staticmethod
+    def listOf(examples: List[Example | ExampleWithInit]) -> List["ExamplesSet"]:
+        examples_set_list = []
+        examples_set = ExamplesSet()
+        for example in examples:
+            if "init" in example and "inputs" in example and "outputs" in example:
+                init = example.get("init")
+                inputs = example.get("inputs")
+                outputs = example.get("outputs")
+
+                assert init is not None, "init is None"
+                assert inputs is not None, "inputs is None"
+                assert outputs is not None, "outputs is None"
+
+                assert len(inputs) == len(outputs), "len(inputs) != len(outputs)"
+                examples_set_list.append(ExamplesSet(init, map(lambda io: ExampleIO(*io), zip(inputs, outputs))))
+            elif "input" in example and "output" in example:
+                input = example.get("input")
+                output = example.get("output")
+
+                assert input is not None, "input is None"
+                assert output is not None, "output is None"
+
+                examples_set.examples.append(ExampleIO(input, output))
+        if len(examples_set.examples) > 0:
+            examples_set_list.append(examples_set)
+        return examples_set_list

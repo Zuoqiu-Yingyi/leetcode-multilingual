@@ -32,7 +32,7 @@ export interface ISolution<F extends CallableFunction = CallableFunction> {
 /**
  * 测试用例 (类格式)
  */
-export interface IClassExample<
+export interface IExampleWithInit<
     INIT extends any[] = any[],
     I extends any[] = any[],
     O = any,
@@ -68,7 +68,7 @@ export interface IExample<
     output: O;
 }
 
-export type TExample = IClassExample | IExample;
+export type TExample = IExample | IExampleWithInit;
 
 /**
  * 模块测试
@@ -127,6 +127,7 @@ export async function t(
         func: (await import(`@/${solutions_path}/${name}`)).default,
     }))()));
 
+    let solution_index = 0;
     test.describe.each(solutions)(id, async (solution) => {
         // REF: https://github.com/oven-sh/bun/issues/13090
         // !多次调用 t 函数会导致 test 回调无法执行
@@ -134,30 +135,54 @@ export async function t(
         switch (format) {
             case E.SolutionFormat.function: {
                 const func = solution.func;
+                let example_index = 0;
                 test.test.each(examples as IExample[])(`${solution.name} - ${func.name}`, ({ input, output }) => {
+                    const result = solution.func(...input);
                     test.expect(
-                        solution.func(...input),
-                        `${func.name}(${JSON.stringify(input).slice(1, -1)}) != ${JSON.stringify(output)}`,
+                        result,
+                        [
+                            "",
+                            `solution: ${solution_index}`,
+                            `example:  ${example_index}`,
+                            `input:    ${JSON.stringify(input)}`,
+                            `result:   ${JSON.stringify(result)}`,
+                            `expected: ${JSON.stringify(output)}`,
+                            "",
+                        ].join("\n"),
                     ).toEqual(output);
+                    example_index++;
                 });
                 break;
             }
 
             case E.SolutionFormat.class: {
                 const Solution = solution.func;
-                test.test.each(examples as IClassExample[])(`${solution.name} - ${solution.func.name}`, ({ init, inputs, outputs }) => {
+                let examples_index = 0;
+                test.test.each(examples as IExampleWithInit[])(`${solution.name} - ${solution.func.name}`, ({ init, inputs, outputs }) => {
                     test.expect(
                         inputs.length,
                         `inputs.length != outputs.length`,
                     ).toEqual(outputs.length);
 
                     const solution = new Solution(...init);
-                    inputs.forEach((input, index) => {
+                    inputs.forEach((input, example_index) => {
+                        const result = solution.func(...input);
+                        const output = outputs[example_index];
                         test.expect(
-                            solution.func(...input),
-                            `func(${JSON.stringify(input).slice(1, -1)}) != ${JSON.stringify(outputs[index])}`,
-                        ).toEqual(outputs[index]);
+                            result,
+                            [
+                                "",
+                                `solution: ${solution_index}`,
+                                `examples: ${examples_index}`,
+                                `example:  ${example_index}`,
+                                `input:    ${JSON.stringify(input)}`,
+                                `result:   ${JSON.stringify(result)}`,
+                                `expected: ${JSON.stringify(output)}`,
+                                "",
+                            ].join("\n"),
+                        ).toEqual(output);
                     });
+                    examples_index++;
                 });
                 break;
             }
@@ -165,5 +190,6 @@ export async function t(
             default:
                 break;
         }
+        solution_index++;
     });
 }

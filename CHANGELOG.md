@@ -7,6 +7,7 @@
 - 改进 `go` 题解的自动化测试 | Import automated tests for `go` solutions
 - 改进 `java` 题解的自动化测试 | Import automated tests for `java` solutions
 - 改进 `kotlin` 题解的自动化测试 | Import automated tests for `kotlin` solutions
+- 改进 `python` 题解的自动化测试 | Import automated tests for `python` solutions
 
 ## 2024-08-24
 
