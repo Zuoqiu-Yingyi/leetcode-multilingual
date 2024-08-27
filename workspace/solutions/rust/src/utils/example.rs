@@ -26,6 +26,12 @@ pub struct Example {
     pub output: serde_json::Value,
 }
 
+#[derive(Debug)]
+pub struct ExamplesSet {
+    pub init: Vec<serde_json::Value>,
+    pub examples: Vec<Example>,
+}
+
 pub fn read_examples_file(file_path: &PathBuf) -> Result<String, std::io::Error> {
     let mut file = std::fs::File::open(file_path)?;
     let mut json = String::new();
@@ -51,6 +57,40 @@ pub fn deserialize_examples_json(json: &str) -> Vec<Example> {
                 Example {
                     input,
                     output,
+                }
+            })
+            .collect()
+    } else {
+        panic!("examples json is not an array");
+    }
+}
+
+pub fn deserialize_examples_set_json(json: &str) -> Vec<ExamplesSet> {
+    if let serde_json::Value::Array(arr) = serde_json::from_str(json).unwrap() {
+        arr.iter()
+            .map(|v| {
+                let init = v["init"].as_array().unwrap().to_vec();
+                let inputs = v["inputs"].as_array().unwrap().to_vec();
+                let outputs = v["outputs"].as_array().unwrap().to_vec();
+
+                assert_eq!(inputs.len(), outputs.len(), "inputs.len != outputs.len",);
+
+                let examples = inputs
+                    .iter()
+                    .zip(outputs.iter())
+                    .map(|(input, output)| {
+                        let input = input.as_array().unwrap().to_vec();
+                        let output = output.clone();
+                        Example {
+                            input,
+                            output,
+                        }
+                    })
+                    .collect();
+
+                ExamplesSet {
+                    init,
+                    examples,
                 }
             })
             .collect()
