@@ -1,5 +1,4 @@
 pub mod s_0303_00;
-pub mod s_0303_01;
 pub mod s_0303_test;
 
 pub trait ISolution {

@@ -147,6 +147,7 @@ public class ExampleSet(
             "kotlin.Int" -> jsonElement.jsonPrimitive.int
             "kotlin.Double" -> jsonElement.jsonPrimitive.double
             "kotlin.IntArray" -> jsonElement.jsonArray.map { it.jsonPrimitive.int }.toIntArray()
+            "kotlin.Array<kotlin.IntArray>" -> jsonElement.jsonArray.map { it.jsonArray.map { it.jsonPrimitive.int }.toIntArray() }.toTypedArray()
             else -> throw IllegalArgumentException("Unsupported type (json2any): $typeName")
         }
 
@@ -164,6 +165,7 @@ public class ExampleSet(
             "kotlin.Int" -> Json.encodeToJsonElement(value as Int)
             "kotlin.Double" -> Json.encodeToJsonElement(value as Double)
             "kotlin.IntArray" -> Json.encodeToJsonElement(value as IntArray)
+            "kotlin.Array<kotlin.IntArray>" -> Json.encodeToJsonElement(value as Array<IntArray>)
             else -> throw IllegalArgumentException("Unsupported type (any2json): $typeName")
         }
 

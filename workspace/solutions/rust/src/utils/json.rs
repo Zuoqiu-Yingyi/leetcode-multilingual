@@ -16,6 +16,7 @@
 pub trait ValueExtension {
     fn to_i32(&self) -> Option<i32>;
     fn to_i32_array(&self) -> Option<Vec<i32>>;
+    fn to_i32_matrix(&self) -> Option<Vec<Vec<i32>>>;
 }
 
 impl ValueExtension for serde_json::Value {
@@ -29,6 +30,13 @@ impl ValueExtension for serde_json::Value {
     fn to_i32_array(&self) -> Option<Vec<i32>> {
         match self.as_array() {
             Some(arr) => Some(arr.iter().map(to_i32).collect()),
+            None => None,
+        }
+    }
+
+    fn to_i32_matrix(&self) -> Option<Vec<Vec<i32>>> {
+        match self.as_array() {
+            Some(arr) => Some(arr.iter().map(|v| v.to_i32_array().unwrap()).collect()),
             None => None,
         }
     }

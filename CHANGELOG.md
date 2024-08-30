@@ -1,5 +1,10 @@
 # 更改日志 | Change Log
 
+## 2024-08-31
+
+- 添加题目 `0304` 的题解 | Add the solution to the question `0304`
+  - [304. 二维区域和检索 - 矩阵不可变 - 力扣（LeetCode）](https://leetcode.cn/problems/range-sum-query-2d-immutable/description/)
+
 ## 2024-08-26
 
 - 添加题目 `0303` 的题解 | Add the solution to the question `0303`

@@ -89,7 +89,7 @@ pub fn t_<N, S>(
     module_path: &str,
     solutions: &Vec<N>,
     init: fn(&N, &Vec<serde_json::Value>) -> S,
-    call: fn(&S, &Vec<serde_json::Value>) -> serde_json::Value,
+    call: fn(&mut S, &Vec<serde_json::Value>) -> serde_json::Value,
 ) -> () {
     assert!(solutions.len() > 0, "No solutions");
     let json = load_examples_json_content(module_path);
@@ -99,11 +99,11 @@ pub fn t_<N, S>(
 
     for (solution_index, solution) in solutions.iter().enumerate() {
         for (examples_index, examples_set) in examples_set_list.iter().enumerate() {
-            let object = init(solution, &examples_set.init);
+            let mut object = init(solution, &examples_set.init);
             for (example_index, example) in examples_set.examples.iter().enumerate() {
                 let input = &example.input;
                 let output = &example.output;
-                let result = call(&object, input);
+                let result = call(&mut object, input);
                 assert_eq!(
                     &result,
                     output,
