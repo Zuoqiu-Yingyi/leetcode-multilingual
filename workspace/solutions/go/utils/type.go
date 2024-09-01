@@ -88,10 +88,10 @@ func AnyToVector[T bool | string](array []any) []T {
 	return res
 }
 
-func AnyToMatrix[T bool | string](matrix [][]any) [][]T {
+func AnyToMatrix[T bool | string](matrix []any) [][]T {
 	res := make([][]T, len(matrix))
 	for i, row := range matrix {
-		res[i] = AnyToVector[T](row)
+		res[i] = AnyToVector[T](row.([]any))
 	}
 	return res
 }
@@ -104,10 +104,10 @@ func AnyToNumberVector[T int | int8 | int16 | int32 | int64 | uint | uint8 | uin
 	return res
 }
 
-func AnyToNumberMatrix[T int | int8 | int16 | int32 | int64 | uint | uint8 | uint16 | uint32 | uint64 | float32 | float64](matrix [][]any) [][]T {
+func AnyToNumberMatrix[T int | int8 | int16 | int32 | int64 | uint | uint8 | uint16 | uint32 | uint64 | float32 | float64](matrix []any) [][]T {
 	res := make([][]T, len(matrix))
 	for i, row := range matrix {
-		res[i] = AnyToNumberVector[T](row)
+		res[i] = AnyToNumberVector[T](row.([]any))
 	}
 	return res
 }
@@ -148,7 +148,8 @@ func AnyToReflectValue(value any, valueType reflect.Type) (reflectValue reflect.
 			reflectValue = reflect.ValueOf(float64(v))
 		}
 	case []any:
-		switch valueType.Elem().Kind() {
+		kind := valueType.Elem().Kind()
+		switch kind {
 		case reflect.Bool:
 			reflectValue = reflect.ValueOf(AnyToVector[bool](v))
 		case reflect.String:
@@ -181,48 +182,49 @@ func AnyToReflectValue(value any, valueType reflect.Type) (reflectValue reflect.
 		case reflect.Float64:
 			reflectValue = reflect.ValueOf(AnyToNumberVector[float64](v))
 
+		case reflect.Slice:
+			kind := valueType.Elem().Elem().Kind()
+			switch kind {
+			case reflect.Bool:
+				reflectValue = reflect.ValueOf(AnyToMatrix[bool](v))
+			case reflect.String:
+				reflectValue = reflect.ValueOf(AnyToMatrix[string](v))
+
+			case reflect.Int:
+				reflectValue = reflect.ValueOf(AnyToNumberMatrix[int](v))
+			case reflect.Int8:
+				reflectValue = reflect.ValueOf(AnyToNumberMatrix[int8](v))
+			case reflect.Int16:
+				reflectValue = reflect.ValueOf(AnyToNumberMatrix[int16](v))
+			case reflect.Int32:
+				reflectValue = reflect.ValueOf(AnyToNumberMatrix[int32](v))
+			case reflect.Int64:
+				reflectValue = reflect.ValueOf(AnyToNumberMatrix[int64](v))
+
+			case reflect.Uint:
+				reflectValue = reflect.ValueOf(AnyToNumberMatrix[uint](v))
+			case reflect.Uint8:
+				reflectValue = reflect.ValueOf(AnyToNumberMatrix[uint8](v))
+			case reflect.Uint16:
+				reflectValue = reflect.ValueOf(AnyToNumberMatrix[uint16](v))
+			case reflect.Uint32:
+				reflectValue = reflect.ValueOf(AnyToNumberMatrix[uint32](v))
+			case reflect.Uint64:
+				reflectValue = reflect.ValueOf(AnyToNumberMatrix[uint64](v))
+
+			case reflect.Float32:
+				reflectValue = reflect.ValueOf(AnyToNumberMatrix[float32](v))
+			case reflect.Float64:
+				reflectValue = reflect.ValueOf(AnyToNumberMatrix[float64](v))
+
+			default:
+				err = fmt.Errorf("invalid type: %v", kind)
+			}
 		default:
-			err = fmt.Errorf("invalid type")
-		}
-	case [][]any:
-		switch valueType.Elem().Elem().Kind() {
-		case reflect.Bool:
-			reflectValue = reflect.ValueOf(AnyToMatrix[bool](v))
-		case reflect.String:
-			reflectValue = reflect.ValueOf(AnyToMatrix[string](v))
-
-		case reflect.Int:
-			reflectValue = reflect.ValueOf(AnyToNumberMatrix[int](v))
-		case reflect.Int8:
-			reflectValue = reflect.ValueOf(AnyToNumberMatrix[int8](v))
-		case reflect.Int16:
-			reflectValue = reflect.ValueOf(AnyToNumberMatrix[int16](v))
-		case reflect.Int32:
-			reflectValue = reflect.ValueOf(AnyToNumberMatrix[int32](v))
-		case reflect.Int64:
-			reflectValue = reflect.ValueOf(AnyToNumberMatrix[int64](v))
-
-		case reflect.Uint:
-			reflectValue = reflect.ValueOf(AnyToNumberMatrix[uint](v))
-		case reflect.Uint8:
-			reflectValue = reflect.ValueOf(AnyToNumberMatrix[uint8](v))
-		case reflect.Uint16:
-			reflectValue = reflect.ValueOf(AnyToNumberMatrix[uint16](v))
-		case reflect.Uint32:
-			reflectValue = reflect.ValueOf(AnyToNumberMatrix[uint32](v))
-		case reflect.Uint64:
-			reflectValue = reflect.ValueOf(AnyToNumberMatrix[uint64](v))
-
-		case reflect.Float32:
-			reflectValue = reflect.ValueOf(AnyToNumberMatrix[float32](v))
-		case reflect.Float64:
-			reflectValue = reflect.ValueOf(AnyToNumberMatrix[float64](v))
-
-		default:
-			err = fmt.Errorf("invalid type")
+			err = fmt.Errorf("invalid type: %v", kind)
 		}
 	default:
-		err = fmt.Errorf("invalid type")
+		err = fmt.Errorf("invalid type: %v", v)
 	}
 	return
 }

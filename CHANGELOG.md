@@ -1,5 +1,9 @@
 # 更改日志 | Change Log
 
+## 2024-09-01
+
+- 添加题目 `0304` 的题解 | Add the solution to the question `0304`
+
 ## 2024-08-31
 
 - 添加题目 `0304` 的题解 | Add the solution to the question `0304`
