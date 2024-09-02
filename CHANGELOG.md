@@ -1,8 +1,12 @@
 # 更改日志 | Change Log
 
+## 2024-09-02
+
+- 添加题目 `0304` 的 ECMAScript 题解 | Add the ECMAScript solution to the question `0304`
+
 ## 2024-09-01
 
-- 添加题目 `0304` 的题解 | Add the solution to the question `0304`
+- 添加题目 `0304` 的 Go 题解 | Add the Go solution to the question `0304`
 
 ## 2024-08-31
 
