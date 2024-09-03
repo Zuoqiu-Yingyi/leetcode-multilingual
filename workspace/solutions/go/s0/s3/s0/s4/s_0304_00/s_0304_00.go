@@ -44,20 +44,21 @@ func (this *NumMatrix) SumRegion(row1 int, col1 int, row2 int, col2 int) int {
 }
 
 func (this *NumMatrix) init() bool {
-	if !this.initialized {
-		for i := 0; i < this.n; i++ {
-			for j := 0; j < this.m; j++ {
-				this.prefixSumsMatrix[i+1][j+1] = this.prefixSumsMatrix[i+1][j] +
-					this.prefixSumsMatrix[i][j+1] -
-					this.prefixSumsMatrix[i][j] +
-					this.matrix[i][j]
-			}
-		}
-
-		this.initialized = true
-		return true
+	if this.initialized {
+		return false
 	}
-	return false
+
+	for i := 0; i < this.n; i++ {
+		for j := 0; j < this.m; j++ {
+			this.prefixSumsMatrix[i+1][j+1] = this.prefixSumsMatrix[i+1][j] +
+				this.prefixSumsMatrix[i][j+1] -
+				this.prefixSumsMatrix[i][j] +
+				this.matrix[i][j]
+		}
+	}
+
+	this.initialized = true
+	return true
 }
 
 /**

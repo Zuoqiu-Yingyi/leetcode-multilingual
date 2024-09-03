@@ -24,26 +24,28 @@ class NumMatrix {
     public int sumRegion(int row1, int col1, int row2, int col2) {
         this.init();
         return this.prefix_sums_matrix[row2 + 1][col2 + 1]
-      - this.prefix_sums_matrix[row2 + 1][col1]
-      - this.prefix_sums_matrix[row1][col2 + 1]
-      + this.prefix_sums_matrix[row1][col1];
+            - this.prefix_sums_matrix[row2 + 1][col1]
+            - this.prefix_sums_matrix[row1][col2 + 1]
+            + this.prefix_sums_matrix[row1][col1];
     }
 
     private boolean init() {
-        if (!this.initialized) {
-            for (int i = 0; i < this.n; i++) {
-                for (int j = 0; j < this.m; j++) {
-                    this.prefix_sums_matrix[i + 1][j + 1] = this.prefix_sums_matrix[i + 1][j]
-                                                          + this.prefix_sums_matrix[i][j + 1]
-                                                          - this.prefix_sums_matrix[i][j]
-                                                          + this.matrix[i][j];
-                }
-            }
-
-            this.initialized = true;
-            return true;
+        if (this.initialized) {
+            return false;
         }
-        return false;
+
+        for (int i = 0; i < this.n; i++) {
+            for (int j = 0; j < this.m; j++) {
+                this.prefix_sums_matrix[i + 1][j + 1] //
+                    = this.prefix_sums_matrix[i + 1][j]
+                    + this.prefix_sums_matrix[i][j + 1]
+                    - this.prefix_sums_matrix[i][j]
+                    + this.matrix[i][j];
+            }
+        }
+
+        this.initialized = true;
+        return true;
     }
 }
 

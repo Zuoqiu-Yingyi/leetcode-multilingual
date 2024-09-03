@@ -3,6 +3,7 @@
 ## 2024-09-03
 
 - 添加题目 `0304` 的 Java 题解 | Add the Java solution to the question `0304`
+- 添加题目 `0304` 的 Python 题解 | Add the Python solution to the question `0304`
 
 ## 2024-09-02
 

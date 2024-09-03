@@ -47,26 +47,27 @@ NumMatrix.prototype.sumRegion = function (row1, col1, row2, col2) {
  * @return {boolean}
  */
 NumMatrix.prototype.init = function () {
-    if (!this.initialized) {
-        for (let i = 0; i < this.n; i++) {
-            for (let j = 0; j < this.m; j++) {
-                // @ts-ignore
-                this.prefix_sums_matrix[i + 1][j + 1]
-                    // @ts-ignore
-                    = this.prefix_sums_matrix[i + 1][j]
-                    // @ts-ignore
-                    + this.prefix_sums_matrix[i][j + 1]
-                    // @ts-ignore
-                    - this.prefix_sums_matrix[i][j]
-                    // @ts-ignore
-                    + this.matrix[i][j];
-            }
-        }
-
-        this.initialized = true;
-        return true;
+    if (this.initialized) {
+        return false;
     }
-    return false;
+
+    for (let i = 0; i < this.n; i++) {
+        for (let j = 0; j < this.m; j++) {
+            // @ts-ignore
+            this.prefix_sums_matrix[i + 1][j + 1]
+                // @ts-ignore
+                = this.prefix_sums_matrix[i + 1][j]
+                // @ts-ignore
+                + this.prefix_sums_matrix[i][j + 1]
+                // @ts-ignore
+                - this.prefix_sums_matrix[i][j]
+                // @ts-ignore
+                + this.matrix[i][j];
+        }
+    }
+
+    this.initialized = true;
+    return true;
 };
 
 /**

@@ -88,7 +88,7 @@ AlignConsecutiveShortCaseStatements:
 AlignEscapedNewlines: Right
 
 ## DontAlign | Align | AlignAfterOperator
-AlignOperands: AlignAfterOperator
+AlignOperands: DontAlign
 
 AlignTrailingComments:
   ## Leave | Always | Never

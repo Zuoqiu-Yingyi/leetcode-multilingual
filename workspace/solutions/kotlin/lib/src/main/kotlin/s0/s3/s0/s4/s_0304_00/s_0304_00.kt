@@ -31,19 +31,21 @@ class NumMatrix(matrix: Array<IntArray>) {
     }
 
     private fun init(): Boolean {
-        if (!this.initialized) {
-            for (i in 0..<this.n) {
-                for (j in 0..<this.m) {
-                    this.prefix_sums_matrix[i + 1][j + 1] =
-                        this.prefix_sums_matrix[i + 1][j] +
-                        this.prefix_sums_matrix[i][j + 1] -
-                        this.prefix_sums_matrix[i][j] +
-                        this.matrix[i][j]
-                }
-            }
-            this.initialized = true
-            return true
+        if (this.initialized) {
+            return false
         }
+
+        for (i in 0..<this.n) {
+            for (j in 0..<this.m) {
+                this.prefix_sums_matrix[i + 1][j + 1] =
+                    this.prefix_sums_matrix[i + 1][j] +
+                    this.prefix_sums_matrix[i][j + 1] -
+                    this.prefix_sums_matrix[i][j] +
+                    this.matrix[i][j]
+            }
+        }
+
+        this.initialized = true
         return false
     }
 }

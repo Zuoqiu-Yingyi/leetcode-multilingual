@@ -37,21 +37,22 @@ class NumMatrix {
     }
 
     private init(): boolean {
-        if (!this.initialized) {
-            for (let i = 0; i < this.n; i++) {
-                for (let j = 0; j < this.m; j++) {
-                    this.prefix_sums_matrix[i + 1]![j + 1]
-                        = this.prefix_sums_matrix[i + 1]![j]!
-                        + this.prefix_sums_matrix[i]![j + 1]!
-                        - this.prefix_sums_matrix[i]![j]!
-                        + this.matrix[i]![j]!;
-                }
-            }
-
-            this.initialized = true;
-            return true;
+        if (this.initialized) {
+            return false;
         }
-        return false;
+
+        for (let i = 0; i < this.n; i++) {
+            for (let j = 0; j < this.m; j++) {
+                this.prefix_sums_matrix[i + 1]![j + 1]
+                    = this.prefix_sums_matrix[i + 1]![j]!
+                    + this.prefix_sums_matrix[i]![j + 1]!
+                    - this.prefix_sums_matrix[i]![j]!
+                    + this.matrix[i]![j]!;
+            }
+        }
+
+        this.initialized = true;
+        return true;
     }
 }
 

@@ -90,31 +90,33 @@ impl NumMatrix {
      * 初始化二维前缀和矩阵
      */
     fn init(&mut self) -> bool {
-        if !self.initialized {
-            for i in 0..self.n {
-                for j in 0..self.m {
-                    /*
-                    原矩阵
-                    ⎡     00      01  ..      0(j-1)      0j ⎤
-                    ⎢     10      11  ..      1(j-1)      1j ⎥
-                    ⎢     ..      ..  ..          ..      .. ⎥
-                    ⎢ (i-1)0  (i-1)1  ..  (i-1)(j-1)  (i-1)j ⎥
-                    ⎣     i0      i1  ..      i(j-1)      ij ⎦
-                     */
-                    #[rustfmt::skip]
-                    let sum
-                        = self.prefix_sums_matrix[i + 1][j]
-                        + self.prefix_sums_matrix[i][j + 1]
-                        - self.prefix_sums_matrix[i][j]
-                        + self.matrix[i][j];
-
-                    self.prefix_sums_matrix[i + 1][j + 1] = sum
-                }
-            }
-            self.initialized = true;
-            return true;
+        if self.initialized {
+            return false;
         }
-        false
+
+        for i in 0..self.n {
+            for j in 0..self.m {
+                /*
+                原矩阵
+                ⎡     00      01  ..      0(j-1)      0j ⎤
+                ⎢     10      11  ..      1(j-1)      1j ⎥
+                ⎢     ..      ..  ..          ..      .. ⎥
+                ⎢ (i-1)0  (i-1)1  ..  (i-1)(j-1)  (i-1)j ⎥
+                ⎣     i0      i1  ..      i(j-1)      ij ⎦
+                 */
+                #[rustfmt::skip]
+                let sum
+                    = self.prefix_sums_matrix[i + 1][j]
+                    + self.prefix_sums_matrix[i][j + 1]
+                    - self.prefix_sums_matrix[i][j]
+                    + self.matrix[i][j];
+
+                self.prefix_sums_matrix[i + 1][j + 1] = sum
+            }
+        }
+
+        self.initialized = true;
+        return true;
     }
 }
 
