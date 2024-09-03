@@ -150,7 +150,7 @@ public class ExampleSet {
     public static Object[] jsonList(
         final JSONArray jsonArray,
         final String[] typeNames
-    ) {
+    ) throws IllegalArgumentException {
         final int array_length = jsonArray.size();
         assertEquals(
             array_length,
@@ -176,10 +176,17 @@ public class ExampleSet {
                             .mapToInt(Integer::intValue)
                             .toArray();
                     break;
-
-                default:
-                    array[i] = jsonArray.get(i);
+                case "int[][]":
+                    array[i] =
+                        jsonArray
+                            .getJSONArray(i)
+                            .toJavaList(JSONArray.class)
+                            .stream()
+                            .map((JSONArray subArray) -> subArray.toJavaList(Integer.class).stream().mapToInt(Integer::intValue).toArray())
+                            .toArray(int[][] ::new);
                     break;
+                default:
+                    throw new IllegalArgumentException("Unsupported Type: " + typeNames[i]);
             }
         }
         return array;
@@ -195,7 +202,7 @@ public class ExampleSet {
         final JSONObject jsonObject,
         final String valueKey,
         final String typeName
-    ) {
+    ) throws IllegalArgumentException {
         switch (typeName) {
             case "String":
                 return jsonObject.getString(valueKey);
@@ -208,8 +215,15 @@ public class ExampleSet {
                     .stream()
                     .mapToInt(Integer::intValue)
                     .toArray();
+            case "int[][]":
+                return jsonObject
+                    .getJSONArray(valueKey)
+                    .toJavaList(JSONArray.class)
+                    .stream()
+                    .map((JSONArray array) -> array.toJavaList(Integer.class).stream().mapToInt(Integer::intValue).toArray())
+                    .toArray(int[][] ::new);
             default:
-                return jsonObject.get(valueKey);
+                throw new IllegalArgumentException("Unsupported Type: " + typeName);
         }
     }
 

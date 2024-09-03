@@ -64,7 +64,7 @@ class NumMatrix {
 
 export default class extends NumMatrix {
     public func = this.sumRegion;
-    constructor(nums: TMatrix) {
-        super(nums);
+    constructor(matrix: TMatrix) {
+        super(matrix);
     }
 };

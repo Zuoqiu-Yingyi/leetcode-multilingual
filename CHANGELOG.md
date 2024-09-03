@@ -1,5 +1,9 @@
 # 更改日志 | Change Log
 
+## 2024-09-03
+
+- 添加题目 `0304` 的 Java 题解 | Add the Java solution to the question `0304`
+
 ## 2024-09-02
 
 - 添加题目 `0304` 的 ECMAScript 题解 | Add the ECMAScript solution to the question `0304`
