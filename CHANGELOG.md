@@ -1,5 +1,10 @@
 # 更改日志 | Change Log
 
+## 2024-09-05
+
+- 添加题目 `2132` 的题解 | Add the solution to the question `2132`
+  - [2132. 用邮票贴满网格图 - 力扣（LeetCode）](https://leetcode.cn/problems/stamping-the-grid/description/)
+
 ## 2024-09-03
 
 - 添加题目 `0304` 的 Java 题解 | Add the Java solution to the question `0304`

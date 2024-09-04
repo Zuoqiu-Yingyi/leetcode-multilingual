@@ -20,6 +20,7 @@ package utils
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.boolean
 import kotlinx.serialization.json.double
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.int
@@ -144,6 +145,7 @@ public class ExampleSet(
             typeName: String,
         ): Any = when (typeName) {
             "kotlin.String" -> jsonElement.jsonPrimitive.content
+            "kotlin.Boolean" -> jsonElement.jsonPrimitive.boolean
             "kotlin.Int" -> jsonElement.jsonPrimitive.int
             "kotlin.Double" -> jsonElement.jsonPrimitive.double
             "kotlin.IntArray" -> jsonElement.jsonArray.map { it.jsonPrimitive.int }.toIntArray()
@@ -162,6 +164,7 @@ public class ExampleSet(
             typeName: String,
         ): JsonElement = when (typeName) {
             "kotlin.String" -> Json.encodeToJsonElement(value as String)
+            "kotlin.Boolean" -> Json.encodeToJsonElement(value as Boolean)
             "kotlin.Int" -> Json.encodeToJsonElement(value as Int)
             "kotlin.Double" -> Json.encodeToJsonElement(value as Double)
             "kotlin.IntArray" -> Json.encodeToJsonElement(value as IntArray)
