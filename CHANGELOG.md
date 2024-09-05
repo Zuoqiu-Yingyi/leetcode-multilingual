@@ -4,6 +4,8 @@
 
 - 添加题目 `2132` 的题解 | Add the solution to the question `2132`
   - [2132. 用邮票贴满网格图 - 力扣（LeetCode）](https://leetcode.cn/problems/stamping-the-grid/description/)
+- 添加题目 `0003` 的题解 | Add the solution to the question `0003`
+  - [3. 无重复字符的最长子串 - 力扣（LeetCode）](https://leetcode.cn/problems/longest-substring-without-repeating-characters/description/)
 
 ## 2024-09-03
 
