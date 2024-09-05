@@ -23,6 +23,7 @@ rustfmt
 serde
 sourcesets
 struct
+subarray
 tsdoc
 vararg
 Yingyi

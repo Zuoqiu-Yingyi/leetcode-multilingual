@@ -169,7 +169,22 @@ async function createSolutionFile(
                 await Bun.sleep(1_000); // 避免 VSCode 扩展 LeetCode.vscode-leetcode 重复创建文件
 
                 /* 在指定位置创建题解模板文件 */
-                const content = await Bun.file(original).text();
+                const content = await (async () => {
+                    let retry = 3;
+                    while (retry--) {
+                        try {
+                            const content = await Bun.file(original).text();
+                            if (content) {
+                                return content;
+                            }
+                        }
+                        catch (error) {
+                            console.warn(error);
+                        }
+                        await Bun.sleep(1_000);
+                    }
+                    throw new Error(`Failed to read file: ${original}`);
+                })();
 
                 const solution_file_content = await renderSolutionFile(
                     {
