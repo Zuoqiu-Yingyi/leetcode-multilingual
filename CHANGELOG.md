@@ -6,6 +6,8 @@
   - [713. 乘积小于 K 的子数组 - 力扣（LeetCode）](https://leetcode.cn/problems/subarray-product-less-than-k/description/)
 - 添加题目 `0191` 的题解 | Add the solution to the question `0191`
   - [191. 位1的个数 - 力扣（LeetCode）](https://leetcode.cn/problems/number-of-1-bits/description/)
+- 添加题目 `0056` 的题解 | Add the solution to the question `0056`
+  - [56. 合并区间 - 力扣（LeetCode）](https://leetcode.cn/problems/merge-intervals/description/)
 
 ## 2024-09-05
 
