@@ -1,5 +1,9 @@
 # 更改日志 | Change Log
 
+## 2024-09-11
+
+- 为 Java 与 Kotlin 项目添加依赖更新检查插件 | Add dependency update check plugin to Java and Kotlin projects
+
 ## 2024-09-06
 
 - 添加题目 `0713` 的题解 | Add the solution to the question `0713`

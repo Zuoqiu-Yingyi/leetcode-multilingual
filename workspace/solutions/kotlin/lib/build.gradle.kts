@@ -18,6 +18,9 @@ plugins {
     // alias(libs.plugins.diktat)
     alias(libs.plugins.spotless)
 
+    // REF: https://github.com/ben-manes/gradle-versions-plugin
+    alias(libs.plugins.versions)
+
     // Apply the java-library plugin for API and implementation separation.
     // "java-library"
 }
