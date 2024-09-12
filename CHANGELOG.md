@@ -4,6 +4,8 @@
 
 - 添加题目 `0496` 的题解 | Add the solution to the question `0496`
   - [496. 下一个更大元素 I - 力扣（LeetCode）](https://leetcode.cn/problems/next-greater-element-i/description/)
+- 添加题目 `0739` 的题解 | Add the solution to the question `0739`
+  - [739. 每日温度 - 力扣（LeetCode）](https://leetcode.cn/problems/daily-temperatures/description/)
 
 ## 2024-09-11
 
