@@ -1,5 +1,10 @@
 # 更改日志 | Change Log
 
+## 2024-09-12
+
+- 添加题目 `0496` 的题解 | Add the solution to the question `0496`
+  - [496. 下一个更大元素 I - 力扣（LeetCode）](https://leetcode.cn/problems/next-greater-element-i/description/)
+
 ## 2024-09-11
 
 - 为 Java 与 Kotlin 项目添加依赖更新检查插件 | Add dependency update check plugin to Java and Kotlin projects
