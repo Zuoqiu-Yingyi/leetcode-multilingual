@@ -1,5 +1,10 @@
 # 更改日志 | Change Log
 
+## 2024-09-13
+
+- 添加题目 `0907` 的题解 | Add the solution to the question `0907`
+  - [907. 子数组的最小值之和 - 力扣（LeetCode）](https://leetcode.cn/problems/sum-of-subarray-minimums/description/)
+
 ## 2024-09-12
 
 - 添加题目 `0496` 的题解 | Add the solution to the question `0496`
