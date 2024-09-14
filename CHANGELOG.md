@@ -1,5 +1,10 @@
 # 更改日志 | Change Log
 
+## 2024-09-14
+
+- 添加题目 `0962` 的题解 | Add the solution to the question `0962`
+  - [962. 最大宽度坡 - 力扣（LeetCode）](https://leetcode.cn/problems/maximum-width-ramp/description/)
+
 ## 2024-09-13
 
 - 添加题目 `0907` 的题解 | Add the solution to the question `0907`
