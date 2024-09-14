@@ -4,6 +4,8 @@
 
 - 添加题目 `0962` 的题解 | Add the solution to the question `0962`
   - [962. 最大宽度坡 - 力扣（LeetCode）](https://leetcode.cn/problems/maximum-width-ramp/description/)
+- 添加题目 `0768` 的题解 | Add the solution to the question `0768`
+  - [768. 最多能完成排序的块 II - 力扣（LeetCode）](https://leetcode.cn/problems/max-chunks-to-make-sorted-ii/description/)
 
 ## 2024-09-13
 
