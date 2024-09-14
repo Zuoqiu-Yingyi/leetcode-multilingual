@@ -2,7 +2,7 @@ import test from "bun:test";
 
 import { t } from "@/utils/test";
 
-t(
+await t(
     test,
     import.meta.dir,
 );

@@ -4,7 +4,7 @@ import { E } from "@repo/common";
 
 import { t } from "@/utils/test";
 
-t(
+await t(
     test,
     import.meta.dir,
     E.SolutionFormat.class,

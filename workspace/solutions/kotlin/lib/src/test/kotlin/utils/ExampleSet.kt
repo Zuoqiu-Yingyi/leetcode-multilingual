@@ -27,6 +27,7 @@ import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.long
 import java.io.File
 import kotlin.io.path.Path
 import kotlin.test.*
@@ -147,6 +148,7 @@ public class ExampleSet(
             "kotlin.String" -> jsonElement.jsonPrimitive.content
             "kotlin.Boolean" -> jsonElement.jsonPrimitive.boolean
             "kotlin.Int" -> jsonElement.jsonPrimitive.int
+            "kotlin.Long" -> jsonElement.jsonPrimitive.long
             "kotlin.Double" -> jsonElement.jsonPrimitive.double
             "kotlin.IntArray" -> jsonElement.jsonArray.map { it.jsonPrimitive.int }.toIntArray()
             "kotlin.Array<kotlin.IntArray>" -> jsonElement.jsonArray.map { it.jsonArray.map { it.jsonPrimitive.int }.toIntArray() }.toTypedArray()
@@ -166,6 +168,7 @@ public class ExampleSet(
             "kotlin.String" -> Json.encodeToJsonElement(value as String)
             "kotlin.Boolean" -> Json.encodeToJsonElement(value as Boolean)
             "kotlin.Int" -> Json.encodeToJsonElement(value as Int)
+            "kotlin.Long" -> Json.encodeToJsonElement(value as Long)
             "kotlin.Double" -> Json.encodeToJsonElement(value as Double)
             "kotlin.IntArray" -> Json.encodeToJsonElement(value as IntArray)
             "kotlin.Array<kotlin.IntArray>" -> Json.encodeToJsonElement(value as Array<IntArray>)

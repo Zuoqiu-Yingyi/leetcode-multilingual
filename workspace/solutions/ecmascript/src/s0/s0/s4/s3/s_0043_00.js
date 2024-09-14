@@ -14,7 +14,7 @@ const multiply = function (num1, num2) {
     if (num1 === "0" || num2 === "0")
         return "0";
 
-    const result = Array(num1.length + num2.length).fill(0);
+    const result = Array.from({ length: num1.length + num2.length }).fill(0);
     const code_0 = "0".charCodeAt(0);
 
     const num1_len = num1.length;
