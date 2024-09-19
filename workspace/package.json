@@ -77,11 +77,11 @@
         "@wasm-fmt/clang-format": "^18.1.8",
         "chalk": "^5.3.0",
         "chokidar": "^4.0.0",
-        "cspell": "^8.14.2",
+        "cspell": "^8.14.4",
         "eslint": "^9.10.0",
         "husky": "^9.1.6",
         "lint-staged": "^15.2.10",
-        "nushell": "^0.97.1",
+        "nushell": "^0.98.0",
         "prettier": "^3.3.3",
         "typescript": "^5.6.2"
     }

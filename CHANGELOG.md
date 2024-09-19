@@ -1,5 +1,10 @@
 # 更改日志 | Change Log
 
+## 2024-09-15
+
+- 添加题目 `1856` 的题解 | Add the solution to the question `1856`
+  - [1856. 子数组最小乘积的最大值 - 力扣（LeetCode）](https://leetcode.cn/problems/maximum-subarray-min-product/description/)
+
 ## 2024-09-14
 
 - 添加题目 `0962` 的题解 | Add the solution to the question `0962`
