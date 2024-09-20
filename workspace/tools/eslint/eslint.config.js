@@ -1,6 +1,8 @@
 import antfu, {
     GLOB_JS,
     GLOB_JSX,
+    GLOB_SRC_EXT,
+    GLOB_TESTS,
 } from "@antfu/eslint-config";
 import tsdoc from "eslint-plugin-tsdoc";
 
@@ -229,6 +231,14 @@ export default antfu({
     ignores: [
         GLOB_JS,
         GLOB_JSX,
+    ],
+}, {
+    rules: {
+        "antfu/no-top-level-await": ["off"],
+    },
+    files: [
+        ...GLOB_TESTS,
+        `**/*_test.${GLOB_SRC_EXT}`,
     ],
 }, {
     rules: {

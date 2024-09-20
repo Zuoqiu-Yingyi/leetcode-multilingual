@@ -1,5 +1,10 @@
 # 更改日志 | Change Log
 
+## 2024-09-20
+
+- 添加题目 `0329` 的题解 | Add the solution to the question `0329`
+  - [239. 滑动窗口最大值 - 力扣（LeetCode）](https://leetcode.cn/problems/sliding-window-maximum/description/)
+
 ## 2024-09-15
 
 - 添加题目 `1856` 的题解 | Add the solution to the question `1856`
