@@ -36,7 +36,9 @@ public class T {
      * @param Solution 题解类
      * @return 题解的构造函数
      */
-    private static final Constructor<?> getConstructor(final Class<?> Solution) {
+    private static final Constructor<?> getConstructor(
+        final Class<?> Solution
+    ) {
         Constructor<?>[] constructors = Solution.getConstructors();
         assertEquals(
             constructors.length,
@@ -51,7 +53,9 @@ public class T {
      * @param Solution 题解类
      * @return 题解的入口方法
      */
-    private static final Method getMethod(final Class<?> Solution) {
+    private static final Method getMethod(
+        final Class<?> Solution
+    ) {
         Method[] methods = Solution.getDeclaredMethods();
         assertEquals(
             methods.length,
@@ -66,7 +70,9 @@ public class T {
      * @param function 函数
      * @return 函数的参数个数
      */
-    private static final int getParameterCount(final Executable function) {
+    private static final int getParameterCount(
+        final Executable function
+    ) {
         return function.getParameterCount();
     }
 
@@ -75,7 +81,9 @@ public class T {
      * @param function 方法
      * @return 方法的参数类型列表
      */
-    private static final Class<?>[] getParameterTypes(final Executable function) {
+    private static final Class<?>[] getParameterTypes(
+        final Executable function
+    ) {
         Class<?>[] parameter_types = function.getParameterTypes();
         return parameter_types;
     }
@@ -85,7 +93,9 @@ public class T {
      * @param method 方法
      * @return 方法的返回值类型
      */
-    private static final Class<?> getMethodReturnType(final Method method) {
+    private static final Class<?> getMethodReturnType(
+        final Method method
+    ) {
         Class<?> return_type = method.getReturnType();
         return return_type;
     }
@@ -95,7 +105,9 @@ public class T {
      * @param function 函数
      * @return 函数的参数类型名称列表
      */
-    private static final String[] getParameterTypeNames(final Executable function) {
+    private static final String[] getParameterTypeNames(
+        final Executable function
+    ) {
         Class<?>[] parameter_types = T.getParameterTypes(function);
         final String[] parameter_type_names = new String[parameter_types.length];
         for (int i = 0; i < parameter_types.length; ++i) {
@@ -113,7 +125,9 @@ public class T {
      * @param method 方法
      * @return 方法的返回值类型名称
      */
-    private static final String getMethodReturnTypeName(final Method method) {
+    private static final String getMethodReturnTypeName(
+        final Method method
+    ) {
         Class<?> return_type = T.getMethodReturnType(method);
         final String return_type_name = return_type.getSimpleName();
         return return_type_name;

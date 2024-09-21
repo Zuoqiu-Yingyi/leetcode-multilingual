@@ -10,7 +10,7 @@ mod tests {
     fn test() -> () {
         t_(
             module_path!(), //
-            &vec![0, 1],
+            &vec![0],
             |solution, init| -> Box<dyn ISolution> {
                 let nums = init[0].to_i32_array().unwrap();
                 match solution {

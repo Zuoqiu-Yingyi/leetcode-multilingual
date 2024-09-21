@@ -1,5 +1,5 @@
 # REF: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
-# v18.1.8
+# v19.1.0
 
 # $schema: https://json.schemastore.org/clang-format.json
 
@@ -57,32 +57,29 @@ AlignConsecutiveShortCaseStatements:
   # AlignCaseArrows: false
   AlignCaseColons: false
 
-# ^v19 ✔
-# AlignConsecutiveTableGenBreakingDAGArgColons:
-#   Enabled: false
-#   AcrossEmptyLines: false
-#   AcrossComments: false
-#   AlignCompound: false
-#   AlignFunctionPointers: false
-#   PadOperators: true
+AlignConsecutiveTableGenBreakingDAGArgColons:
+  Enabled: false
+  AcrossEmptyLines: false
+  AcrossComments: false
+  # AlignCompound: false
+  # AlignFunctionPointers: false
+  # PadOperators: true
 
-# ^v19 ✔
-# AlignConsecutiveTableGenCondOperatorColons:
-#   Enabled: false
-#   AcrossEmptyLines: false
-#   AcrossComments: false
-#   AlignCompound: false
-#   AlignFunctionPointers: false
-#   PadOperators: true
+AlignConsecutiveTableGenCondOperatorColons:
+  Enabled: false
+  AcrossEmptyLines: false
+  AcrossComments: false
+  # AlignCompound: false
+  # AlignFunctionPointers: false
+  # PadOperators: true
 
-# ^v19 ✔
-# AlignConsecutiveTableGenDefinitionColons:
-#   Enabled: false
-#   AcrossEmptyLines: false
-#   AcrossComments: false
-#   AlignCompound: false
-#   AlignFunctionPointers: false
-#   PadOperators: true
+AlignConsecutiveTableGenDefinitionColons:
+  Enabled: false
+  AcrossEmptyLines: false
+  AcrossComments: false
+  # AlignCompound: false
+  # AlignFunctionPointers: false
+  # PadOperators: true
 
 ## DontAlign | Left | LeftWithLastLine | Right
 AlignEscapedNewlines: Right
@@ -105,8 +102,7 @@ AllowBreakBeforeNoexceptSpecifier: Never
 ## Never | Empty | Always
 AllowShortBlocksOnASingleLine: Empty
 
-# ^v19 ✔
-# AllowShortCaseExpressionOnASingleLine: true
+AllowShortCaseExpressionOnASingleLine: true
 
 AllowShortCaseLabelsOnASingleLine: true
 
@@ -128,17 +124,15 @@ AllowShortLoopsOnASingleLine: false
 ## None | All | TopLevel
 AlwaysBreakAfterDefinitionReturnType: None
 
-# ^v19 ✖
-# * ➡ BreakAfterReturnType
+# ✖ ➡ BreakAfterReturnType
 ## None | Automatic | ExceptShortType | All | TopLevel | AllDefinitions | TopLevelDefinitions
-AlwaysBreakAfterReturnType: None
+# AlwaysBreakAfterReturnType: None
 
 AlwaysBreakBeforeMultilineStrings: true
 
-# ^v19 ✖
-# * ➡ BreakTemplateDeclarations
+# ✖ ➡ BreakTemplateDeclarations
 ## Leave | No | MultiLine | Yes
-AlwaysBreakTemplateDeclarations: MultiLine
+# AlwaysBreakTemplateDeclarations: MultiLine
 
 AttributeMacros:
   - __capability
@@ -181,9 +175,9 @@ BreakAfterAttributes: Leave
 
 BreakAfterJavaFieldAnnotations: true
 
-# ^v19 ✔
 # * ⬅ AlwaysBreakAfterReturnType
-# BreakAfterReturnType: None
+## None (deprecated) | Automatic | ExceptShortType | All | TopLevel | AllDefinitions | TopLevelDefinitions
+BreakAfterReturnType: Automatic
 
 BreakArrays: true
 
@@ -207,17 +201,16 @@ BreakBeforeTernaryOperators: true
 ## BeforeColon | BeforeComma | AfterColon
 BreakConstructorInitializers: AfterColon
 
-# ^v19 ✔
-# BreakFunctionDefinitionParameters: true
+BreakFunctionDefinitionParameters: true
 
 ## BeforeColon | BeforeComma | AfterColon | AfterComma
 BreakInheritanceList: AfterColon
 
 BreakStringLiterals: false
 
-# ^v19 ✔
 # * ⬅ AlwaysBreakTemplateDeclarations
-# BreakTemplateDeclarations: MultiLine
+## Leave | No | MultiLine | Yes
+BreakTemplateDeclarations: Yes
 
 ColumnLimit: 0
 
@@ -325,19 +318,16 @@ JavaScriptQuotes: Leave
 
 JavaScriptWrapImports: true
 
-# ^v19 ✔
-# KeepEmptyLines:
-#   AtEndOfFile: true
-#   AtStartOfBlock: false
-#   AtStartOfFile: false
+KeepEmptyLines:
+  AtEndOfFile: true
+  AtStartOfBlock: false
+  AtStartOfFile: false
 
-# ^v19 ✖
-# * ➡ KeepEmptyLines.AtEndOfFile
-KeepEmptyLinesAtEOF: true
+# ✖ ➡ KeepEmptyLines.AtEndOfFile
+# KeepEmptyLinesAtEOF: true
 
-# ^v19 ✖
-# * ➡ KeepEmptyLines.AtStartOfBlock
-KeepEmptyLinesAtTheStartOfBlocks: false
+# ✖ ➡ KeepEmptyLines.AtStartOfBlock
+# KeepEmptyLinesAtTheStartOfBlocks: false
 
 ## Signature | OuterScope
 LambdaBodyIndentation: Signature
@@ -351,8 +341,8 @@ MacroBlockEnd: ""
 
 Macros: []
 
-# ^v19 ✔
-# MainIncludeChar: Quote
+## Quote (default) | AngleBracket | Any
+MainIncludeChar: Quote
 
 MaxEmptyLinesToKeep: 2
 
@@ -549,11 +539,10 @@ StatementMacros:
 
 TabWidth: 4
 
-# ^v19
-# TableGenBreakInsideDAGArg: BreakAll
+## DontBreak | BreakElements | BreakAll
+TableGenBreakInsideDAGArg: BreakAll
 
-# ^v19
-# TableGenBreakingDAGArgOperators: []
+TableGenBreakingDAGArgOperators: []
 
 TypeNames: []
 

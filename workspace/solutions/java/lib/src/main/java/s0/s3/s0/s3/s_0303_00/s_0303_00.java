@@ -10,7 +10,9 @@ package s0.s3.s0.s3.s_0303_00;
 class NumArray {
     private int[] prefix_sums;
 
-    public NumArray(int[] nums) {
+    public NumArray(
+        int[] nums
+    ) {
         final int nums_length = nums.length;
         this.prefix_sums = new int[nums_length + 1];
         for (int i = 0; i < nums_length; i++) {
@@ -18,7 +20,9 @@ class NumArray {
         }
     }
 
-    public int sumRange(int left, int right) {
+    public int sumRange(
+        int left, int right
+    ) {
         return this.prefix_sums[right + 1] - this.prefix_sums[left];
     }
 }
@@ -31,7 +35,9 @@ class NumArray {
 // @lc code=end
 
 public class s_0303_00 extends NumArray {
-    public s_0303_00(int[] nums) {
+    public s_0303_00(
+        int[] nums
+    ) {
         super(nums);
     }
 }

@@ -25,7 +25,7 @@ dependencies {
     // implementation 'com.alibaba.fastjson2:fastjson2:2.0.52'
     testImplementation libs.fastjson2
 
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testRuntimeOnly libs.junit.platform.launcher
 
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     api libs.commons.math3

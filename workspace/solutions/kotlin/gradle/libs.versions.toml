@@ -3,13 +3,13 @@
 
 [versions]
     commons-math3 = "3.6.1"
-    guava = "33.3.0-jre"
+    guava = "33.3.1-jre"
     junit-jupiter-engine = "5.11.0"
-    kotlin = "2.0.20"
-    kotlin-serialization-json = "1.7.2"
+    kotlin = "2.1.0-Beta1"
+    kotlin-serialization-json = "1.7.3"
     spotless = "7.0.0.BETA2"
     versions = "0.51.0"
-# diktat = "2.0.0"
+    # diktat = "2.0.0"
 
 [libraries]
     commons-math3 = { group = "org.apache.commons", name = "commons-math3", version.ref = "commons-math3" }

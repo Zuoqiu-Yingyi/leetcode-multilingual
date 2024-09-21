@@ -39,7 +39,9 @@ public class ExampleSet {
      * @param packageName 包名 (格式: "_0._1._2._3")
      * @return 题解 ID (格式: 0123)
      */
-    public static String package2id(final String packageName) {
+    public static String package2id(
+        final String packageName
+    ) {
         return packageName
             .replace("s", "")
             .replace(".", "");
@@ -50,7 +52,9 @@ public class ExampleSet {
      * @param packageName 包名 (格式: "_0._1._2._3")
      * @return 路径 (格式: "0/1/2/3")
      */
-    public static final String package2path(final String packageName) {
+    public static final String package2path(
+        final String packageName
+    ) {
         return packageName
             .replace("s", "")
             .replace(".", "/");
@@ -61,7 +65,9 @@ public class ExampleSet {
      * @param packageName 包名 (格式: "_0._1._2._3")
      * @return JSON 字符串
      */
-    public static final String readExamplesFile(final String packageName) {
+    public static final String readExamplesFile(
+        final String packageName
+    ) {
         try {
             final String id = ExampleSet.package2id(packageName);
             final String path = ExampleSet.package2path(packageName);

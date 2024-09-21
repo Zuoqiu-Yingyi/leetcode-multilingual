@@ -14,14 +14,18 @@ class NumMatrix {
     private final int[][] prefix_sums_matrix;
     private boolean initialized = false;
 
-    public NumMatrix(int[][] matrix) {
+    public NumMatrix(
+        int[][] matrix
+    ) {
         this.n = matrix.length;
         this.m = matrix[0].length;
         this.matrix = matrix;
         this.prefix_sums_matrix = new int[this.n + 1][this.m + 1];
     }
 
-    public int sumRegion(int row1, int col1, int row2, int col2) {
+    public int sumRegion(
+        int row1, int col1, int row2, int col2
+    ) {
         this.init();
         return this.prefix_sums_matrix[row2 + 1][col2 + 1]
             - this.prefix_sums_matrix[row2 + 1][col1]
@@ -57,7 +61,9 @@ class NumMatrix {
 // @lc code=end
 
 public class s_0304_00 extends NumMatrix {
-    public s_0304_00(int[][] matrix) {
+    public s_0304_00(
+        int[][] matrix
+    ) {
         super(matrix);
     }
 }
