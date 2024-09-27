@@ -1,5 +1,10 @@
 # 更改日志 | Change Log
 
+## 2024-09-27
+
+- 添加题目 `1499` 的题解 | Add the solution to the question `1499`
+  - [1499. 满足不等式的最大值 - 力扣（LeetCode）](https://leetcode.cn/problems/max-value-of-equation/description/)
+
 ## 2024-09-20
 
 - 添加题目 `0329` 的题解 | Add the solution to the question `0329`
